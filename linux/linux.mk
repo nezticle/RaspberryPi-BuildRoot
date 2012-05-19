@@ -67,6 +67,8 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
 LINUX_IMAGE_NAME=vmlinux
 else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
 LINUX_IMAGE_NAME=vmlinuz
+else ifeq ($(BR2_LINUX_KERNEL_UNCOMPRESSED),y)
+LINUX_IMAGE_NAME=Image
 endif
 endif
 
