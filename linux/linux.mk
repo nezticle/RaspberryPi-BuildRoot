@@ -68,6 +68,7 @@ LINUX_IMAGE_NAME=vmlinux
 else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
 LINUX_IMAGE_NAME=vmlinuz
 else ifeq ($(BR2_LINUX_KERNEL_UNCOMPRESSED),y)
+LINUX_DEPENDENCIES+=host-mkimage VideoCore bootloader
 LINUX_IMAGE_NAME=Image
 endif
 endif
@@ -181,7 +182,16 @@ endef
 
 ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
 define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
-	install -m 0644 -D $(LINUX_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
+#ifeq ($(BR2_LINUX_KERNEL_UNCOMPRESSED),y)
+#	#package uncompressed kernel for raspberry pi
+#	cat $(HOST_DIR)/usr/share/mkimage/first32k.bin $(LINUX_IMAGE_PATH) > $(TARGET_DIR)/boot/kernel.img
+#else
+#	install -m 0644 -D $(LINUX_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
+#endif
+	$(if $(BR2_LINUX_KERNEL_UNCOMPRESSED),
+		mkdir -p $(TARGET_DIR)/boot
+		cat $(HOST_DIR)/usr/share/mkimage/first32k.bin $(LINUX_IMAGE_PATH) > $(TARGET_DIR)/boot/kernel.img ,
+		install -m 0644 -D $(LINUX_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME) )
 endef
 endif
 
