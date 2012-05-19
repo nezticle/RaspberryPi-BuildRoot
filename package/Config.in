@@ -688,4 +688,10 @@ source "package/vim/Config.in"
 endif
 endmenu
 
+menu "Raspberry Pi"
+source "package/raspberrypi/VideoCore/Config.in"
+source "package/raspberrypi/mkimage/Config.in"
+source "package/raspberrypi/bootloader/Config.in"
+endmenu
+
 endmenu

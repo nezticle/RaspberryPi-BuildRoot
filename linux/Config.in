@@ -164,7 +164,8 @@ config BR2_LINUX_KERNEL_VMLINUZ
 	depends on BR2_mips || BR2_mipsel
 
 config BR2_LINUX_KERNEL_UNCOMPRESSED
-	bool "uncompressed"
+	bool "uncompressed (Rapsberry Pi)"
+	depends on BR2_PACKAGE_RASPBERRYPI_MKIMAGE
 
 config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
 	bool "custom target"
