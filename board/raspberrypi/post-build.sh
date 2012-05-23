@@ -12,13 +12,13 @@ echo "arm_freq=800" >> $TARGETDIR/boot/config.txt
 tar -czf $TARGETDIR/../images/boot.tar.gz --exclude=Image -C $TARGETDIR/boot/ .
 
 # add a corrected, and lightweight inittab
-cp /home/nezticle/Devices/RaspberryPi/buildroot/board/raspberrypi/inittab $TARGETDIR/etc/inittab
+cp board/raspberrypi/inittab $TARGETDIR/etc/inittab
 
 # add eth0 dhcp entry into /etc/network/interfaces
-cp /home/nezticle/Devices/RaspberryPi/buildroot/board/raspberrypi/interfaces $TARGETDIR/etc/network/
+cp board/raspberrypi/interfaces $TARGETDIR/etc/network/
 
 # make sure that ntpdate is run before sshd is started
-cp /home/nezticle/Devices/RaspberryPi/buildroot/board/raspberrypi/S41ntpdate $TARGETDIR/etc/init.d/
+cp board/raspberrypi/S41ntpdate $TARGETDIR/etc/init.d/
 chmod a+x $TARGETDIR/etc/init.d/S41ntpdate
 
 # add /opt/vc/lib to default library path
