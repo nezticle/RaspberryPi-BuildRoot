@@ -59,7 +59,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_01
 	  Thumb 2, with the softfp calling convention, and uses the
 	  VFPv3-D16 FPU instructions.
 
-config BR2_TOOLCHAIN_EXTERNAL_RASPBERRYPI_ARM_BCM2708
+config BR2_TOOLCHAIN_EXTERNAL_RASPBERRYPI_ARM
 	bool "Rapsberry Pi ARMv6 hardfloat"
 	depends on BR2_arm
 	depends on BR2_arm1176jzf_s
@@ -549,7 +549,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && BR2_BFIN_FDPIC
 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && !BR2_BFIN_FDPIC
 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && BR2_BFIN_FDPIC
-	default "arm-bcm2708hardfp-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_RASPBERRYPI_ARM_BCM2708
+	default "arm-raspberrypi-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_RASPBERRYPI_ARM
 	default $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX) \
 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
 
