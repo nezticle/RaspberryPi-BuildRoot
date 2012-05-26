@@ -100,6 +100,13 @@ endef
 define HOST_BZIP2_INSTALL_CMDS
 	$(HOST_MAKE_ENV) \
 	$(MAKE) PREFIX=$(HOST_DIR)/usr -C $(@D) install
+	cp $(@D)/libbz2.so.$(BZIP2_SONAME) $(HOST_DIR)/usr/lib/
+	cp $(@D)/libbz2.a $(HOST_DIR)/usr/lib/
+	(cd $(HOST_DIR)/usr/lib/; \
+		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so; \
+		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1.0; \
+		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1; \
+	)
 endef
 
 $(eval $(call GENTARGETS))
