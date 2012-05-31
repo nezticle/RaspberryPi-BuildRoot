@@ -50,7 +50,7 @@ endef
 
 PYTHON_DEPENDENCIES  = host-python libffi
 
-HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
+HOST_PYTHON_DEPENDENCIES = host-expat host-zlib host-bzip2
 
 PYTHON_INSTALL_STAGING = YES
 
