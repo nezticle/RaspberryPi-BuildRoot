@@ -1,4 +1,4 @@
-config BR2_PACKAGE_RASPBERRYPI_MKIMAGE
+config BR2_PACKAGE_MKIMAGE
 	bool "Raspberry Pi mkImage tool"
 	help
 	  A python script make uncompressed Image bootable by Raspberry Pi.
