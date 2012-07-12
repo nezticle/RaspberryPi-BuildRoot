@@ -178,10 +178,12 @@ config BR2_DEBIAN_MIRROR
 endmenu
 
 config BR2_JLEVEL
-	int "Number of jobs to run simultaneously"
-	default "2"
+	int "Number of jobs to run simultaneously (0 for auto)"
+	default "0"
 	help
-	  Number of jobs to run simultaneously
+	  Number of jobs to run simultaneously.  If 0, determine
+	  automatically according to number of CPUs on the host
+	  system.
 
 config BR2_CCACHE
 	bool "Enable compiler cache"
@@ -282,6 +284,25 @@ config BR2_STRIP_none
 	  Do not strip binaries and libraries in the target
 	  filesystem.
 endchoice
+
+config BR2_STRIP_EXCLUDE_FILES
+	string "executables that should not be stripped"
+	depends on !BR2_STRIP_none
+	default ""
+	help
+	  You may specify a space-separated list of binaries and libraries
+	  here that should not be stripped on the target.
+
+config BR2_STRIP_EXCLUDE_DIRS
+	string "directories that should be skipped when stripping"
+	depends on !BR2_STRIP_none
+	default ""
+	help
+	  You may specify a space-separated list of directories that should
+	  be skipped when stripping. Binaries and libraries in these
+	  directories will not be touched.
+	  The directories should be specified relative to the target directory,
+	  without leading slash.
 
 choice
 	prompt "gcc optimization level"

@@ -1,12 +1,14 @@
-# Getting started with the Bsquask SDK: #
+# Getting started with the SDK: #
 
-The objective of this project is to provide an SDK and root file system for the Raspberry Pi that is lightweight and takes full advantage of the hardware available.  The resulting image produced is small distro known as Bsquask (linux).
+This project is the fork of Bsquask project 
 
-The Bsquask SDK provides a GCC 4.6.3 toolchain for building armv6 binaries with the hardfloat ABI, as well as bootloaders, kernel image, rootfs, and development sysroot for the Raspberry Pi.
+The objective of this project is to provide an SDK and root file system for the Raspberry Pi that is lightweight and takes full advantage of the hardware available.  The resulting image produced is small distro.
+
+The SDK provides a linaro GCC 4.7 (2012.06) toolchain for building armv6 binaries with the hardfloat ABI, as well as bootloaders, kernel image, rootfs, and development sysroot for the Raspberry Pi.
 
 ## Generating Image and Sysroot: ##
 
-Building is fairly strait-forward as buildroot is Makefile based.  One caveat though is that you can not specify the number of make jobs (-jN) for the top level Makefile.  This is handled automatically, so expect build failure if you set the number of jobs explicitly.
+Building is fairly straight-forward as buildroot is Makefile based.  One caveat though is that you can not specify the number of make jobs (-jN) for the top level Makefile.  This is handled automatically, so expect build failure if you set the number of jobs explicitly.
 
 To Build (in source):  
 `make raspberrypi_defconfig`
@@ -48,4 +50,4 @@ If you want to regenerate your image with your changes to target, just run make 
 ## Note: ##
 Right now the default setup downloads an external toolchain that only works with x86_64 systems.  It is also possible to change the configuration to build your own compatible toolchain, but for this you should consult the BuildRoot documentation.
 
-### The Bsquask SDK is based on BuildRoot 2012.05 ###
+### based on latest BuildRoot git repository ###

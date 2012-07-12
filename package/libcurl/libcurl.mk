@@ -4,7 +4,7 @@
 #
 #############################################################
 
-LIBCURL_VERSION = 7.24.0
+LIBCURL_VERSION = 7.25.0
 LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
 LIBCURL_SITE = http://curl.haxx.se/download
 LIBCURL_INSTALL_STAGING = YES
@@ -29,6 +29,12 @@ define LIBCURL_TARGET_CLEANUP
 endef
 
 LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
+
+define LIBCURL_STAGING_FIXUP_CURL_CONFIG
+	$(SED) "s,prefix=/usr,prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/curl-config
+endef
+
+LIBCURL_POST_INSTALL_STAGING_HOOKS += LIBCURL_STAGING_FIXUP_CURL_CONFIG
 
 $(eval $(call AUTOTARGETS))
 

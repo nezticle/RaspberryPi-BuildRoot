@@ -6,11 +6,21 @@ HOSTMAKE=$(MAKE)
 endif
 HOSTMAKE :=$(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
 
-MAKE1:=$(HOSTMAKE) -j1
-MAKE:=$(HOSTMAKE) -j$(BR2_JLEVEL)
+# If BR2_LEVEL is 0, scale the maximum concurrency with the number of
+# CPUs.  A coefficient of 2 is used in order to keep processors busy
+# while waiting on I/O.
+ifeq ($(BR2_JLEVEL),0)
+PARALLEL_JOBS:=$(shell echo \
+	$$((2 * `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
+else
+PARALLEL_JOBS:=$(BR2_JLEVEL)
+endif
 
-# Compute GNU_TARGET_NAME and REAL_GNU_TARGET_NAME
-GNU_TARGET_NAME=$(ARCH)-linux
+MAKE1:=$(HOSTMAKE) -j1
+MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
+
+# Compute GNU_TARGET_NAME
+GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
 
 ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG_uClibc)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
 LIBC=uclibc
@@ -46,9 +56,7 @@ TARGET_ABI+=-mabi=spe -mfloat-gprs=double -Wa,-me500mc
 endif
 endif
 
-REAL_GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
-
-STAGING_DIR=$(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/sysroot
+STAGING_DIR=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sysroot
 
 TARGET_OPTIMIZATION:=$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
 
@@ -97,7 +105,7 @@ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
 TARGET_LDFLAGS=$(call qstrip,$(BR2_TARGET_LDFLAGS))
 
 ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
-TARGET_CROSS=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
+TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
 else
 TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
 endif
@@ -137,7 +145,7 @@ endif
 ifeq ($(BR2_STRIP_sstrip),y)
 STRIP_STRIP_UNNEEDED:=
 STRIP_STRIP_ALL:=
-TARGET_STRIP=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
+TARGET_STRIP=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-sstrip
 STRIPCMD=$(TARGET_STRIP)
 KSTRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note --strip-unneeded
 endif
@@ -297,6 +305,7 @@ endif
 
 ifeq ($(BR2_PREFER_STATIC_LIB),y)
 SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
+TARGET_LDFLAGS += -static
 else
 SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
 endif
