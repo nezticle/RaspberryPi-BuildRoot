@@ -252,9 +252,7 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
 TOOLCHAIN_EXTERNAL_SITE=http://git.xilinx.com/?p=xldk/microblaze_v2.0.git;a=blob;h=71e031ae990e063a5718f90d30cf97ad85e2f565;hb=569081301f0f1d8d3b24335a364e8ff1774190d4;f=
 TOOLCHAIN_EXTERNAL_SOURCE=microblaze-unknown-linux-gnu.tgz
 else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_RASPBERRYPI_ARM),y)
-TOOLCHAIN_EXTERNAL_SITE=http://bsquask.com/downloads/toolchains/
-#TOOLCHAIN_EXTERNAL_SITE=http://dl.dropbox.com/u/10721033/
-#TOOLCHAIN_EXTERNAL_SOURCE=x86-linux64-cross-arm-linux-hardfp.tar.bz2
+TOOLCHAIN_EXTERNAL_SITE=http://dl.dropbox.com/u/91182557/
 TOOLCHAIN_EXTERNAL_SOURCE=arm-raspberrypi-linux-gnueabi.tar.bz2
 else
 # A value must be set (even if unused), otherwise the
