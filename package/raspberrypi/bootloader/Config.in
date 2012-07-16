@@ -1,6 +1,31 @@
-config BR2_PACKAGE_RASPBERRYPI_BOOTLOADER
+config BR2_PACKAGE_BOOTLOADER
 	bool "Raspberry Pi bootloader files"
 	help
 	  These are the binary bootloader files from Broadcom.
 	  https://github.com/raspberrypi/firmware
 
+if BR2_PACKAGE_BOOTLOADER
+
+choice
+        prompt "RaspberryPi RAM Size"
+        default BR2_RASPBERRYPI_RAM_SIZE_128
+        help
+          Select the Raspberry Pi RAM size.
+
+        config BR2_RASPBERRYPI_RAM_SIZE_128 
+                bool "RaspberryPi RAM Size 128"
+
+        config BR2_RASPBERRYPI_RAM_SIZE_192
+                bool "RaspberryPi RAM Size 192"
+
+        config BR2_RASPBERRYPI_RAM_SIZE_224
+                bool "RaspberryPi RAM Size 224"
+
+endchoice
+
+endif
+config BR2_RASPBERRYPI_RAM_SIZE
+        string
+        default "128"        if BR2_RASPBERRYPI_RAM_SIZE_128 
+        default "192"        if BR2_RASPBERRYPI_RAM_SIZE_192
+        default "224"        if BR2_RASPBERRYPI_RAM_SIZE_224
