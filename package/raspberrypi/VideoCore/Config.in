@@ -1,4 +1,4 @@
-config BR2_PACKAGE_RASPBERRYPI_VIDEOCORE
+config BR2_PACKAGE_VIDEOCORE
 	bool "Raspberry Pi VideoCore drivers"
 	help
 	  These are the binary VideoCore drivers from Broadcom.
