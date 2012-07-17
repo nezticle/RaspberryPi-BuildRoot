@@ -24,8 +24,3 @@ choice
 endchoice
 
 endif
-config BR2_RASPBERRYPI_RAM_SIZE
-        string
-        default "128"        if BR2_RASPBERRYPI_RAM_SIZE_128 
-        default "192"        if BR2_RASPBERRYPI_RAM_SIZE_192
-        default "224"        if BR2_RASPBERRYPI_RAM_SIZE_224
