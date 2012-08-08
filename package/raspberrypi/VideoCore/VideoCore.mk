@@ -1,6 +1,6 @@
-VIDEOCORE_VERSION = master
-VIDEOCORE_SITE = git://github.com/raspberrypi/firmware.git
-VIDEOCORE_SITE_METHOD = git
+VIDEOCORE_VERSION = 7680bb3
+VIDEOCORE_SITE = http://bsquask.com/downloads/firmware
+VIDEOCORE_SOURCE = raspberrypi-firmware-$(VIDEOCORE_VERSION).tar.gz
 VIDEOCORE_INSTALL_STAGING = YES
 VIDEOCORE_INSTALL_TARGET = YES
 

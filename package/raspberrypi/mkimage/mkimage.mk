@@ -1,7 +1,7 @@
-MKIMAGE_VERSION = master
-MKIMAGE_SITE = git://github.com/raspberrypi/tools.git
-MKIMAGE_SITE_METHOD = git
-MKIMAGE_INSTALL_HOST = yes
+MKIMAGE_VERSION = bed344f
+MKIMAGE_SITE = http://bsquask.com/downloads/toolchains
+MKIMAGE_SOURCE = raspberrypi-tools-$(MKIMAGE_VERSION).tar.gz
+MKIMAGE_INSTALL_HOST = YES
 
 define HOST_MKIMAGE_INSTALL_CMDS
 	#copy first32k.bin to host/usr/share/mkimage/
