@@ -19,11 +19,11 @@ define QTXMLPATTERNS_INSTALL_STAGING_CMDS
 endef
 
 define QTXMLPATTERNS_INSTALL_TARGET_CMDS
-	cp -dpf $(STAGING_DIR)/usr/lib/QtXmlPatterns*.so.* $(TARGET_DIR)/usr/lib
+	cp -dpf $(STAGING_DIR)/usr/lib/libQtXmlPatterns*.so.* $(TARGET_DIR)/usr/lib
 endef
 
 define QTXMLPATTERNS_UNINSTALL_TARGET_CMDS
-	-rm $(TARGET_DIR)/usr/lib/QtXmlPatterns*.so.*
+	-rm $(TARGET_DIR)/usr/lib/libQtXmlPatterns*.so.*
 endef
 
 $(eval $(call GENTARGETS))

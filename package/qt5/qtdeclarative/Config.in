@@ -1,0 +1,7 @@
+config BR2_PACKAGE_QTDECLARATIVE
+	bool "qtdeclarative"
+	select BR2_PACKAGE_QTBASE
+	select BR2_PACKAGE_QTXMLPATTERNS
+	select BR2_PACKAGE_QTJSBACKEND
+	help
+		Qt 5 declarative module

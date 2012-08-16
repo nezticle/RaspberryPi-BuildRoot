@@ -13,6 +13,7 @@ define QTBASE_CONFIGURE_CMDS
 		-release \
 		-device pi \
 		-make libs \
+		-make tools \
 		-device-option CROSS_COMPILE=$(HOST_DIR)/usr/bin/arm-raspberrypi-linux-gnueabi- \
 		-device-option DISTRO=bsquask \
 		-sysroot $(STAGING_DIR) \
