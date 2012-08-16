@@ -1,7 +1,7 @@
 QTBASE_VERSION = master
 QTBASE_SITE = git://gitorious.org/qt/qtbase.git
 QTBASE_SITE_METHOD = git
-QTBASE_DEPENDENCIES = host-pkg-config libglib2 zlib jpeg libpng tiff freetype dbus openssl sqlite alsa-lib
+QTBASE_DEPENDENCIES = host-pkg-config udev libglib2 zlib jpeg libpng tiff freetype dbus VideoCore openssl sqlite alsa-lib 
 QTBASE_INSTALL_STAGING = YES
 
 define QTBASE_CONFIGURE_CMDS
