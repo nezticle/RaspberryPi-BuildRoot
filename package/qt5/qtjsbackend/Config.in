@@ -1,0 +1,5 @@
+config BR2_PACKAGE_QTJSBACKEND
+	bool "qtjsbackend"
+	select BR2_PACKAGE_QTBASE
+	help
+		Qt 5 jsbackend module
