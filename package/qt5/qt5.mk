@@ -1,0 +1,1 @@
+include package/qt5/qtbase/qtbase.mk
