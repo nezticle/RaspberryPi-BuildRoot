@@ -1,51 +1,66 @@
-# Getting started with the Bsquask SDK: #
+# RaspberryPi-Buildroot (aka the Bsquask SDK) #
 
 The objective of this project is to provide an SDK and root file system for the Raspberry Pi that is lightweight and takes full advantage of the hardware available.  The resulting image produced is small distro known as Bsquask (linux).
 
 The Bsquask SDK provides a GCC 4.6.3 toolchain for building armv6 binaries with the hardfloat ABI, as well as bootloaders, kernel image, rootfs, and development sysroot for the Raspberry Pi.
 
-## Generating Image and Sysroot: ##
+## Getting and building the Bsquask SDK ##
 
-Building is fairly strait-forward as buildroot is Makefile based.  One caveat though is that you can not specify the number of make jobs (-jN) for the top level Makefile.  This is handled automatically, so expect build failure if you set the number of jobs explicitly.
+Clone the RaspberryPi-BuildRoot project into your local code directory:  
+`cd ~/Code/`  
+`git clone git@github.com:nezticle/RaspberryPi-BuildRoot.git BuildRoot`
 
-To Build (in source):  
-`make raspberrypi_defconfig`
+Create the directory where you want your SDK to be built:  
+`export BSQUASK_DIR=/opt/bsquask`  
+`mkdir -p $BSQUASK_DIR`  
 
-To do a shadow build (recommended):  
-`make raspberrypi_defconfig O=/build/output/directory`  
-`cd /build/output/directory`  
-`make` 
+Enter the BuildRoot directory and generate a Makefile for your SDK:  
+`cd BuildRoot`  
+`make raspberrypi_defconfig O=$BSQUASK_DIR`  
+You may be missing some build dependancies (flex, bison, etc...) but you will be warned about what packages you need to install if this is the case.
 
-Wait for the build to complete, which can take up to a couple of hours if you have a slow machine.
+Change to your SDK directory and and start the build (this can take a few hours the first time).  
+`cd $BSQUASK_DIR`  
+`make`  
+*Do not use the -j option with this Makefile!  The number of make jobs is specified by the BuildRoot configuration, and overriding this with the -j flag here breaks the build system.  If you want to change the number of build jobs run:*  
+`sed 's/BR2_JLEVEL=5/BR2_JLEVEL=N/' .config > .tmp_config; mv .tmp_config .config`  
+*replacing the N with the number of build jobs, then run make as above*  
 
+## Using Generated Image on the Raspberry Pi ##
 
-## Create SD Image ##
+First you need to obtain an SD card that has the correct partitions setup.  It needs to be setup as follows:  
+- 75MB fat32 partition
+- 500MB or greater ext4 partition (ideally using the remainder of the card)
 
-Format an SD card with two partitions:  
-*75Mb Fat32*  
-*500+Mb Ext4*  
+If you need help with this, the Raspberry Pi wiki has a [guide](http://elinux.org/RPi_Advanced_Setup#Advanced_SD_card_setup) that's pretty close (make sure to use ext4 instead of ext3).
 
-Extract outputDirectory/images/boot.tar.gz to the Fat32 partition:  
-`tar -zxvf boot.tar.gz -C /media/boot`
+When you have this setup, mount the the two partitions (assuming /media/BOOT for the fat32 partiion, and /media/rootfs for the ext4).  The run the following commands to install the rootfs:  
+`cd $BSQUASK_DIR/images`  
+`tar -zxvf boot.tar.gz -C /media/BOOT`  
+`sudo tar -zxvf rootfs.tar.gz -C /media/rootfs`  
+*Make sure you are root(sudo) when extracting rootfs.tar.gz, or you will have problems on boot*
 
-extract outputDirectory/images/rootfs.tar.gz to the ext4 partition as root:  
-`sudo tar -zxvf rootfs.tar.gz -C /media/rootfs`
+Now place the SD card in your Raspberry Pi and power on.  If everything went as planned, you should get a login prompt for Bsquask (linux).  
+Easy right?
 
-## SDK + Toolchain: ##
-SDK host tools are in:  
-*output/host/usr/bin*
+## Basics of Using the SDK ##
+Lets set a few more environment variables to make things easier:  
+`export BSQUASK_HOST_DIR=$BSQUASK_DIR/host`  
+`export BSQUASK_STAGING_DIR=$BSQUASK_DIR/staging`  
+`export BSQUASK_TARGET_DIR=$BSQUASK_DIR/target`  
 
-Add this to you PATH environment variable to make use of these tools.
+`$BSQUASK_HOST_DIR` is the directory containing the native built tools for your machine like your cross compiler.  If you want to make use these tools then you will want to add these them to your path:  
+`export PATH=$BSQUASK_HOST_DIR/usr/bin:$PATH`  
 
-Sysroot containing header files and development library files is located here:  
-*outputDirectory/staging*
+`$BSQUASK_STAGING_DIR` is the location of your sysroot.  This is where you install everything that you've built for your device, including development headers and debug symbols.
 
-Target directory used to make images is here:  
-*outputDirectory/target*
-
-If you want to regenerate your image with your changes to target, just run make again.
+`$BSQUASK_TARGET_DIR` is the location you use to build images.  This is what you are deploying to your device, so only things you want to be in your images (like stripped binaries). 
 
 ## Note: ##
 Right now the default setup downloads an external toolchain that only works with x86_64 systems.  It is also possible to change the configuration to build your own compatible toolchain, but for this you should consult the BuildRoot documentation.
+
+### Login information:  
+username: root   
+password: root   
 
 ### The Bsquask SDK is based on BuildRoot 2012.05 ###
