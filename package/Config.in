@@ -698,6 +698,7 @@ source "package/qt5/qtxmlpatterns/Config.in"
 source "package/qt5/qtjsbackend/Config.in"
 source "package/qt5/qtdeclarative/Config.in"
 source "package/qt5/qtmultimedia/Config.in"
+source "package/qt5/qtwayland/Config.in"
 endmenu
 
 endmenu
