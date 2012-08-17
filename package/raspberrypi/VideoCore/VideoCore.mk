@@ -13,6 +13,8 @@ define VIDEOCORE_INSTALL_TARGET_CMDS
 	cp -r $(@D)/hardfp/opt/vc/bin $(TARGET_DIR)/opt/vc
 	cp -r $(@D)/hardfp/opt/vc/lib $(TARGET_DIR)/opt/vc
 	cp -r $(@D)/hardfp/opt/vc/sbin $(TARGET_DIR)/opt/vc
+	# add /opt/vc/lib to default library path
+	echo /opt/vc/lib >> $(TARGET_DIR)/etc/ld.so.conf
 endef
 
 $(eval $(call GENTARGETS))

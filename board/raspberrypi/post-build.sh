@@ -20,6 +20,3 @@ cp board/raspberrypi/interfaces $TARGETDIR/etc/network/
 # make sure that ntpdate is run before sshd is started
 cp board/raspberrypi/S41ntpdate $TARGETDIR/etc/init.d/
 chmod a+x $TARGETDIR/etc/init.d/S41ntpdate
-
-# add /opt/vc/lib to default library path
-echo /opt/vc/lib > $TARGETDIR/etc/ld.so.conf
