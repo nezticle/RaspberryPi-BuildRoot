@@ -52,10 +52,7 @@ Lets set a few more environment variables to make things easier:
 
 `$BSQUASK_STAGING_DIR` is the location of your sysroot.  This is where you install everything that you've built for your device, including development headers and debug symbols.
 
-`$BSQUASK_TARGET_DIR` is the location you use to build images.  This is what you are deploying to your device, so only things you want to be in your images (like stripped binaries). 
-
-## Note: ##
-Right now the default setup downloads an external toolchain that only works with x86_64 systems.  It is also possible to change the configuration to build your own compatible toolchain, but for this you should consult the BuildRoot documentation.
+`$BSQUASK_TARGET_DIR` is the location you use to build images.  This is what you are deploying to your device, so only things you want to be in your images (like stripped binaries).
 
 ### Login information:  
 username: root   
