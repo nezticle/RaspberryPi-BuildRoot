@@ -22,9 +22,7 @@ You may be missing some build dependancies (flex, bison, etc...) but you will be
 Change to your SDK directory and and start the build (this can take a few hours the first time).  
 `cd $BSQUASK_DIR`  
 `make`  
-*Do not use the -j option with this Makefile!  The number of make jobs is specified by the BuildRoot configuration, and overriding this with the -j flag here breaks the build system.  If you want to change the number of build jobs run:*  
-`sed 's/BR2_JLEVEL=5/BR2_JLEVEL=N/' .config > .tmp_config; mv .tmp_config .config`  
-*replacing the N with the number of build jobs, then run make as above*  
+*Do not use the -j option with this Makefile!  The optimum number of make jobs is determined by BuildRoot, and overriding this with the -j flag here breaks the build system.
 
 ## Using Generated Image on the Raspberry Pi ##
 
