@@ -1,0 +1,8 @@
+config BR2_PACKAGE_QT3D
+	bool "qt3d"
+	select BR2_PACKAGE_QTBASE
+	select BR2_PACKAGE_QTXMLPATTERNS
+	select BR2_PACKAGE_QTJSBACKEND
+	select BR2_PACKAGE_QTDECLARATIVE
+	help
+		Qt 5 3d module
