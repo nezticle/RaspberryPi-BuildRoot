@@ -15,8 +15,8 @@ init::sysinit:/etc/init.d/rcS
 
 # Logging junk
 mess::sysinit:/bin/touch /var/log/messages
-sysl:1:respawn:/sbin/syslogd -n -m 0
-klog:1:respawn:/sbin/klogd -n
+sysl:1:respawn:/usr/sbin/syslogd -n -m 0
+klog:1:respawn:/usr/sbin/klogd -n
 
 # Stuff to do for the 3-finger salute
 rebo::ctrlaltdel:/sbin/reboot
