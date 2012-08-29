@@ -18,7 +18,7 @@ LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/opt/vc/l
 INCLUDES="-isystem$(STAGING_DIR)/usr/include -isystem$(STAGING_DIR)/opt/vc/include -isystem$(STAGING_DIR)/usr/include -isystem$(STAGING_DIR)/opt/vc/include/interface/vcos/pthreads -isystem$(STAGING_DIR)/usr/include/freetype2"
 
 define OMXPLAYER_CONFIGURE_CMDS
-	$(MAKE) clean
+	$(MAKE) clean -C $(@D)
 endef
 
 define OMXPLAYER_BUILD_CMDS
