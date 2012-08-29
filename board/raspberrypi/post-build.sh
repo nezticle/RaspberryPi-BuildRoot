@@ -9,7 +9,7 @@ echo "disable_overscan=1" > $TARGETDIR/boot/config.txt
 echo "arm_freq=800" >> $TARGETDIR/boot/config.txt
 
 # Point /bin/sh to /bin/bash
-ln -s $TARGETDIR/bin/sh /bin/bash
+ln -T -s /bin/bash $TARGETDIR/bin/sh 
 
 # Package the /boot partition
 tar -czf $TARGETDIR/../images/boot.tar.gz --exclude=Image -C $TARGETDIR/boot/ .
