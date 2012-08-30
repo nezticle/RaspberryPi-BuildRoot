@@ -1,7 +1,7 @@
 OMXPLAYER_VERSION = a39c40e1852ebb9d2bcf8ab73b1890048a27b689
 OMXPLAYER_SITE = git://github.com/nezticle/omxplayer.git
 OMXPLAYER_SITE_METHOD = git
-OMXPLAYER_DEPENDENCIES = ffmpeg
+OMXPLAYER_DEPENDENCIES = ffmpeg boost pcre liberation
 
 OMXPLAYER_CONFIG_ENV = \
 LD="$(TARGET_LD)" \
