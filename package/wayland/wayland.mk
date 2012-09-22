@@ -1,4 +1,4 @@
-WAYLAND_VERSION = c855d6eec4c5e63489da5bc08451a2376e6d2aea
+WAYLAND_VERSION = 4b681a7fd4bee01c4d3385e69ee47ed3856c2229
 WAYLAND_SITE = git://anongit.freedesktop.org/wayland/wayland
 WAYLAND_SITE_METHOD = git
 HOST_WAYLAND_DEPENDENCIES = host-expat host-libffi

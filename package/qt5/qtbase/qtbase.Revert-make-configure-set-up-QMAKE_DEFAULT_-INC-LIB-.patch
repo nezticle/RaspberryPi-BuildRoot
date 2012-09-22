@@ -1,0 +1,93 @@
+From 4515f41d96c27d82588e7f44a53a37754e303678 Mon Sep 17 00:00:00 2001
+From: Andy Nichols <andy.nichols@digia.com>
+Date: Sun, 23 Sep 2012 02:21:01 +0200
+Subject: [PATCH] Revert "make configure set up QMAKE_DEFAULT_{INC,LIB}DIRS"
+
+This reverts commit 4d7921b819c9966eb0732a3e672f18833d65c7fc.
+---
+ configure                        |   18 +-----------------
+ mkspecs/common/unix.conf         |    3 +++
+ tools/configure/configureapp.cpp |    5 -----
+ 3 files changed, 4 insertions(+), 22 deletions(-)
+
+diff --git a/configure b/configure
+index 6e6162b..c75dd8d 100755
+--- a/configure
++++ b/configure
+@@ -2595,7 +2595,6 @@ if [ "$XPLATFORM_SYMBIAN_SBSV2" = "no" ]; then
+         exit 1
+     fi
+ fi
+-TEST_COMPILER_CXXFLAGS=`getXQMakeConf QMAKE_CXXFLAGS`
+ 
+ GCC_MACHINE_DUMP=
+ case "$TEST_COMPILER" in *g++) GCC_MACHINE_DUMP=$($TEST_COMPILER -dumpmachine);; esac
+@@ -2621,6 +2620,7 @@ fi
+ 
+ # auto-detect support for separate debug info in objcopy
+ if [ "$CFG_SEPARATE_DEBUG_INFO" != "no" ] && [ "$CFG_SHARED" = "yes" ]; then
++    TEST_COMPILER_CXXFLAGS=`getXQMakeConf QMAKE_CXXFLAGS`
+     TEST_OBJCOPY=`getXQMakeConf QMAKE_OBJCOPY`
+     COMPILER_WITH_FLAGS="$TEST_COMPILER $TEST_COMPILER_CXXFLAGS"
+     if "$unixtests/objcopy.test" "$COMPILER_WITH_FLAGS" "$TEST_OBJCOPY" "$OPT_VERBOSE"; then
+@@ -2685,20 +2685,6 @@ else
+     CFG_FRAMEWORK=no
+ fi
+ 
+-# auto-detect default include and library search paths
+-gccout=`$TEST_COMPILER $SYSROOT_FLAG $TEST_COMPILER_CXXFLAGS -xc++ -E -v - < /dev/null 2>&1 > /dev/null`
+-libdirs=`echo "$gccout" | sed -n -e 's/^LIBRARY_PATH=\(.*\)/\1/p'`
+-DEFAULT_LIBDIRS=`IFS=:; for i in $libdirs; do test -d "$i" && cd "$i" && pwd; done | sort -u`
+-DEFAULT_INCDIRS=`echo "$gccout" | awk '
+-/^End of search/ { yup=0 }
+-yup { print substr($0, 2) }
+-/^\#include </ { yup=1 }
+-' | sort -u`
+-test -z "$DEFAULT_LIBDIRS" && DEFAULT_LIBDIRS="/lib
+-/usr/lib"
+-test -z "$DEFAULT_INCDIRS" && DEFAULT_INCDIRS="/usr/include
+-/usr/local/include"
+-
+ #setup the build parts
+ if [ -z "$CFG_BUILD_PARTS" ]; then
+     CFG_BUILD_PARTS="$QT_DEFAULT_BUILD_PARTS"
+@@ -5937,8 +5923,6 @@ QT_ARCH = $CFG_ARCH
+ QT_HOST_ARCH = $CFG_HOST_ARCH
+ QT_CPU_FEATURES = $CFG_CPUFEATURES
+ QT_HOST_CPU_FEATURES = $CFG_HOST_CPUFEATURES
+-QMAKE_DEFAULT_LIBDIRS = `echo "$DEFAULT_LIBDIRS" | sed 's,^,",;s,$,",' | tr '\n' ' '`
+-QMAKE_DEFAULT_INCDIRS = `echo "$DEFAULT_INCDIRS" | sed 's,^,",;s,$,",' | tr '\n' ' '`
+ QT_EDITION = $Edition
+ QT_CONFIG += $QT_CONFIG
+ 
+diff --git a/mkspecs/common/unix.conf b/mkspecs/common/unix.conf
+index a8f8c57..1c69633 100644
+--- a/mkspecs/common/unix.conf
++++ b/mkspecs/common/unix.conf
+@@ -15,4 +15,7 @@ QMAKE_PREFIX_SHLIB      = lib
+ QMAKE_PREFIX_STATICLIB  = lib
+ QMAKE_EXTENSION_STATICLIB = a
+ 
++QMAKE_DEFAULT_INCDIRS   = /usr/include /usr/local/include
++QMAKE_DEFAULT_LIBDIRS   = /usr/lib /usr/local/lib
++
+ include(shell-unix.conf)
+diff --git a/tools/configure/configureapp.cpp b/tools/configure/configureapp.cpp
+index 54ac8ce..6bb7324 100644
+--- a/tools/configure/configureapp.cpp
++++ b/tools/configure/configureapp.cpp
+@@ -2906,11 +2906,6 @@ void Configure::generateQConfigPri()
+         configStream << "QT_HOST_ARCH = " << dictionary["QT_HOST_ARCH"] << endl;
+         configStream << "QT_CPU_FEATURES = " << dictionary["QT_CPU_FEATURES"] << endl;
+         configStream << "QT_HOST_CPU_FEATURES = " << dictionary["QT_HOST_CPU_FEATURES"] << endl;
+-        if (!dictionary["XQMAKESPEC"].isEmpty() && !dictionary["XQMAKESPEC"].startsWith("wince")) {
+-            // FIXME: add detection
+-            configStream << "QMAKE_DEFAULT_LIBDIRS = /lib /usr/lib" << endl;
+-            configStream << "QMAKE_DEFAULT_INCDIRS = /usr/include /usr/local/include" << endl;
+-        }
+         if (dictionary["QT_EDITION"].contains("OPENSOURCE"))
+             configStream << "QT_EDITION = " << QLatin1String("OpenSource") << endl;
+         else
+-- 
+1.7.9.5
+
