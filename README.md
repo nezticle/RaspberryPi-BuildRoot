@@ -58,4 +58,4 @@ Lets set a few more environment variables to make things easier:
 username: root   
 password: root   
 
-### The Bsquask SDK is based on BuildRoot 2012.05 ###
+### The Bsquask SDK is based on BuildRoot 2012.08 ###
