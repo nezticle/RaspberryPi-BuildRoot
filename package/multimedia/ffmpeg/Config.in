@@ -60,6 +60,11 @@ config BR2_PACKAGE_FFMPEG_SWSCALE
 	help
 	  Swscale is a library of video scaling routines.
 
+config BR2_PACKAGE_FFMPEG_AVFILTER
+	bool "Build libavfilters"
+	help
+	  libavfilters
+
 config BR2_PACKAGE_FFMPEG_ENCODERS
 	string "Enabled encoders"
 	default "all"

@@ -4,14 +4,14 @@
 #
 #############################################################
 
-FFMPEG_VERSION = 0.8.12
+FFMPEG_VERSION = 0.11.1
 FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
 FFMPEG_SITE = http://ffmpeg.org/releases
 FFMPEG_INSTALL_STAGING = YES
 
 FFMPEG_CONF_OPT = \
 	--prefix=/usr		\
-	--disable-avfilter	\
+	--disable-static \
 	$(if $(BR2_HAVE_DOCUMENTATION),,--disable-doc)
 
 ifeq ($(BR2_PACKAGE_FFMPEG_GPL),y)
@@ -56,6 +56,12 @@ ifeq ($(BR2_PACKAGE_FFMPEG_SWSCALE),y)
 FFMPEG_CONF_OPT += --enable-swscale
 else
 FFMPEG_CONF_OPT += --disable-swscale
+endif
+
+ifeq ($(BR2_PACKAGE_FFMPEG_AVFILTER),y)
+FFMPEG_CONF_OPT += --enable-avfilter
+else
+FFMPEG_CONF_OPT += --disable-avfilter
 endif
 
 ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_ENCODERS)),all)

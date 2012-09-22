@@ -1,0 +1,8 @@
+config BR2_PACKAGE_WAYLAND
+	bool "wayland"
+	select BR2_PACKAGE_PKG_CONFIG
+	select BR2_PACKAGE_UDEV
+	select BR2_PACKAGE_VIDEOCORE
+	select BR2_PACKAGE_LIBFFI
+	help
+		Provides libwayland needed for wayland compositors

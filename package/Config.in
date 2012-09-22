@@ -671,7 +671,7 @@ endif
 source "package/monit/Config.in"
 if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
 source "package/procps/Config.in"
-source "package/psmisc/Config.in"
+source "package/psmisc/Config.in"	
 endif
 source "package/quota/Config.in"
 if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
@@ -694,6 +694,23 @@ source "package/uemacs/Config.in"
 if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
 source "package/vim/Config.in"
 endif
+endmenu
+
+menu "Raspberry Pi"
+source "package/raspberrypi/VideoCore/Config.in"
+source "package/raspberrypi/mkimage/Config.in"
+source "package/raspberrypi/bootloader/Config.in"
+source "package/wayland/Config.in"
+source "package/raspberrypi/omxplayer/Config.in"
+menu "Qt 5"
+source "package/qt5/qtbase/Config.in"
+source "package/qt5/qtxmlpatterns/Config.in"
+source "package/qt5/qtjsbackend/Config.in"
+source "package/qt5/qtdeclarative/Config.in"
+source "package/qt5/qtmultimedia/Config.in"
+source "package/qt5/qtwayland/Config.in"
+source "package/qt5/qt3d/Config.in"
+endmenu
 endmenu
 
 endmenu

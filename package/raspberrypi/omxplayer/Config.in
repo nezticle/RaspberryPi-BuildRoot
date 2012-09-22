@@ -1,0 +1,13 @@
+config BR2_PACKAGE_OMXPLAYER
+	bool "omxplayer"
+	select BR2_PACKAGE_FFMPEG
+	select BR2_PACKAGE_BOOST
+	select BR2_PACKAGE_PCRE
+	select BR2_PACKAGE_LIBERATION
+	select BR2_PACKAGE_FFMPEG_GPL
+	select BR2_PACKAGE_FFMPEG_AVFILTER
+	select BR2_PACKAGE_FFMPEG_SWSCALE
+	select BR2_PACKAGE_FFMPEG_POSTPROC
+	help
+		Enables omxplayer (Media player backend
+		for xbmc on Raspberry Pi)

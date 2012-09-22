@@ -66,6 +66,8 @@ LIB_EXTERNAL_LIBS+=libthread_db.so
 endif # gdbserver
 endif # ! no threads
 
+HOST_ARCH:=$(shell uname -m)
+
 # Details about sysroot directory selection.
 #
 # To find the sysroot directory:
@@ -259,6 +261,13 @@ TOOLCHAIN_EXTERNAL_SOURCE=microblazeel-unknown-linux-gnu.tgz
 else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
 TOOLCHAIN_EXTERNAL_SITE=http://git.xilinx.com/?p=xldk/microblaze_v2.0.git;a=blob;h=71e031ae990e063a5718f90d30cf97ad85e2f565;hb=569081301f0f1d8d3b24335a364e8ff1774190d4;f=
 TOOLCHAIN_EXTERNAL_SOURCE=microblaze-unknown-linux-gnu.tgz
+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_RASPBERRYPI_ARM),y)
+ifeq ($(HOST_ARCH),x86_64)
+TOOLCHAIN_EXTERNAL_SITE=http://bsquask.com/downloads/toolchains/
+else
+TOOLCHAIN_EXTERNAL_SITE=http://bsquask.com/downloads/toolchains/x86/
+endif
+TOOLCHAIN_EXTERNAL_SOURCE=arm-raspberrypi-linux-gnueabi.tar.bz2
 else
 # Custom toolchain
 TOOLCHAIN_EXTERNAL_SITE=$(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))

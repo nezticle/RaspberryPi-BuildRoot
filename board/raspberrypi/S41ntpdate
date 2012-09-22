@@ -1,0 +1,25 @@
+#!/bin/sh
+#
+# run ntpdate....
+#
+
+case "$1" in
+  start)
+     echo "Running ntpdate to set the time"
+     /usr/bin/ntpdate -u 0.us.pool.ntp.org
+     ;;
+  stop)
+     echo -n "not running ntpdate..."
+     ;;
+  restart|reload)
+     "$0" stop
+     "$0" start
+     ;;
+  *)
+     echo "Usage: $0 {start|stop|restart}"
+     exit 1
+esac
+
+exit $?
+
+

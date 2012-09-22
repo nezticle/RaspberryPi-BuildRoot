@@ -17,14 +17,19 @@ define SYSVINIT_DEBIAN_PATCHES
 	if [ -d $(@D)/debian/patches ]; then \
 		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*.patch; \
 	fi
+# Fix broken logic for -lcrypt with GLBC
+#ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
+	$(SED) 's/$(wildcard \/usr\/lib\*\/libcrypt\.a),/0, 1/' $(@D)/src/Makefile
+#endif
 endef
 
 SYSVINIT_POST_PATCH_HOOKS = SYSVINIT_DEBIAN_PATCHES
 
+
 define SYSVINIT_BUILD_CMDS
 	# Force sysvinit to link against libcrypt as it otherwise
 	# use an incorrect test to see if it's available
-	$(MAKE) $(TARGET_CONFIGURE_OPTS) LCRYPT="-lcrypt" -C $(@D)/src
+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/src
 endef
 
 define SYSVINIT_INSTALL_TARGET_CMDS
