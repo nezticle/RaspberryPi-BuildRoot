@@ -1,4 +1,4 @@
-VIDEOCORE_VERSION = 9f7cff0
+VIDEOCORE_VERSION = c58f722
 VIDEOCORE_SITE = http://bsquask.com/downloads/firmware
 VIDEOCORE_SOURCE = raspberrypi-firmware-$(VIDEOCORE_VERSION).tar.gz
 VIDEOCORE_INSTALL_STAGING = YES
