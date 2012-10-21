@@ -1,4 +1,4 @@
-QT3D_VERSION = 0c2a92b200db925ead6946f87fca9eb2dbc7e339
+QT3D_VERSION = 6b8ee028ac0daae74f5521b9e5562f94b5e8e169
 QT3D_SITE = git://gitorious.org/qt/qt3d.git
 QT3D_SITE_METHOD = git
 QT3D_DEPENDENCIES = qtbase qtxmlpatterns qtjsbackend qtdeclarative
