@@ -6,21 +6,10 @@ config BR2_PACKAGE_BOOTLOADER
 
 if BR2_PACKAGE_BOOTLOADER
 
-choice
-        prompt "RaspberryPi RAM Size"
-        default BR2_RASPBERRYPI_RAM_SIZE_128
-        help
-          Select the Raspberry Pi RAM size.
-
-        config BR2_RASPBERRYPI_RAM_SIZE_128 
-                bool "RaspberryPi RAM Size 128"
-
-        config BR2_RASPBERRYPI_RAM_SIZE_192
-                bool "RaspberryPi RAM Size 192"
-
-        config BR2_RASPBERRYPI_RAM_SIZE_224
-                bool "RaspberryPi RAM Size 224"
-
-endchoice
+config BR2_RASPBERRYPI_GPU_RAM_SIZE
+    int "Amount of RAM dedicated to the GPU"
+    default "128"
+    help
+      Remaining RAM will be used as system RAM.
 
 endif
