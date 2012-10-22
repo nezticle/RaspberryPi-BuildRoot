@@ -92,7 +92,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_01
 	  VFPv3-D16 FPU instructions.
 
 config BR2_TOOLCHAIN_EXTERNAL_RASPBERRYPI_ARM
-	bool "Rapsberry Pi ARMv6 hardfloat"
+	bool "Raspberry Pi ARMv6 hardfloat"
 	depends on BR2_arm
 	depends on BR2_arm1176jzf_s
 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
