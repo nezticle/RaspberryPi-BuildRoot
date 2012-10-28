@@ -9,8 +9,17 @@ ln -T -s /bin/bash $TARGETDIR/bin/sh
 # Package the /boot partition
 tar -czf $TARGETDIR/../images/boot.tar.gz --exclude=Image -C $TARGETDIR/boot/ .
 
-# add a corrected, and lightweight inittab
-cp board/raspberrypi/inittab $TARGETDIR/etc/inittab
+# remove inittab
+rm $TARGETDIR/etc/inittab
+
+#remote rc.conf
+rm $TARGETDIR/etc/init/rc.conf
+
+#replace rc-sysinit.conf
+cp board/raspberrypi/rc-sysinit.conf $TARGETDIR/etc/init/
+
+#add task to start getty on tty1
+cp board/raspberrypi/tty1.conf $TARGETDIR/etc/init/
 
 # add eth0 dhcp entry into /etc/network/interfaces
 cp board/raspberrypi/interfaces $TARGETDIR/etc/network/

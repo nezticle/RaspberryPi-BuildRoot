@@ -64,6 +64,17 @@ comment 'systemd requires largefile, wchar, IPv6, threads and udev support'
 		     BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS && \
 		     BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV)
 
+config BR2_INIT_UPSTART
+	bool "Upstart"
+	depends on BR2_LARGEFILE
+	depends on BR2_USE_WCHAR
+	depends on BR2_INET_IPV6
+	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+	depends on BR2_TOOLCHAIN_HAS_THREADS
+	select BR2_PACKAGE_DBUS
+	select BR2_PACKAGE_LIBNIH
+	select BR2_PACKAGE_UPSTART
+
 config BR2_INIT_NONE
 	bool "None"
 
