@@ -2,20 +2,13 @@ root:x:0:
 daemon:x:1:
 bin:x:2:
 sys:x:3:
-adm:x:4:bsquask
+adm:x:4:
 tty:x:5:
 disk:x:6:
-lp:x:7:bsquask
 wheel:x:10:root
-kmem:x:15:
-dialout:x:20:
-cdrom:x:24:
-floppy:x:25:
-tape:x:26:
-audio:x:29:bsquask
+audio:x:29:
 www-data:x:33:
 utmp:x:43:
-video:x:44:bsquask
 staff:x:50:
 lock:x:54:
 haldaemon:x:68:
@@ -26,4 +19,3 @@ nobody:x:99:
 nogroup:x:99:
 users:x:100:
 default:x:1000:
-bsquask:x:1001:
