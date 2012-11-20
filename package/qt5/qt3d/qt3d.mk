@@ -1,4 +1,4 @@
-QT3D_VERSION = 6b8ee028ac0daae74f5521b9e5562f94b5e8e169
+QT3D_VERSION = 1ce13f86c7066721ce80258d6a89baccc4030066
 QT3D_SITE = git://gitorious.org/qt/qt3d.git
 QT3D_SITE_METHOD = git
 QT3D_DEPENDENCIES = qtbase qtxmlpatterns qtjsbackend qtdeclarative
@@ -19,13 +19,13 @@ define QT3D_INSTALL_STAGING_CMDS
 endef
 
 define QT3D_INSTALL_TARGET_CMDS
-	cp -dpf $(STAGING_DIR)/usr/lib/libQt3D*.so.* $(TARGET_DIR)/usr/lib
-	cp -dpfr $(STAGING_DIR)/usr/imports/Qt3D $(TARGET_DIR)/usr/imports
+	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
+	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
 endef
 
 define QT3D_UNINSTALL_TARGET_CMDS
-	-rm $(TARGET_DIR)/usr/lib/libQt3D*.so.*
-	-rm -r $(TARGET_DIR)/usr/imports/Qt3D
+	-rm $(TARGET_DIR)/usr/lib/libQt53D*.so.*
+	-rm -r $(TARGET_DIR)/usr/qml/Qt3D
 endef
 
 $(eval $(generic-package))

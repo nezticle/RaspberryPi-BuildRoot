@@ -19,11 +19,11 @@ define QTJSBACKEND_INSTALL_STAGING_CMDS
 endef
 
 define QTJSBACKEND_INSTALL_TARGET_CMDS
-	cp -dpf $(STAGING_DIR)/usr/lib/libQtV8*.so.* $(TARGET_DIR)/usr/lib
+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5V8*.so.* $(TARGET_DIR)/usr/lib
 endef
 
 define QTJSBACKEND_UNINSTALL_TARGET_CMDS
-	-rm $(TARGET_DIR)/usr/lib/libQtV8*.so.*
+	-rm $(TARGET_DIR)/usr/lib/libQt5V8*.so.*
 endef
 
 $(eval $(generic-package))

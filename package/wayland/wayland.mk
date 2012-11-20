@@ -1,6 +1,6 @@
-WAYLAND_VERSION = 4b681a7fd4bee01c4d3385e69ee47ed3856c2229
-WAYLAND_SITE = git://anongit.freedesktop.org/wayland/wayland
-WAYLAND_SITE_METHOD = git
+WAYLAND_VERSION = 1.0.1
+WAYLAND_SITE = http://wayland.freedesktop.org/releases/
+WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
 HOST_WAYLAND_DEPENDENCIES = host-expat host-libffi
 WAYLAND_DEPENDENCIES = host-pkg-config udev VideoCore libffi host-wayland
 WAYLAND_INSTALL_STAGING = YES
