@@ -9,7 +9,7 @@ WAYLAND_INSTALL_STAGING = YES
 
 HOST_WAYLAND_AUTORECONF = YES
 
-define HOST_WAYLAND_CONFIG_CMDS
+define HOST_WAYLAND_CONFIGURE_CMDS
 	(cd $(@D) && rm -rf config.cache; \
 	        $(HOST_CONFIGURE_OPTS) \
 		CFLAGS="$(HOST_CFLAGS)" \
@@ -17,10 +17,11 @@ define HOST_WAYLAND_CONFIG_CMDS
 		./configure \
 		--prefix="$(HOST_DIR)/usr" \
 		--sysconfdir="$(HOST_DIR)/etc" \
+		--disable-documentation \
 	)
 endef
 
-WAYLAND_CONF_OPT += --disable-scanner
+WAYLAND_CONF_OPT += --disable-scanner --disable-documentation
 
 WAYLAND_AUTORECONF = YES
 
