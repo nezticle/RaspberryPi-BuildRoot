@@ -25,7 +25,7 @@ endef
 
 define QTWAYLAND_UNINSTALL_TARGET_CMDS
 	-rm $(TARGET_DIR)/usr/lib/libQt5Compositor*.so.*
-	-rm $(TARGET_DIR)/usr/plugins/platforms/libqwalynad.so
+	-rm $(TARGET_DIR)/usr/plugins/platforms/libqwayland.so
 endef
 
 $(eval $(generic-package))
