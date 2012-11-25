@@ -6,3 +6,4 @@ include package/qt5/qtmultimedia/qtmultimedia.mk
 include package/qt5/qtwayland/qtwayland.mk
 include package/qt5/qt3d/qt3d.mk
 include package/qt5/qtgamepad/qtgamepad.mk
+include package/qt5/qtgraphicaleffects/qtgraphicaleffects.mk
