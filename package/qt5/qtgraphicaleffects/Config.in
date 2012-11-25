@@ -1,0 +1,6 @@
+config BR2_PACKAGE_QTGRAPHICALEFFECTS
+	bool "qtgraphicaleffects"
+	select BR2_PACKAGE_QTBASE
+	select BR2_PACKAGE_QTDECLARATIVE
+	help
+		Qt 5 Graphical Effects module
