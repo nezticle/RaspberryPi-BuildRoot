@@ -1,4 +1,4 @@
-QTBASE_VERSION = b98b11fa036ea301d1483df6f533ec55be727d9d
+QTBASE_VERSION = ad4de55eb4186656bbe1b8c26f3f0d696b8f56b9
 QTBASE_SITE = git://gitorious.org/qt/qtbase.git
 QTBASE_SITE_METHOD = git
 QTBASE_DEPENDENCIES = host-pkg-config udev libglib2 zlib jpeg libpng tiff freetype dbus VideoCore openssl sqlite alsa-lib 
