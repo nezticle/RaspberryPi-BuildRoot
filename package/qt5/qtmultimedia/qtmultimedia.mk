@@ -1,6 +1,6 @@
-QTMULTIMEDIA_VERSION = 6a6c9ca37c0cf9ee8e1156860db7d32508a9dc5a
-QTMULTIMEDIA_SITE = git://gitorious.org/qt/qtmultimedia.git
-QTMULTIMEDIA_SITE_METHOD = git
+QTMULTIMEDIA_VERSION = 5.0.0-rc1
+QTMULTIMEDIA_SITE = http://releases.qt-project.org/qt5.0/rc1/submodules_tar
+QTMULTIMEDIA_SOURCE = qtmultimedia-opensource-src-$(QTMULTIMEDIA_VERSION).tar.gz
 QTMULTIMEDIA_DEPENDENCIES = qtbase qtdeclarative
 QTMULTIMEDIA_INSTALL_STAGING = YES
 

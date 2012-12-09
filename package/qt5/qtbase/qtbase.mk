@@ -1,6 +1,6 @@
-QTBASE_VERSION = ad4de55eb4186656bbe1b8c26f3f0d696b8f56b9
-QTBASE_SITE = git://gitorious.org/qt/qtbase.git
-QTBASE_SITE_METHOD = git
+QTBASE_VERSION = 5.0.0-rc1
+QTBASE_SITE = http://releases.qt-project.org/qt5.0/rc1/submodules_tar
+QTBASE_SOURCE = qtbase-opensource-src-$(QTBASE_VERSION).tar.gz
 QTBASE_DEPENDENCIES = host-pkg-config udev libglib2 zlib jpeg libpng tiff freetype dbus VideoCore openssl sqlite alsa-lib 
 QTBASE_INSTALL_STAGING = YES
 

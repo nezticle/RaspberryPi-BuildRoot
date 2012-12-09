@@ -1,6 +1,6 @@
-QTDECLARATIVE_VERSION = acb9a7340b22cfda8bf6310c2fc9196c96cfc148
-QTDECLARATIVE_SITE = git://gitorious.org/qt/qtdeclarative.git
-QTDECLARATIVE_SITE_METHOD = git
+QTDECLARATIVE_VERSION = 5.0.0-rc1
+QTDECLARATIVE_SITE = http://releases.qt-project.org/qt5.0/rc1/submodules_tar
+QTDECLARATIVE_SOURCE = qtdeclarative-opensource-src-$(QTDECLARATIVE_VERSION).tar.gz
 QTDECLARATIVE_DEPENDENCIES = qtbase qtxmlpatterns qtjsbackend
 QTDECLARATIVE_INSTALL_STAGING = YES
 
