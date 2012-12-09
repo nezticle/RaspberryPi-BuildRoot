@@ -1,4 +1,4 @@
-QTWAYLAND_VERSION = c2651cb953c4dfcf1578a380e65d6a0ec20ca571
+QTWAYLAND_VERSION = 75bbcca373018d93ea934a879020e9940b53d9fd
 QTWAYLAND_SITE = git://gitorious.org/qt/qtwayland.git
 QTWAYLAND_SITE_METHOD = git
 QTWAYLAND_DEPENDENCIES = qtbase qtxmlpatterns qtjsbackend qtdeclarative wayland

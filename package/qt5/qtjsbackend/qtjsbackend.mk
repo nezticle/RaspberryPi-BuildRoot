@@ -1,6 +1,6 @@
-QTJSBACKEND_VERSION = 4cbcad7fbb5606e6f183062b5f15be08b9568ecb
-QTJSBACKEND_SITE = git://gitorious.org/qt/qtjsbackend.git
-QTJSBACKEND_SITE_METHOD = git
+QTJSBACKEND_VERSION = 5.0.0-rc1
+QTJSBACKEND_SITE = http://releases.qt-project.org/qt5.0/rc1/submodules_tar
+QTJSBACKEND_SOURCE = qtjsbackend-opensource-src-$(QTJSBACKEND_VERSION).tar.gz
 QTJSBACKEND_DEPENDENCIES = qtbase
 QTJSBACKEND_INSTALL_STAGING = YES
 

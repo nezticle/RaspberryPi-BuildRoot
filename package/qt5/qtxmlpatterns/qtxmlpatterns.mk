@@ -1,6 +1,6 @@
-QTXMLPATTERNS_VERSION = 2cb057efb696d1d784ae01edb197ec8547cafb93
-QTXMLPATTERNS_SITE = git://gitorious.org/qt/qtxmlpatterns.git
-QTXMLPATTERNS_SITE_METHOD = git
+QTXMLPATTERNS_VERSION = 5.0.0-rc1
+QTXMLPATTERNS_SITE = http://releases.qt-project.org/qt5.0/rc1/submodules_tar
+QTXMLPATTERNS_SOURCE = qtxmlpatterns-opensource-src-$(QTXMLPATTERNS_VERSION).tar.gz
 QTXMLPATTERNS_DEPENDENCIES = qtbase
 QTXMLPATTERNS_INSTALL_STAGING = YES
 
