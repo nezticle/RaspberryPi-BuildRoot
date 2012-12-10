@@ -19,7 +19,7 @@ define QTXMLPATTERNS_INSTALL_STAGING_CMDS
 endef
 
 define QTXMLPATTERNS_INSTALL_TARGET_CMDS
-	cp -dpf $(STAGING_DIR)/usr/lib/libQt5XmlPatterns*.so.* $(TARGET_DIR)/usr/lib
+	cp -dpf $(@D)/lib/libQt5XmlPatterns*.so.* $(TARGET_DIR)/usr/lib
 endef
 
 define QTXMLPATTERNS_UNINSTALL_TARGET_CMDS

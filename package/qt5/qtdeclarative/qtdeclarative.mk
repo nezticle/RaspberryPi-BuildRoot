@@ -19,11 +19,11 @@ define QTDECLARATIVE_INSTALL_STAGING_CMDS
 endef
 
 define QTDECLARATIVE_INSTALL_TARGET_CMDS
-	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Qml*.so.* $(TARGET_DIR)/usr/lib
-	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Quick*.so.* $(TARGET_DIR)/usr/lib
-	cp -dpf $(STAGING_DIR)/usr/bin/qml* $(TARGET_DIR)/usr/bin
-	cp -dpfr $(STAGING_DIR)/usr/plugins/qml* $(TARGET_DIR)/usr/plugins
-	cp -dpfr $(STAGING_DIR)/usr/qml $(TARGET_DIR)/usr
+	cp -dpf $(@D)/lib/libQt5Qml*.so.* $(TARGET_DIR)/usr/lib
+	cp -dpf $(@D)/lib/libQt5Quick*.so.* $(TARGET_DIR)/usr/lib
+	cp -dpf $(@D)/bin/qml* $(TARGET_DIR)/usr/bin
+	cp -dpfr $(@D)/plugins/qml* $(TARGET_DIR)/usr/plugins
+	cp -dpfr $(@D)/qml $(TARGET_DIR)/usr
 endef
 
 define QTDECLARATIVE_UNINSTALL_TARGET_CMDS

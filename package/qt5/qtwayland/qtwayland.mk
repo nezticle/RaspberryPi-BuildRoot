@@ -19,8 +19,8 @@ define QTWAYLAND_INSTALL_STAGING_CMDS
 endef
 
 define QTWAYLAND_INSTALL_TARGET_CMDS
-	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Compositor*.so.* $(TARGET_DIR)/usr/lib
-	cp -dpf $(STAGING_DIR)/usr/plugins/platforms/libqwayland.so $(TARGET_DIR)/usr/plugins/platforms/
+	cp -dpf $(@D)/lib/libQt5Compositor*.so.* $(TARGET_DIR)/usr/lib
+	cp -dpf $(@D)/plugins/platforms/libqwayland.so $(TARGET_DIR)/usr/plugins/platforms/
 endef
 
 define QTWAYLAND_UNINSTALL_TARGET_CMDS
