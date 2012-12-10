@@ -14,7 +14,7 @@ define QTBASE_CONFIGURE_CMDS
 		-device pi \
 		-make libs \
 		-make tools \
-		-device-option CROSS_COMPILE=$(HOST_DIR)/usr/bin/arm-raspberrypi-linux-gnueabi- \
+		-device-option CROSS_COMPILE=$(TARGET_CROSS) \
 		-device-option DISTRO=bsquask \
 		-sysroot $(STAGING_DIR) \
 		-no-neon \
@@ -32,8 +32,8 @@ define QTBASE_INSTALL_STAGING_CMDS
 endef
 
 define QTBASE_INSTALL_TARGET_CMDS
-	cp -dpf $(STAGING_DIR)/usr/lib/libQt*.so.* $(TARGET_DIR)/usr/lib
-	cp -dpfr $(STAGING_DIR)/usr/plugins $(TARGET_DIR)/usr
+	cp -dpf $(@D)/lib/libQt5*.so.* $(TARGET_DIR)/usr/lib
+	cp -dpfr $(@D)/plugins $(TARGET_DIR)/usr
 endef
 
 define QTBASE_UNINSTALL_TARGET_CMDS

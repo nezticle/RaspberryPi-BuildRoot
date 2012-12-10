@@ -19,9 +19,9 @@ define QTMULTIMEDIA_INSTALL_STAGING_CMDS
 endef
 
 define QTMULTIMEDIA_INSTALL_TARGET_CMDS
-	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Multimedia*.so.* $(TARGET_DIR)/usr/lib
-	cp -dpfr $(STAGING_DIR)/usr/plugins/* $(TARGET_DIR)/usr/plugins
-	cp -dpfr $(STAGING_DIR)/usr/qml/* $(TARGET_DIR)/usr/qml
+	cp -dpf $(@D)/lib/libQt5Multimedia*.so.* $(TARGET_DIR)/usr/lib
+	cp -dpfr $(@D)/plugins/* $(TARGET_DIR)/usr/plugins
+	cp -dpfr $(@D)/qml/* $(TARGET_DIR)/usr/qml
 endef
 
 define QTMULTIMEDIA_UNINSTALL_TARGET_CMDS

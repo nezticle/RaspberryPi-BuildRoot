@@ -19,8 +19,8 @@ define QT3D_INSTALL_STAGING_CMDS
 endef
 
 define QT3D_INSTALL_TARGET_CMDS
-	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
-	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
+	cp -dpf $(@D)/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
+	cp -dpfr $(@D)/qml/Qt3D $(TARGET_DIR)/usr/qml
 endef
 
 define QT3D_UNINSTALL_TARGET_CMDS
