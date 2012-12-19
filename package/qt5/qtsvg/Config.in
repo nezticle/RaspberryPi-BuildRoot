@@ -1,0 +1,5 @@
+config BR2_PACKAGE_QTSVG
+	bool "qtsvg"
+	select BR2_PACKAGE_QTBASE
+	help
+		Qt 5 svg module

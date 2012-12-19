@@ -54,6 +54,10 @@ Lets set a few more environment variables to make things easier:
 
 `$BSQUASK_TARGET_DIR` is the location you use to build images.  This is what you are deploying to your device, so only things you want to be in your images (like stripped binaries).
 
+### Building cmake based projects   
+`cmake -DCMAKE_TOOLCHAIN_FILE=$BSQUASK_HOST_DIR/usr/share/buildroot/toolchainfile.cmake`   
+`make`   
+
 ### Login information:  
 username: root   
 password: root   
