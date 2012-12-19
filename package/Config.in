@@ -711,9 +711,14 @@ source "package/qt5/qtjsbackend/Config.in"
 source "package/qt5/qtdeclarative/Config.in"
 source "package/qt5/qtmultimedia/Config.in"
 source "package/qt5/qtwayland/Config.in"
+source "package/qt5/qtgraphicaleffects/Config.in"
+source "package/qt5/qtwebkit/Config.in"
+source "package/qt5/qtimageformats/Config.in"
+source "package/qt5/qtquick1/Config.in"
+source "package/qt5/qtscript/Config.in"
+source "package/qt5/qtsvg/Config.in"
 source "package/qt5/qt3d/Config.in"
 source "package/qt5/qtgamepad/Config.in"
-source "package/qt5/qtgraphicaleffects/Config.in"
 endmenu
 endmenu
 

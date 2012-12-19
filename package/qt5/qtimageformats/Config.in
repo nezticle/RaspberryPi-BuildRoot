@@ -1,0 +1,5 @@
+config BR2_PACKAGE_QTIMAGEFORMATS
+	bool "qtimageformats"
+	select BR2_PACKAGE_QTBASE
+	help
+		Qt 5 image formats module
