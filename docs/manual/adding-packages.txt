@@ -1,6 +1,8 @@
-Adding new packages to Buildroot
-================================
+// -*- mode:doc -*- ;
+
 [[adding-packages]]
+Adding new packages to Buildroot
+--------------------------------
 
 This section covers how new packages (userspace libraries or
 applications) can be integrated into Buildroot. It also shows how
@@ -15,8 +17,8 @@ include::adding-packages-autotools.txt[]
 
 include::adding-packages-cmake.txt[]
 
-include::adding-packages-handwritten.txt[]
-
 include::adding-packages-gettext.txt[]
+
+include::adding-packages-tips.txt[]
 
 include::adding-packages-conclusion.txt[]

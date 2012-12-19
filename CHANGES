@@ -1,3 +1,115 @@
+2012.11, Released December 2nd, 2012:
+
+	Git shallow clone fix for older git version.
+
+	Updated/fixed packages: ctuio, libtool
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#5726: List all the available hook points
+
+2012.11-rc2, Released November 30th, 2012:
+
+	Minor fixes around the tree.
+
+	Various manual updates and fixes.
+
+	Add checks for legacy features.
+
+	Updated/fixed packages: acpid, alsa-lib, arptables, binutils,
+	busybox, ccache, cjson, cramfs, directfb, flex, fluxbox, gdb,
+	hiawatha, igh-ethercat, imagemagick, imlib2, lcdproc,
+	libdaemon, libecore, libhid, libmad, libpcap, libsigc, libusb,
+	linux-fusion, matchbox, ocf-linux, owl-linux, python, rrdtool,
+	scons, strace, sylpheed
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#5732: Error : package/alsa-lib/alsa-lib.mk
+
+2012.11-rc1, Released November 17th, 2012
+
+	Fixes all over the tree and new features.
+
+	Defconfigs: use u-boot 2012.10 on at91 and beaglebone,
+	sheevaplug + qemu: bump kernel version, add qemu-mips64-malta
+	+ nitrogen6x defconfigs.
+
+	Bootloaders: add u-boot 2012.07/10, ais target format, add
+	barebox 2012.08/09/10/11, linker overlap issue fix for
+	at91bootstrap, mxs-bootlets updated for new Barebox versions.
+
+	Toolchains: binutils 2.23.1, gcc 4.7.2, default to gcc 4.6.x,
+	Codebench arm/sh/x86 2012.03/09, Linaro 2012.08/09/10.
+	Libtirpc support for modern glibc variants. Toolchain on
+	target has been deprecated.
+
+	Initial Aarch64 support, Xtensa support re-added.
+
+	Infrastructure: Use shallow git clone when possible, use
+	tarballs rather than git URLs for github. Moved to pkgconf
+	rather than pkg-config. System directory added, default
+	skeleton/device tables moved. More than 1 post-build script
+	can now be used. output/target now contains a
+	THIS_IS_NOT_YOUR_ROOT_FILESYSTEM warning, to help people
+	understand how to (not) use it.
+
+	Manual has been reworked and extended.
+
+	Legal-info: Lots of package annotations, CSV file fixes,
+	_LICENSE / _REDISTRIBUTE splitup, per-package hooks.
+
+	Updated/fixed packages: acpid, alsa-lib, alsa-utils,
+	alsamixergui, attr, autoconf, automake, bash, bind, binutils,
+	bison, blackbox, bluez-utils, busybox, cairo, can-utils,
+	cifs-utils, cjson, cmake, collectd, connman, conntrack-tools,
+	coreutils, cups, cvs, dbus, dhcp, directfb, dmalloc, dnsmasq,
+	dropbear, e2fsprogs, ethtool, fbdump, feh, fftw, file,
+	flashrom, fluxbox, gdb, gdisk, gdk-pixbuf, genext2fs, gettext,
+	gnutls, gpsd, gqview, grep, gsl, gst-plugins-{bad,good},
+	hdparm, hiawatha, hostapd, input-tools, iproute2, ipset,
+	iptables, iw, json-c, kexec, kmod, lcdproc, leafpad, less,
+	libcurl, libdrm, libdvdnav, libdvdread, libffi, libfuse,
+	libglib2, libhid, liblockfile, libmad, libmbus, libmnl,
+	libnetfilter_{acct,conntrack,cthelper,cttimeout,queue},
+	libnfc, libnfc-llcp, libnfnetlink, libnl, libnspr, libnss,
+	libpcap, libplayer, libtool, libtorrent, liburcu, libv4l,
+	libxcb, libxml2, libxslt, links, linux-firmware, lm-sensors,
+	lmbench, lockfile-progs, logrotate, lshw, lsof,
+	lttng-babeltrace, lttng-tools, lua, luajit, mesa3d, microperl,
+	mii-diag, module-init-tools, mpc, mpd, mpg123, mplayer,
+	mtd-utils, mysql_client, nbd, ncurses, netatalk, netkitbase,
+	netkittelnet, netsnmp, newt, nfs-utils, openntpd, openssh,
+	openssl, opkg, patch, pciutils, pcre, php, poco, polarssl,
+	popt, portmap, pppd, procps, pulseaudio, python, python-nfc,
+	python-protobuf, qt, quota, rp-pppoe, rtorrent, sam-ba, samba,
+	scons, sdl_gfx, smartmontools, sqlite, squid, strace, sudo,
+	sylpheed, tcpdump, tremor, ttcp, tiff, unionfs,
+	usb_modeswitch, usbutils, util-linux, vala, valgrind, vpnc,
+	vsftpd, webkit, wget, which, wpa_supplicant, x11vnc, xapp_*,
+	xdriver_*, xenomai, xfont_*, xinetd, xl2tp, xlib_*, xlsclient,
+	xproto_*, xserver_xorg-server, xutil_util-macros, xz, zeromq
+
+	New packages: arptables, at91bootstrap3, boot-wrapper-aarch64,
+	ccid, cpanminus, cpuload, erlang, evtest, fb-test-apps,
+	fxload, gdbm, gnupg, googlefontdirectory, grantlee, gsl,
+	lcdapi, liblo, liblog4c-localtime, libtirpc, linux-pam,
+	lua-msgpack-native, macchanger, mtdev, mtdev2tuio, nfacct,
+	opus, opus-tools, pcsc-lite, perl, pkgconf, python-meld3,
+	python3, qemu, qextserialport, qtuio, rpcbind, schifra,
+	sconeserver, supervisor, time, ulogd, usb_modeswitch_data,
+	yasm
+
+	Deprecated packages: netkitbase, netkittelnet
+
+	Issues resolved (http://bugs.uclibc.org):
+
+	#807:  [PATCH] samba - make iconv and smbd optional
+	#3049: binutils have a sysroot bug in ld
+	#5330: update vsftpd to 3.0.0
+	#5486: libglib2 build fails on: libs/libglib-2.0.so: undefined...
+	#5666: Fails to build python 2.7.2 for 2440 arm
+
 2012.08, Release August 31th, 2012
 
 	Updated/fixed packages: microperl, cups, luajit, rrdtool,

@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-PULSEAUDIO_VERSION = 2.0
+PULSEAUDIO_VERSION = 2.1
 PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases/
 PULSEAUDIO_INSTALL_STAGING = YES
 PULSEAUDIO_CONF_OPT = \
@@ -15,8 +15,8 @@ PULSEAUDIO_CONF_OPT = \
 	$(if $(BR2_HAVE_DOCUMENTATION),,--disable-manpages)
 
 PULSEAUDIO_DEPENDENCIES = \
-	host-pkg-config libtool json-c libsndfile speex host-intltool \
-	$(if $(BR2_PACKAGE_LIBINTL),libintl) \
+	host-pkgconf libtool json-c libsndfile speex host-intltool \
+	$(if $(BR2_NEEDS_GETTEXT),gettext) \
 	$(if $(BR2_PACKAGE_LIBATOMIC_OPS),libatomic_ops) \
 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
 	$(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib) \
@@ -55,6 +55,25 @@ endif
 # gtk support needs x backend
 ifneq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_XORG),yy)
 PULSEAUDIO_CONF_OPT += --disable-gtk2
+endif
+
+ifeq ($(BR2_PACKAGE_LIBXCB)$(BR2_PACKAGE_XLIB_LIBSM)$(BR2_PACKAGE_XLIB_LIBXTST),yyy)
+PULSEAUDIO_DEPENDENCIES += libxcb xlib_libSM xlib_libXtst
+
+# .desktop file generation needs nls support, so fake it for !locale builds
+# https://bugs.freedesktop.org/show_bug.cgi?id=54658
+ifneq ($(BR2_ENABLE_LOCALE),y)
+define PULSEAUDIO_FIXUP_DESKTOP_FILES
+	cp $(@D)/src/daemon/pulseaudio.desktop.in \
+	   $(@D)/src/daemon/pulseaudio.desktop
+	cp $(@D)/src/daemon/pulseaudio-kde.desktop.in \
+	   $(@D)/src/daemon/pulseaudio-kde.desktop
+endef
+PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FIXUP_DESKTOP_FILES
+endif
+
+else
+PULSEAUDIO_CONF_OPT += --disable-x11
 endif
 
 ifneq ($(BR2_PACKAGE_VALA),y)

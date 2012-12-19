@@ -4,9 +4,11 @@
 #
 #############################################################
 
-IPROUTE2_VERSION = 3.4.0
+IPROUTE2_VERSION = 3.6.0
 IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
 IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct rtmon rtpr rtstat ss tc
+IPROUTE2_LICENSE = GPLv2
+IPROUTE2_LICENSE_FILES = COPYING
 
 # If both iproute2 and busybox are selected, make certain we win
 # the fight over who gets to have their utils actually installed.
@@ -22,9 +24,16 @@ define IPROUTE2_WITH_IPTABLES
 	$(SED) "s/-DIPT/-DXT/" $(IPROUTE2_DIR)/tc/Makefile
 	echo "TC_CONFIG_XT:=y" >>$(IPROUTE2_DIR)/Config
 endef
+else
+define IPROUTE2_WITH_IPTABLES
+	# em_ipset needs xtables, but configure misdetects it
+	echo "TC_CONFIG_IPSET:=n" >>$(IPROUTE2_DIR)/Config
+endef
 endif
 
 define IPROUTE2_CONFIGURE_CMDS
+	$(SED) 's/gcc/$$CC $$CFLAGS/g' $(@D)/configure
+	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
 	# arpd needs berkeleydb
 	$(SED) "/^TARGETS=/s: arpd : :" $(IPROUTE2_DIR)/misc/Makefile
 	echo "IPT_LIB_DIR:=/usr/lib/xtables" >>$(IPROUTE2_DIR)/Config
