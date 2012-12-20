@@ -1,8 +1,8 @@
 # RaspberryPi-Buildroot (aka the Bsquask SDK) #
 
-The objective of this project is to provide an SDK and root file system for the Raspberry Pi that is lightweight and takes full advantage of the hardware available.  The resulting image produced is small distro known as Bsquask (linux).
+The objective of this project is to provide an SDK and root file system for the Raspberry Pi that is lightweight and takes full advantage of the hardware available. The resulting image produced is small Linux distribution known as Bsquask.
 
-The Bsquask SDK provides a GCC 4.6.3 toolchain for building armv6 binaries with the hardfloat ABI, as well as bootloaders, kernel image, rootfs, and development sysroot for the Raspberry Pi.
+The Bsquask SDK provides a GCC 4.6.3 toolchain for building armv6 binaries with the hard-float ABI, as well as bootloaders, kernel image, rootfs, and development sysroot for the Raspberry Pi.
 
 ## Getting and building the Bsquask SDK ##
 
@@ -39,7 +39,10 @@ When you have this setup, mount the the two partitions (assuming /media/BOOT for
 *Make sure you are root(sudo) when extracting rootfs.tar.gz, or you will have problems on boot*
 
 Now place the SD card in your Raspberry Pi and power on.  If everything went as planned, you should get a login prompt for Bsquask (linux).  
-Easy right?
+
+### Login information:  
+username: root   
+password: root   
 
 ## Basics of Using the SDK ##
 Lets set a few more environment variables to make things easier:  
@@ -54,12 +57,16 @@ Lets set a few more environment variables to make things easier:
 
 `$BSQUASK_TARGET_DIR` is the location you use to build images.  This is what you are deploying to your device, so only things you want to be in your images (like stripped binaries).
 
+### Building Qt 5 based applications   
+`$BSQUASK_HOST_DIR/usr/bin/qmake yourproject.pro`   
+`make`   
+
+### Building automake based projects   
+`./autogen.sh --host arm-raspberrypi-linux-gnueabi --prefix=$BSQUASK_STAGING_DIR/usr`   
+`make`   
+
 ### Building cmake based projects   
 `cmake -DCMAKE_TOOLCHAIN_FILE=$BSQUASK_HOST_DIR/usr/share/buildroot/toolchainfile.cmake`   
 `make`   
-
-### Login information:  
-username: root   
-password: root   
 
 ### The Bsquask SDK is based on BuildRoot 2012.08 ###
