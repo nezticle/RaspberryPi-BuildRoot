@@ -3,8 +3,8 @@
 # dbus
 #
 #############################################################
-DBUS_VERSION = 1.4.20
-DBUS_SITE = http://dbus.freedesktop.org/releases/dbus/
+DBUS_VERSION = 1.6.8
+DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
 DBUS_INSTALL_STAGING = YES
 
 DBUS_DEPENDENCIES = host-pkg-config
@@ -63,7 +63,15 @@ define DBUS_INSTALL_TARGET_FIXUP
 	$(INSTALL) -m 0755 -D package/dbus/S30dbus $(TARGET_DIR)/etc/init.d/S30dbus
 endef
 
-DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_INSTALL_TARGET_FIXUP
+define DBUS_INSTALL_TARGET_UPSTART_FIXUP
+	$(INSTALL) -m 0644 package/dbus/dbus.conf $(TARGET_DIR)/etc/init
+endef
+
+ifeq ($(BR2_PACKAGE_UPSTART), y)
+	DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_INSTALL_TARGET_UPSTART_FIXUP
+else
+	DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_INSTALL_TARGET_FIXUP
+endif
 
 HOST_DBUS_DEPENDENCIES = host-pkg-config host-expat
 HOST_DBUS_CONF_OPT = \
