@@ -25,9 +25,7 @@ cp board/raspberrypi/tty1.conf $TARGETDIR/etc/init/
 cp board/raspberrypi/interfaces $TARGETDIR/etc/network/
 
 # make sure that ntpdate is run before sshd is started
-cp board/raspberrypi/S41ntpdate $TARGETDIR/etc/init.d/
-chmod a+x $TARGETDIR/etc/init.d/S41ntpdate
+cp board/raspberrypi/ntpdate.conf $TARGETDIR/etc/init/
 
 # start bluetooth daemon
-cp board/raspberrypi/S32bluetooth $TARGETDIR/etc/init.d/
-chmod a+x $TARGETDIR/etc/init.d/S32bluetooth
+cp board/raspberrypi/bluetooth.conf $TARGETDIR/etc/init/
