@@ -9,7 +9,7 @@ define BOOTLOADER_INSTALL_TARGET_CMDS
 	cp $(@D)/bootcode.bin $(TARGET_DIR)/boot/bootcode.bin
 	cp $(@D)/fixup.dat $(TARGET_DIR)/boot/fixup.dat
 	# Generate boot config files
-	echo "dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait" > $(TARGET_DIR)/boot/cmdline.txt
+	echo "dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty2 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait quiet" > $(TARGET_DIR)/boot/cmdline.txt
 	echo "disable_overscan=1" > $(TARGET_DIR)/boot/config.txt
 	echo "framebuffer_depth=24" >> $(TARGET_DIR)/boot/config.txt
 	echo "arm_freq=1000" >> $(TARGET_DIR)/boot/config.txt
