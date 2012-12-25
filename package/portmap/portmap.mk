@@ -47,8 +47,9 @@ define PORTMAP_INSTALL_INITSCRIPT
 endef
 
 define PORTMAP_INSTALL_UPSTART_INITSCRIPT
+	mkdir -p $(TARGET_DIR)/etc/init
 	$(INSTALL) -m 0644 package/portmap/portmap.conf \
-		$(TARGET_DIR)/etc/init
+		$(TARGET_DIR)/etc/init/portmap.conf
 endef
 
 ifeq ($(BR2_PACKAGE_UPSTART), y)

@@ -64,7 +64,8 @@ define DBUS_INSTALL_TARGET_FIXUP
 endef
 
 define DBUS_INSTALL_TARGET_UPSTART_FIXUP
-	$(INSTALL) -m 0644 package/dbus/dbus.conf $(TARGET_DIR)/etc/init
+	mkdir -p $(TARGET_DIR)/etc/init
+	$(INSTALL) -m 0644 package/dbus/dbus.conf $(TARGET_DIR)/etc/init/dbus.conf
 endef
 
 ifeq ($(BR2_PACKAGE_UPSTART), y)

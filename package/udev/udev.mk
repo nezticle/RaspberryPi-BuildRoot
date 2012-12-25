@@ -44,6 +44,7 @@ define UDEV_INSTALL_INITSCRIPT
 endef
 
 define UDEV_INSTALL_UPSTART_INITSCRIPT
+	mkdir -p $(TARGET_DIR)/etc/init
 	$(INSTALL) -m 0644 package/udev/udev.conf $(TARGET_DIR)/etc/init/udev.conf
 	$(INSTALL) -m 0644 package/udev/udevmonitor.conf $(TARGET_DIR)/etc/init/udevmonitor.conf
 	$(INSTALL) -m 0644 package/udev/udevtrigger.conf $(TARGET_DIR)/etc/init/udevtrigger.conf
