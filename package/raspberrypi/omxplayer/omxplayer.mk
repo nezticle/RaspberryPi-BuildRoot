@@ -15,7 +15,7 @@ CXXCP="$(CXX) -E" \
 PATH=$(HOST_DIR)usr/bin:$(PATH) \
 CFLAGS="-pipe -mfloat-abi=hard -mcpu=arm1176jzf-s -fomit-frame-pointer -mabi=aapcs-linux -mtune=arm1176jzf-s -mfpu=vfp -Wno-psabi -mno-apcs-stack-check -O3 -mstructure-size-boundary=32 -mno-sched-prolog" \
 LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/opt/vc/lib/" \
-INCLUDES="-isystem$(STAGING_DIR)/usr/include -isystem$(STAGING_DIR)/opt/vc/include -isystem$(STAGING_DIR)/usr/include -isystem$(STAGING_DIR)/opt/vc/include/interface/vcos/pthreads -isystem$(STAGING_DIR)/usr/include/freetype2"
+INCLUDES="-isystem$(STAGING_DIR)/usr/include -isystem$(STAGING_DIR)/opt/vc/include -isystem$(STAGING_DIR)/usr/include -isystem$(STAGING_DIR)/opt/vc/include/interface/vcos/pthreads -isystem$(STAGING_DIR)/opt/vc/include/interface/vmcs_host/linux -isystem$(STAGING_DIR)/usr/include/freetype2"
 
 define OMXPLAYER_CONFIGURE_CMDS
 	$(MAKE) clean -C $(@D)

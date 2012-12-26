@@ -1,4 +1,4 @@
-VIDEOCORE_VERSION = 83e1597d57766a4dddcf11960289a6bd49d3d1ce
+VIDEOCORE_VERSION = 079d104f340e9b87ba05f045a775d2111e2d8a2a
 VIDEOCORE_SITE = git://github.com/raspberrypi/userland.git
 VIDEOCORE_SITE_METHOD = git
 VIDEOCORE_DEPENDENCIES = udev
@@ -11,7 +11,6 @@ define VIDEOCORE_CLEANUP_TARGET_INSTALL
 	# development files are installed to image which need to be removed
 	rm -r $(TARGET_DIR)/opt/vc/include
 	rm -r $(TARGET_DIR)/opt/vc/src
-	rm -r $(TARGET_DIR)/opt/vc/share
 	rm $(TARGET_DIR)/opt/vc/lib/*.a
 	# vcfile daemon needs to be renamed 
 	#mv $(TARGET_DIR)/etc/init.d/vcfiled $(TARGET_DIR)/etc/init.d/S31vcfiled
