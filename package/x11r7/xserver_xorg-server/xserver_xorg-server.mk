@@ -4,14 +4,12 @@
 #
 ################################################################################
 
-XSERVER_XORG_SERVER_VERSION = 1.7.5
+XSERVER_XORG_SERVER_VERSION = 1.9.4
 XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
 XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
 XSERVER_XORG_SERVER_MAKE = $(MAKE1) # make install fails with parallel make
 XSERVER_XORG_SERVER_INSTALL_STAGING = YES
 XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
-XSERVER_XORG_SERVER_AUTORECONF = YES
-
 XSERVER_XORG_SERVER_DEPENDENCIES = 	\
 	xutil_util-macros 		\
 	xlib_libXfont 			\
@@ -55,14 +53,14 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
 	pixman 				\
 	openssl 			\
 	mcookie 			\
-	host-pkg-config
+	host-pkgconf
 
 XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
-		--disable-xnest --disable-xephyr --disable-xvfb \
-		--disable-dmx \
+		--disable-xnest --disable-xephyr --disable-dmx \
 		--with-builder-addr=buildroot@uclibc.org \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
-		--with-fontdir=/usr/share/fonts/X11/ --localstatedir=/var
+		--with-fontdir=/usr/share/fonts/X11/ --localstatedir=/var \
+		--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
 
 ifeq ($(BR2_PACKAGE_XSERVER_xorg),y)
 XSERVER_XORG_SERVER_CONF_OPT += --enable-xorg
@@ -106,9 +104,14 @@ XSERVER_XORG_SERVER_DEPENDENCIES += tslib
 XSERVER_XORG_SERVER_CONF_OPT += --enable-tslib LDFLAGS="-lts"
 endif
 
+ifeq ($(BR2_PACKAGE_UDEV),y)
+XSERVER_XORG_SERVER_DEPENDENCIES += udev
+XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
+else
 ifeq ($(BR2_PACKAGE_DBUS),y)
 XSERVER_XORG_SERVER_DEPENDENCIES += dbus
 XSERVER_XORG_SERVER_CONF_OPT += --enable-config-dbus
+endif
 endif
 
 ifeq ($(BR2_PACKAGE_FREETYPE),y)
@@ -118,6 +121,8 @@ endif
 ifeq ($(BR2_PACKAGE_XPROTO_RECORDPROTO),y)
 XSERVER_XORG_SERVER_DEPENDENCIES += xproto_recordproto
 XSERVER_XORG_SERVER_CONF_OPT += --enable-record
+else
+XSERVER_XORG_SERVER_CONF_OPT += --disable-record
 endif
 
 ifneq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)

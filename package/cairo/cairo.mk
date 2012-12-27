@@ -34,7 +34,11 @@ CAIRO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
 		ac_use_included_regex=no gl_cv_c_restrict=no
 
-CAIRO_DEPENDENCIES = host-pkg-config fontconfig pixman
+CAIRO_CONF_OPT = \
+	--enable-trace=no \
+	--enable-interpreter=no
+
+CAIRO_DEPENDENCIES = host-pkgconf fontconfig pixman
 
 ifeq ($(BR2_PACKAGE_DIRECTFB),y)
 	CAIRO_CONF_OPT += --enable-directfb
@@ -75,6 +79,12 @@ ifeq ($(BR2_PACKAGE_CAIRO_SVG),y)
 	CAIRO_CONF_OPT += --enable-svg
 else
 	CAIRO_CONF_OPT += --disable-svg
+endif
+
+ifeq ($(BR2_PACKAGE_CAIRO_TEE),y)
+	CAIRO_CONF_OPT += --enable-tee
+else
+	CAIRO_CONF_OPT += --disable-tee
 endif
 
 $(eval $(autotools-package))

@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBNIH
 	bool "libnih"
 	select BR2_PACKAGE_DBUS
 	select BR2_PACKAGE_EXPAT
-	select BR2_PACKAGE_PKG_CONFIG
+	select BR2_PACKAGE_PKGCONF
 	help
 		libnih is a small library for C application development
 		containing functions that, despite its name, are not 

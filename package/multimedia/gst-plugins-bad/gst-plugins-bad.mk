@@ -521,11 +521,25 @@ else
 GST_PLUGINS_BAD_CONF_OPT += --disable-libmms
 endif
 
+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MUSEPACK),y)
+GST_PLUGINS_BAD_CONF_OPT += --enable-musepack
+GST_PLUGINS_BAD_DEPENDENCIES += musepack
+else
+GST_PLUGINS_BAD_CONF_OPT += --disable-musepack
+endif
+
 ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_NEON),y)
 GST_PLUGINS_BAD_CONF_OPT += --enable-neon
 GST_PLUGINS_BAD_DEPENDENCIES += neon
 else
 GST_PLUGINS_BAD_CONF_OPT += --disable-neon
+endif
+
+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_OPUS),y)
+GST_PLUGINS_BAD_CONF_OPT += --enable-opus
+GST_PLUGINS_BAD_DEPENDENCIES += opus
+else
+GST_PLUGINS_BAD_CONF_OPT += --disable-opus
 endif
 
 ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RSVG),y)

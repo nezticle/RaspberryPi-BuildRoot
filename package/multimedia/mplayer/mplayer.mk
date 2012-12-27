@@ -3,10 +3,9 @@
 # mplayer
 #
 #############################################################
-MPLAYER_VERSION = 32726
-# MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.bz2
-# MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
-MPLAYER_SITE = svn://svn.mplayerhq.hu/mplayer/trunk
+MPLAYER_VERSION = 1.1
+MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.xz
+MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
 
 MPLAYER_CFLAGS = $(TARGET_CFLAGS)
 MPLAYER_LDFLAGS = $(TARGET_LDFLAGS)
@@ -25,18 +24,6 @@ else
 MPLAYER_CONF_OPTS += --disable-big-endian
 endif
 
-# mplayer unfortunately uses --disable-largefiles, so we cannot use
-# DISABLE_LARGEFILE
-ifeq ($(BR2_LARGEFILE),y)
-MPLAYER_CONF_OPTS += --enable-largefiles
-else
-# dvdread/dvdcss requires largefile support
-MPLAYER_CONF_OPTS += 			\
-	--disable-largefiles 		\
-	--disable-dvdread-internal 	\
-	--disable-libdvdcss-internal
-endif
-
 ifeq ($(BR2_PACKAGE_SDL),y)
 MPLAYER_CONF_OPTS += \
 	--enable-sdl \
@@ -53,6 +40,21 @@ MPLAYER_CONF_OPTS +=  \
 MPLAYER_DEPENDENCIES += freetype
 else
 MPLAYER_CONF_OPTS += --disable-freetype
+endif
+
+ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
+MPLAYER_CONF_OPTS +=  \
+	--enable-dvdread \
+	--disable-dvdread-internal \
+	--with-dvdread-config=$(STAGING_DIR)/usr/bin/dvdread-config
+MPLAYER_DEPENDENCIES += libdvdread
+endif
+
+ifeq ($(BR2_PACKAGE_LIBDVDNAV),y)
+MPLAYER_CONF_OPTS +=  \
+	--enable-dvdnav \
+	--with-dvdnav-config=$(STAGING_DIR)/usr/bin/dvdnav-config
+MPLAYER_DEPENDENCIES += libdvdnav
 endif
 
 ifeq ($(BR2_PACKAGE_MPLAYER_MPLAYER),y)
@@ -79,6 +81,7 @@ endif
 
 ifeq ($(BR2_PACKAGE_LIBMAD),y)
 MPLAYER_DEPENDENCIES += libmad
+MPLAYER_CONF_OPTS += --enable-mad
 else
 MPLAYER_CONF_OPTS += --disable-mad
 endif
@@ -134,7 +137,6 @@ define MPLAYER_CONFIGURE_CMDS
 		--extra-cflags="$(MPLAYER_CFLAGS)" \
 		--extra-ldflags="$(MPLAYER_LDFLAGS)" \
 		--yasm='' \
-		--enable-mad \
 		--enable-fbdev \
 		$(MPLAYER_CONF_OPTS) \
 		--enable-cross-compile \
@@ -151,6 +153,9 @@ define MPLAYER_FIXUP_IPV6_MREQ_DETECTION
 endef
 
 MPLAYER_POST_CONFIGURE_HOOKS += MPLAYER_FIXUP_IPV6_MREQ_DETECTION
+MPLAYER_CONF_OPTS += --disable-inet6
+else
+MPLAYER_CONF_OPTS += --enable-inet6
 endif
 
 define MPLAYER_BUILD_CMDS
