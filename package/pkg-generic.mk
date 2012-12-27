@@ -231,7 +231,7 @@ ifndef $(2)_SOURCE
  ifdef $(3)_SOURCE
   $(2)_SOURCE = $($(3)_SOURCE)
  else
-  $(2)_SOURCE			?= $$($(2)_BASE_NAME).tar.gz
+  $(2)_SOURCE			?= $$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz
  endif
 endif
 
@@ -268,13 +268,22 @@ ifndef $(2)_LICENSE
  endif
 endif
 
+$(2)_LICENSE			?= unknown
+
 ifndef $(2)_LICENSE_FILES
  ifdef $(3)_LICENSE_FILES
   $(2)_LICENSE_FILES = $($(3)_LICENSE_FILES)
  endif
 endif
 
-$(2)_LICENSE			?= unknown
+ifndef $(2)_REDISTRIBUTE
+ ifdef $(3)_REDISTRIBUTE
+  $(2)_REDISTRIBUTE = $($(3)_REDISTRIBUTE)
+ endif
+endif
+
+$(2)_REDISTRIBUTE		?= YES
+
 
 $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
 
@@ -316,6 +325,7 @@ $(2)_POST_INSTALL_HOOKS         ?=
 $(2)_POST_INSTALL_STAGING_HOOKS ?=
 $(2)_POST_INSTALL_TARGET_HOOKS  ?=
 $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
+$(2)_POST_LEGAL_INFO_HOOKS      ?=
 
 # human-friendly targets and target sequencing
 $(1):			$(1)-install
@@ -444,29 +454,27 @@ $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
 endif
 
 # legal-info: declare dependencies and set values used later for the manifest
-ifneq ($$($(2)_LICENSE),PROPRIETARY)
+ifneq ($$($(2)_LICENSE_FILES),)
+$(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
+endif
+$(2)_MANIFEST_LICENSE_FILES ?= not saved
+
+ifeq ($$($(2)_REDISTRIBUTE),YES)
 ifneq ($$($(2)_SITE_METHOD),local)
 ifneq ($$($(2)_SITE_METHOD),override)
 # Packages that have a tarball need it downloaded and extracted beforehand
 $(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR)
 $(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
-ifneq ($$($(2)_LICENSE_FILES),)
-$(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
 endif
 endif
 endif
-endif
-# defaults for packages without tarball or license files
 $(2)_MANIFEST_TARBALL ?= not saved
-$(2)_MANIFEST_LICENSE_FILES ?= not saved
 
 # legal-info: produce legally relevant info.
 $(1)-legal-info:
 # Packages without a source are assumed to be part of Buildroot, skip them.
 ifneq ($(call qstrip,$$($(2)_SOURCE)),)
-ifeq ($$($(2)_LICENSE),PROPRIETARY)
-# Proprietary packages: nothing to save
-else ifeq ($$($(2)_SITE_METHOD),local)
+ifeq ($$($(2)_SITE_METHOD),local)
 # Packages without a tarball: don't save and warn
 	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),local)
 else ifeq ($$($(2)_SITE_METHOD),override)
@@ -482,12 +490,15 @@ else
 		$(call legal-license-file,$$($(2)_RAWNAME),$$$${F},$$($(2)_DIR)/$$$${F}); \
 		done
 endif
+ifeq ($$($(2)_REDISTRIBUTE),YES)
 # Copy the source tarball (just hardlink if possible)
 	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR) 2>/dev/null || \
 	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR)
 endif
+endif
 	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL))
 endif # ifneq ($(call qstrip,$$($(2)_SOURCE)),)
+	$(foreach hook,$($(2)_POST_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
 
 # add package to the general list of targets if requested by the buildroot
 # configuration

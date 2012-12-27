@@ -3,8 +3,8 @@
 # poco
 #
 #############################################################
-POCO_VERSION_MAJOR = 1.4.3
-POCO_VERSION = $(POCO_VERSION_MAJOR)p1
+POCO_VERSION_MAJOR = 1.4.4
+POCO_VERSION = $(POCO_VERSION_MAJOR)
 POCO_SOURCE = poco-$(POCO_VERSION)-all.tar.gz
 POCO_SITE = http://downloads.sourceforge.net/project/poco/sources/poco-$(POCO_VERSION_MAJOR)
 POCO_LICENSE = Boost-v1.0
@@ -45,7 +45,7 @@ define POCO_CONFIGURE_CMDS
 endef
 
 define POCO_BUILD_CMDS
-	$(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSSENV=$(TARGET_CROSS) \
+	$(MAKE1) POCO_TARGET_OSARCH=$(ARCH) CROSSENV=$(TARGET_CROSS) \
 		MYSQL_LIBDIR=$(STAGING_DIR)/usr/lib/mysql \
 		MYSQL_INCDIR=$(STAGING_DIR)/usr/include/mysql -C $(@D)
 endef

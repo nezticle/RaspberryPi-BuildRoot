@@ -1,10 +1,12 @@
+// -*- mode:doc; -*-
+
 Infrastructure for autotools-based packages
--------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 [[autotools-package-tutorial]]
 
 +autotools-package+ tutorial
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 First, let's see how to write a +.mk+ file for an autotools-based
 package, with an example :
@@ -19,9 +21,9 @@ package, with an example :
 07: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
 08: LIBFOO_SITE = http://www.foosoftware.org/download
 09: LIBFOO_INSTALL_STAGING = YES
-10: LIBFOO_INSTALL_TARGET = YES
-11: LIBFOO_CONF_OPT = --enable-shared
-12: LIBFOO_DEPENDENCIES = libglib2 host-pkg-config
+10: LIBFOO_INSTALL_TARGET = NO
+11: LIBFOO_CONF_OPT = --disable-shared
+12: LIBFOO_DEPENDENCIES = libglib2 host-pkgconf
 13:
 14: $(eval $(autotools-package))
 ------------------------
@@ -42,13 +44,13 @@ other libraries or applications depending on them. Also by default, when
 staging installation is enabled, packages are installed in this location
 using the +make install+ command.
 
-On line 10, we tell Buildroot to also install the package to the
+On line 10, we tell Buildroot to not install the package to the
 target directory. This directory contains what will become the root
-filesystem running on the target. Usually, we try not to install header
-files and to install stripped versions of the binary. By default, target
-installation is enabled, so in fact, this line is not strictly
-necessary. Also by default, packages are installed in this location
-using the +make install+ command.
+filesystem running on the target. For purely static libraries, it is
+not necessary to install them in the target directory because they will
+not be used at runtime. By default, target installation is enabled; setting
+this variable to NO is almost never needed. Also by default, packages are
+installed in this location using the +make install+ command.
 
 On line 11, we tell Buildroot to pass a custom configure option, that
 will be passed to the +./configure+ script before configuring
@@ -64,7 +66,7 @@ package to be built.
 [[autotools-package-reference]]
 
 +autotools-package+ reference
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The main macro of the autotools package infrastructure is
 +autotools-package+. It is similar to the +generic-package+ macro. The ability to
@@ -131,13 +133,13 @@ cases, typical packages will therefore only use a few of them.
 
 * +LIBFOO_INSTALL_STAGING_OPT+ contains the make options
   used to install the package to the staging directory. By default, the
-  value is +DESTDIR=$$(STAGING_DIR) install+, which is
+  value is +DESTDIR=$(STAGING_DIR) install+, which is
   correct for most autotools packages. It is still possible to override
   it.
 
 * +LIBFOO_INSTALL_TARGET_OPT+ contains the make options
   used to install the package to the target directory. By default, the
-  value is +DESTDIR=$$(TARGET_DIR) install+. The default
+  value is +DESTDIR=$(TARGET_DIR) install+. The default
   value is correct for most autotools packages, but it is still possible
   to override it if needed.
 

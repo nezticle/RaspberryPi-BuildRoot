@@ -33,11 +33,6 @@ else
  GCC_SITE:=$(BR2_GNU_MIRROR)/gcc/gcc-$(GCC_VERSION)
 endif
 
-ifneq ($(filter xtensa%,$(ARCH)),)
-include target/xtensa/patch.in
-GCC_PATCH_EXTRA:=$(call XTENSA_PATCH,gcc,$(GCC_PATCH_DIR),. ..)
-endif
-
 GCC_SOURCE:=gcc-$(GCC_VERSION).tar.bz2
 GCC_PATCH_DIR:=toolchain/gcc/$(GCC_VERSION)
 GCC_DIR:=$(TOOLCHAIN_DIR)/gcc-$(GCC_VERSION)
@@ -256,13 +251,17 @@ $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
 	rm -rf $(GCC_DIR)
 	$(GCC_CAT) $(DL_DIR)/$(GCC_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
 	$(call CONFIG_UPDATE,$(@D))
+ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
+	tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,\
+		$(BR2_XTENSA_CORE_NAME)).tar -C $(@D) --strip-components=1 gcc
+endif
 	touch $@
 
 gcc-patched: $(GCC_DIR)/.patched
 $(GCC_DIR)/.patched: $(GCC_DIR)/.unpacked
 	# Apply any files named gcc-*.patch from the source directory to gcc
 ifneq ($(wildcard $(GCC_PATCH_DIR)),)
-	support/scripts/apply-patches.sh $(GCC_DIR) $(GCC_PATCH_DIR) \*.patch $(GCC_PATCH_EXTRA)
+	support/scripts/apply-patches.sh $(GCC_DIR) $(GCC_PATCH_DIR) \*.patch
 endif
 
 ifeq ($(ARCH)-$(BR2_GCC_SHARED_LIBGCC),powerpc-y)
