@@ -12,11 +12,14 @@ tar -czf $TARGETDIR/../images/boot.tar.gz --exclude=Image -C $TARGETDIR/boot/ .
 # remove inittab
 rm $TARGETDIR/etc/inittab
 
-#remote rc.conf
+#remove rc.conf
 rm $TARGETDIR/etc/init/rc.conf
 
-#replace rc-sysinit.conf
-cp board/raspberrypi/rc-sysinit.conf $TARGETDIR/etc/init/
+#add task to mount everything
+cp board/raspberrypi/mount.conf $TARGETDIR/etc/init/
+
+#add task to set hostname
+cp board/raspberrypi/hostname.conf $TARGETDIR/etc/init/
 
 #add task to start getty on tty1
 cp board/raspberrypi/tty1.conf $TARGETDIR/etc/init/
