@@ -8,7 +8,7 @@ The Bsquask SDK provides a GCC 4.6.3 toolchain for building armv6 binaries with 
 
 Clone the RaspberryPi-BuildRoot project into your local code directory:  
 `cd ~/Code/`  
-`git clone git@github.com:nezticle/RaspberryPi-BuildRoot.git BuildRoot`
+`git clone git://github.com/nezticle/RaspberryPi-BuildRoot.git BuildRoot`
 
 Create the directory where you want your SDK to be built:  
 `export BSQUASK_DIR=/opt/bsquask`  
