@@ -1,4 +1,4 @@
-QTWEBKIT_VERSION = 5.0.0
+QTWEBKIT_VERSION = 5.0.1
 QTWEBKIT_SITE = http://releases.qt-project.org/qt5/$(QTWEBKIT_VERSION)/submodules_tar
 QTWEBKIT_SOURCE = qtwebkit-opensource-src-$(QTWEBKIT_VERSION).tar.xz
 QTWEBKIT_DEPENDENCIES = qtbase qtxmlpatterns qtdeclarative qtmultimedia qtjsbackend

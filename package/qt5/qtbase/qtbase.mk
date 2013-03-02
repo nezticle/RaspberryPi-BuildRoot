@@ -1,4 +1,4 @@
-QTBASE_VERSION = 5.0.0
+QTBASE_VERSION = 5.0.1
 QTBASE_SITE = http://releases.qt-project.org/qt5/$(QTBASE_VERSION)/submodules_tar
 QTBASE_SOURCE = qtbase-opensource-src-$(QTBASE_VERSION).tar.xz
 QTBASE_DEPENDENCIES = host-pkgconf udev libglib2 zlib jpeg libpng tiff freetype dbus VideoCore openssl sqlite alsa-lib 

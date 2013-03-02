@@ -1,4 +1,4 @@
-QTMULTIMEDIA_VERSION = 5.0.0
+QTMULTIMEDIA_VERSION = 5.0.1
 QTMULTIMEDIA_SITE = http://releases.qt-project.org/qt5/$(QTMULTIMEDIA_VERSION)/submodules_tar
 QTMULTIMEDIA_SOURCE = qtmultimedia-opensource-src-$(QTMULTIMEDIA_VERSION).tar.xz
 QTMULTIMEDIA_DEPENDENCIES = qtbase qtdeclarative
