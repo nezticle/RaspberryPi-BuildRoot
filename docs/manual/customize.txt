@@ -1,4 +1,5 @@
 // -*- mode:doc; -*-
+// vim: set syntax=asciidoc:
 
 Customization
 -------------
@@ -12,3 +13,5 @@ include::customize-uclibc-config.txt[]
 include::customize-kernel-config.txt[]
 
 include::customize-toolchain.txt[]
+
+include::customize-store.txt[]

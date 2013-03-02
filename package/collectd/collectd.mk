@@ -4,10 +4,11 @@
 #
 #############################################################
 
-COLLECTD_VERSION = 5.1.1
+COLLECTD_VERSION = 5.1.2
 COLLECTD_SITE = http://collectd.org/files
 COLLECTD_MAKE_OPT = LDFLAGS="$(TARGET_LDFLAGS) -lm"
 COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
+COLLECTD_INSTALL_STAGING = YES
 COLLECTD_LICENSE = GPLv2 LGPLv2.1
 COLLECTD_LICENSE_FILES = COPYING
 
@@ -120,6 +121,14 @@ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
 	COLLECTD_DEPENDENCIES += libgcrypt
 	COLLECTD_CONF_OPT += --with-libgcrypt=$(STAGING_DIR)/usr
 endif
+
+# released software should not break on minor warnings
+define COLLECTD_DROP_WERROR
+	$(SED) 's/-Werror//' \
+		$(@D)/src/Makefile.in $(@D)/src/libcollectdclient/Makefile.in
+endef
+
+COLLECTD_POST_PATCH_HOOKS += COLLECTD_DROP_WERROR
 
 define COLLECTD_INSTALL_TARGET_CMDS
 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install

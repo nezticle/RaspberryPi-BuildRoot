@@ -1,11 +1,13 @@
 config BR2_PACKAGE_PULSEAUDIO
 	bool "pulseaudio"
 	depends on BR2_USE_WCHAR
+	depends on BR2_TOOLCHAIN_HAS_THREADS
 	select BR2_PACKAGE_LIBTOOL
 	select BR2_PACKAGE_JSON_C
 	select BR2_PACKAGE_LIBSNDFILE
 	select BR2_PACKAGE_SPEEX
 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+	depends on BR2_LARGEFILE
 	help
 	  PulseAudio is a sound system for POSIX OSes, meaning that it
 	  is a proxy for your sound applications. It allows you to do
@@ -17,5 +19,5 @@ config BR2_PACKAGE_PULSEAUDIO
 
 	  http://pulseaudio.org
 
-comment "pulseaudio requires a toolchain with WCHAR support"
-	depends on !BR2_USE_WCHAR
+comment "pulseaudio requires a toolchain with WCHAR, LARGEFILE and threads support"
+	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS

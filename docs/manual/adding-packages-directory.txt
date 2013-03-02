@@ -1,4 +1,5 @@
 // -*- mode:doc; -*-
+// vim: set syntax=asciidoc:
 
 Package directory
 ~~~~~~~~~~~~~~~~~
@@ -168,6 +169,7 @@ coding style].
 
 The +.mk+ file
 ~~~~~~~~~~~~~~
+[[adding-packages-mk]]
 
 Finally, here's the hardest part. Create a file named +libfoo.mk+. It
 describes how the package should be downloaded, configured, built,

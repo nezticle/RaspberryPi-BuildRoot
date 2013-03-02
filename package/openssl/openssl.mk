@@ -4,7 +4,7 @@
 #
 #############################################################
 
-OPENSSL_VERSION = 1.0.1c
+OPENSSL_VERSION = 1.0.1e
 OPENSSL_SITE = http://www.openssl.org/source
 OPENSSL_LICENSE = OpenSSL or SSLeay
 OPENSSL_LICENSE_FILES = LICENSE
@@ -38,7 +38,10 @@ endif
 endif
 endif
 ifeq ($(ARCH),powerpc)
+# 4xx cores seem to have trouble with openssl's ASM optimizations
+ifeq ($(BR2_powerpc_401)$(BR2_powerpc_403)$(BR2_powerpc_405)$(BR2_powerpc_405fp)$(BR2_powerpc_440)$(BR2_powerpc_440fp),)
 	OPENSSL_TARGET_ARCH = ppc
+endif
 endif
 ifeq ($(ARCH),x86_64)
 	OPENSSL_TARGET_ARCH = x86_64
@@ -73,8 +76,7 @@ define OPENSSL_CONFIGURE_CMDS
 endef
 
 define OPENSSL_BUILD_CMDS
-	$(MAKE1) -C $(@D) all build-shared
-	$(MAKE1) -C $(@D) do_linux-shared
+	$(MAKE1) -C $(@D)
 endef
 
 define OPENSSL_INSTALL_STAGING_CMDS

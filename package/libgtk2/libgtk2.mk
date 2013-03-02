@@ -82,7 +82,43 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
 		--x-includes=$(STAGING_DIR)/usr/include/X11 \
 		--x-libraries=$(STAGING_DIR)/usr/lib \
 		--with-gdktarget=x11
-	LIBGTK2_DEPENDENCIES += xlib_libXcomposite xserver_xorg-server
+	LIBGTK2_DEPENDENCIES += xlib_libXcomposite fontconfig xlib_libX11 \
+		xlib_libXext xlib_libXrender
+
+ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
+	LIBGTK2_CONF_OPT += --enable-xinerama
+	LIBGTK2_DEPENDENCIES += xlib_libXinerama
+else
+	LIBGTK2_CONF_OPT += --disable-xinerama
+endif
+
+ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
+	LIBGTK2_CONF_OPT += --with-xinput=yes
+	LIBGTK2_DEPENDENCIES += xlib_libXi
+else
+	LIBGTK2_CONF_OPT += --with-xinput=no
+endif
+
+ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
+	LIBGTK2_DEPENDENCIES += xlib_libXrandr
+endif
+
+ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
+	LIBGTK2_DEPENDENCIES += xlib_libXcursor
+endif
+
+ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
+	LIBGTK2_DEPENDENCIES += xlib_libXfixes
+endif
+
+ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
+	LIBGTK2_DEPENDENCIES += xlib_libXcomposite
+endif
+
+ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
+	LIBGTK2_DEPENDENCIES += xlib_libXdamage
+endif
+
 else
 	LIBGTK2_CONF_OPT += --without-x
 endif

@@ -1,9 +1,8 @@
 // -*- mode:doc; -*-
+// vim: set syntax=asciidoc:
 
 Going further in Buildroot's innards
 ====================================
-
-include::embedded-basics.txt[]
 
 include::how-buildroot-works.txt[]
 

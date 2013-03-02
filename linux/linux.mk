@@ -10,7 +10,7 @@ LINUX_LICENSE_FILES = COPYING
 # Compute LINUX_SOURCE and LINUX_SITE from the configuration
 ifeq ($(LINUX_VERSION),custom)
 LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
-LINUX_SITE = $(dir $(LINUX_TARBALL))
+LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
 LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
 else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
 LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
@@ -53,7 +53,7 @@ LINUX_MAKE_FLAGS = \
 LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
 
 ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
-KERNEL_DTS_NAME = $(BR2_LINUX_KERNEL_INTREE_DTS_NAME)
+KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
 else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
 KERNEL_DTS_NAME = $(basename $(notdir $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))
 endif
@@ -64,6 +64,8 @@ $(error Kernel with appended device tree needs exactly one DTS source.\
   Check BR2_LINUX_KERNEL_INTREE_DTS_NAME or BR2_LINUX_KERNEL_CUSTOM_DTS_PATH.)
 endif
 endif
+
+KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
 
 ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
 LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
@@ -190,25 +192,39 @@ endef
 ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
 ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
 define LINUX_BUILD_DTB
-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTS_NAME).dtb
+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTBS)
 endef
 define LINUX_INSTALL_DTB
-	cp $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
+	# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
+	cp $(addprefix \
+		$(KERNEL_ARCH_PATH)/boot/$(if $(wildcard \
+		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
+		$(BINARIES_DIR)/
+endef
+define LINUX_INSTALL_DTB_TARGET
+	# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
+	cp $(addprefix \
+		$(KERNEL_ARCH_PATH)/boot/$(if $(wildcard \
+		$(addprefix $(KERNEL_ARCH_PATH)/boot/dts/,$(KERNEL_DTBS))),dts/),$(KERNEL_DTBS)) \
+		$(TARGET_DIR)/boot/
 endef
 endif
 endif
 
+ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
+# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
+define LINUX_APPEND_DTB
+	if [ -e $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb ]; then \
+		cat $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb; \
+	else \
+		cat $(KERNEL_ARCH_PATH)/boot/dts/$(KERNEL_DTS_NAME).dtb; \
+	fi >> $(KERNEL_ARCH_PATH)/boot/zImage
+endef
 ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
-define LINUX_APPEND_DTB
-	cat $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb >> $(KERNEL_ARCH_PATH)/boot/zImage
-	# We need to generate the uImage here after that so that the uImage is
-	# generated with the right image size.
-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) uImage
-endef
-else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
-define LINUX_APPEND_DTB
-	cat $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb >> $(KERNEL_ARCH_PATH)/boot/zImage
-endef
+# We need to generate the uImage here after that so that the uImage is
+# generated with the right image size.
+LINUX_APPEND_DTB += $(sep)$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) uImage
+endif
 endif
 
 # Compilation. We make sure the kernel gets rebuilt when the
@@ -230,6 +246,7 @@ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
 	$(if $(BR2_LINUX_KERNEL_UNCOMPRESSED),
 		install -m 0644 -D $(LINUX_IMAGE_PATH) $(TARGET_DIR)/boot/kernel.img ,
 		install -m 0644 -D $(LINUX_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME) )
+	$(LINUX_INSTALL_DTB_TARGET)
 endef
 endif
 

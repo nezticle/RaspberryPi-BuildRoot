@@ -70,6 +70,10 @@ else
 PYTHON3_CONF_OPT += --with-expat=none
 endif
 
+ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+PYTHON3_CONF_OPT += --enable-old-stdlib-cache
+endif
+
 ifeq ($(BR2_PACKAGE_PYTHON3_SQLITE),y)
 PYTHON3_DEPENDENCIES += sqlite
 endif
@@ -147,6 +151,35 @@ endef
 PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_USELESS_FILES
 
 PYTHON3_AUTORECONF = YES
+
+define PYTHON3_INSTALL_SYMLINK
+	ln -fs python3 $(TARGET_DIR)/usr/bin/python
+endef
+
+ifneq ($(BR2_PACKAGE_PYTHON),y)
+PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_INSTALL_SYMLINK
+endif
+
+ifeq ($(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
+define PYTHON3_REMOVE_MODULES_FILES
+	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
+		 -name __pycache__` ; do \
+		rm -rf $$i ; \
+	done
+endef
+endif
+
+ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+define PYTHON3_REMOVE_MODULES_FILES
+	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR) \
+		 -name *.py` ; do \
+		rm -f $$i ; \
+	done
+endef
+endif
+
+PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_REMOVE_MODULES_FILES
+
 
 $(eval $(autotools-package))
 $(eval $(host-autotools-package))

@@ -12,5 +12,6 @@ GIBLIB_AUTORECONF = YES
 GIBLIB_AUTORECONF_OPT = --install
 GIBLIB_CONF_OPT = --with-imlib2-prefix=$(STAGING_DIR)/usr \
 		  --with-imlib2-exec-prefix=$(STAGING_DIR)/usr
+GIBLIB_CONFIG_SCRIPTS = giblib-config
 
 $(eval $(autotools-package))

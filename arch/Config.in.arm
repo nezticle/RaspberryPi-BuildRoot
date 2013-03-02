@@ -1,3 +1,11 @@
+# arm cpu features
+config BR2_ARM_CPU_HAS_NEON
+	bool
+
+# for some cores, NEON support is optional
+config BR2_ARM_CPU_MAYBE_HAS_NEON
+	bool
+
 choice
 	prompt "Target Architecture Variant"
 	depends on BR2_arm || BR2_armeb
@@ -23,16 +31,26 @@ config BR2_arm926t
 	bool "arm926t"
 config BR2_arm10t
 	bool "arm10t"
-config BR2_arm1136jf_s
-	bool "arm1136jf_s"
+config BR2_arm1136jf_s_r0
+	bool "arm1136jf_s rev0"
+config BR2_arm1136jf_s_r1
+	bool "arm1136jf_s rev1"
 config BR2_arm1176jz_s
 	bool "arm1176jz-s"
 config BR2_arm1176jzf_s
 	bool "arm1176jzf-s"
+config BR2_cortex_a5
+	bool "cortex-A5"
+	select BR2_ARM_CPU_MAYBE_HAS_NEON
 config BR2_cortex_a8
 	bool "cortex-A8"
+	select BR2_ARM_CPU_HAS_NEON
 config BR2_cortex_a9
 	bool "cortex-A9"
+	select BR2_ARM_CPU_MAYBE_HAS_NEON
+config BR2_cortex_a15
+	bool "cortex-A15"
+	select BR2_ARM_CPU_HAS_NEON
 config BR2_sa110
 	bool "sa110"
 config BR2_sa1100
@@ -43,9 +61,14 @@ config BR2_iwmmxt
 	bool "iwmmxt"
 endchoice
 
+config BR2_arm1136jf_s
+	bool
+	default BR2_arm1136jf_s_r0 || BR2_arm1136jf_s_r1
+
 choice
 	prompt "Target ABI"
 	depends on BR2_arm || BR2_armeb
+	depends on BR2_DEPRECATED
 	default BR2_ARM_EABI
 	help
 	  Application Binary Interface to use
@@ -53,12 +76,25 @@ choice
 	  Note:
 	    Using OABI is discouraged.
 
-config BR2_ARM_EABI
+config BR2_ARM_EABI_CHOICE
 	bool "EABI"
 config BR2_ARM_OABI
 	bool "OABI"
 	depends on !BR2_GCC_VERSION_4_7_X
 endchoice
+
+config BR2_ARM_EABI
+	def_bool y
+	depends on !BR2_ARM_OABI
+
+config BR2_ARM_ENABLE_NEON
+	bool "Enable NEON SIMD extension support"
+	depends on BR2_ARM_CPU_MAYBE_HAS_NEON
+	select BR2_ARM_CPU_HAS_NEON
+	help
+	  For some CPU cores, the NEON SIMD extension is optional.
+	  Select this option if you are certain your particular
+	  implementation has NEON support and you want to use it.
 
 config BR2_ARCH
 	default "arm"	if BR2_arm
@@ -83,8 +119,10 @@ config BR2_GCC_TARGET_TUNE
 	default "arm1136jf-s"	if BR2_arm1136jf_s
 	default "arm1176jz-s"	if BR2_arm1176jz_s
 	default "arm1176jzf-s"	if BR2_arm1176jzf_s
+	default "cortex-a5"	if BR2_cortex_a5
 	default "cortex-a8"	if BR2_cortex_a8
 	default "cortex-a9"	if BR2_cortex_a9
+	default "cortex-a15"	if BR2_cortex_a15
 	default "strongarm110"	if BR2_sa110
 	default "strongarm1100"	if BR2_sa1100
 	default "xscale"	if BR2_xscale
@@ -99,11 +137,14 @@ config BR2_GCC_TARGET_ARCH
 	default "armv4t"	if BR2_arm922t
 	default "armv5te"	if BR2_arm926t
 	default "armv5t"	if BR2_arm10t
-	default "armv6j"	if BR2_arm1136jf_s
+	default "armv6j"	if BR2_arm1136jf_s_r0
+	default "armv6k"	if BR2_arm1136jf_s_r1
 	default "armv6zk"	if BR2_arm1176jz_s
 	default "armv6zk"	if BR2_arm1176jzf_s
+	default "armv7-a"	if BR2_cortex_a5
 	default "armv7-a"	if BR2_cortex_a8
 	default "armv7-a"	if BR2_cortex_a9
+	default "armv7-a"	if BR2_cortex_a15
 	default "armv4"		if BR2_sa110
 	default "armv4"		if BR2_sa1100
 	default "armv5te"	if BR2_xscale

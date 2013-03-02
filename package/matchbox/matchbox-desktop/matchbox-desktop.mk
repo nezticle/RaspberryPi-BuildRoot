@@ -10,8 +10,13 @@ MATCHBOX_DESKTOP_SOURCE = matchbox-desktop-$(MATCHBOX_DESKTOP_VERSION).tar.bz2
 MATCHBOX_DESKTOP_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-desktop/$(MATCHBOX_DESKTOP_VERSION_MAJOR)
 MATCHBOX_DESKTOP_LICENSE = GPLv2+
 MATCHBOX_DESKTOP_LICENSE_FILES = COPYING
-MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib
+MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib zlib
 MATCHBOX_DESKTOP_CONF_OPT = --enable-expat
+
+# The bundled configure script does not properly replace LIBADD_DL, so
+# we force an autoreconf even if we don't have any patches touching
+# configure.ac/Makefile.am.
+MATCHBOX_DESKTOP_AUTORECONF = YES
 
 #############################################################
 

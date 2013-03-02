@@ -1,11 +1,10 @@
 // -*- mode:doc; -*-
+// vim: set syntax=asciidoc:
 
 Advanced usage
 --------------
 
 include::using-buildroot-toolchain.txt[]
-
-include::external-toolchain.txt[]
 
 include::ccache-support.txt[]
 

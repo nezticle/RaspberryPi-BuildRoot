@@ -4,13 +4,15 @@
 #
 #############################################################
 
-HOSTAPD_VERSION = 1.0
+HOSTAPD_VERSION = 2.0
 HOSTAPD_SITE = http://hostap.epitest.fi/releases
 HOSTAPD_SUBDIR = hostapd
 HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
 HOSTAPD_DEPENDENCIES = libnl
 HOSTAPD_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
 HOSTAPD_LDFLAGS = $(TARGET_LDFLAGS)
+HOSTAPD_LICENSE = GPLv2/BSD-3c
+HOSTAPD_LICENSE_FILES = README
 
 # libnl needs -lm (for rint) if linking statically
 ifeq ($(BR2_PREFER_STATIC_LIB),y)
@@ -19,13 +21,14 @@ endif
 
 define HOSTAPD_LIBNL_CONFIG
 	echo 'CONFIG_LIBNL32=y' >>$(HOSTAPD_CONFIG)
+	$(SED) 's/\(#\)\(CONFIG_VLAN_NETLINK.*\)/\2/' $(HOSTAPD_CONFIG)
 endef
 
 define HOSTAPD_LIBTOMMATH_CONFIG
 	$(SED) 's/\(#\)\(CONFIG_INTERNAL_LIBTOMMATH.*\)/\2/' $(HOSTAPD_CONFIG)
 endef
 
-# Try to use openssl or gnutls if it's already available
+# Try to use openssl if it's already available
 ifeq ($(BR2_PACKAGE_OPENSSL),y)
 	HOSTAPD_DEPENDENCIES += openssl
 define HOSTAPD_TLS_CONFIG
@@ -33,16 +36,9 @@ define HOSTAPD_TLS_CONFIG
 	$(SED) 's/\(#\)\(CONFIG_EAP_PWD.*\)/\2/' $(HOSTAPD_CONFIG)
 endef
 else
-ifeq ($(BR2_PACKAGE_GNUTLS),y)
-	HOSTAPD_DEPENDENCIES += gnutls
-define HOSTAPD_TLS_CONFIG
-	$(SED) 's/\(#\)\(CONFIG_TLS=\).*/\2gnutls/' $(HOSTAPD_CONFIG)
-endef
-else
 define HOSTAPD_TLS_CONFIG
 	$(SED) 's/\(#\)\(CONFIG_TLS=\).*/\2internal/' $(HOSTAPD_CONFIG)
 endef
-endif
 endif
 
 ifeq ($(BR2_PACKAGE_HOSTAPD_EAP),y)
@@ -57,6 +53,7 @@ define HOSTAPD_EAP_CONFIG
 	$(SED) 's/\(#\)\(CONFIG_EAP_SIM.*\)/\2/' $(HOSTAPD_CONFIG)
 	$(SED) 's/\(#\)\(CONFIG_EAP_TNC.*\)/\2/' $(HOSTAPD_CONFIG)
 	$(SED) 's/\(#\)\(CONFIG_RADIUS_SERVER.*\)/\2/' $(HOSTAPD_CONFIG)
+	$(SED) 's/\(#\)\(CONFIG_TLSV1.*\)/\2/' $(HOSTAPD_CONFIG)
 endef
 ifneq ($(BR2_INET_IPV6),y)
 define HOSTAPD_RADIUS_IPV6_CONFIG
@@ -80,8 +77,10 @@ endif
 define HOSTAPD_CONFIGURE_CMDS
 	cp $(@D)/hostapd/defconfig $(HOSTAPD_CONFIG)
 # Misc
+	$(SED) 's/\(#\)\(CONFIG_HS20.*\)/\2/' $(HOSTAPD_CONFIG)
 	$(SED) 's/\(#\)\(CONFIG_IEEE80211N.*\)/\2/' $(HOSTAPD_CONFIG)
 	$(SED) 's/\(#\)\(CONFIG_IEEE80211R.*\)/\2/' $(HOSTAPD_CONFIG)
+	$(SED) 's/\(#\)\(CONFIG_IEEE80211W.*\)/\2/' $(HOSTAPD_CONFIG)
 	$(SED) 's/\(#\)\(CONFIG_INTERWORKING.*\)/\2/' $(HOSTAPD_CONFIG)
 	$(SED) 's/\(#\)\(CONFIG_FULL_DYNAMIC_VLAN.*\)/\2/' $(HOSTAPD_CONFIG)
 	$(HOSTAPD_LIBTOMMATH_CONFIG)

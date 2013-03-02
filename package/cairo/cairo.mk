@@ -3,8 +3,10 @@
 # cairo
 #
 #############################################################
-CAIRO_VERSION = 1.10.2
-CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.gz
+CAIRO_VERSION = 1.12.10
+CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
+CAIRO_LICENSE = LGPLv2.1+
+CAIRO_LICENSE_FILES = COPYING
 CAIRO_SITE = http://cairographics.org/releases
 CAIRO_INSTALL_STAGING = YES
 
@@ -48,10 +50,17 @@ else
 endif
 
 ifeq ($(BR2_PACKAGE_XORG7),y)
-	CAIRO_CONF_OPT += --enable-xlib --with-x
-	CAIRO_DEPENDENCIES += xserver_xorg-server
+	CAIRO_CONF_OPT += --enable-xlib --enable-xcb --with-x
+	CAIRO_DEPENDENCIES += xlib_libX11 xlib_libXext
 else
-	CAIRO_CONF_OPT += --disable-xlib --without-x
+	CAIRO_CONF_OPT += --disable-xlib --disable-xcb --without-x
+endif
+
+ifeq ($(BR2_PACKAGE_XLIB_LIBXRENDER),y)
+	CAIRO_CONF_OPT += --enable-xlib-xrender
+	CAIRO_DEPENDENCIES += xlib_libXrender
+else
+	CAIRO_CONF_OPT += --disable-xlib-xrender
 endif
 
 ifeq ($(BR2_PACKAGE_CAIRO_PS),y)
@@ -75,6 +84,12 @@ else
 	CAIRO_CONF_OPT += --disable-png
 endif
 
+ifeq ($(BR2_PACKAGE_CAIRO_SCRIPT),y)
+	CAIRO_CONF_OPT += --enable-script
+else
+	CAIRO_CONF_OPT += --disable-script
+endif
+
 ifeq ($(BR2_PACKAGE_CAIRO_SVG),y)
 	CAIRO_CONF_OPT += --enable-svg
 else
@@ -85,6 +100,12 @@ ifeq ($(BR2_PACKAGE_CAIRO_TEE),y)
 	CAIRO_CONF_OPT += --enable-tee
 else
 	CAIRO_CONF_OPT += --disable-tee
+endif
+
+ifeq ($(BR2_PACKAGE_CAIRO_XML),y)
+	CAIRO_CONF_OPT += --enable-xml
+else
+	CAIRO_CONF_OPT += --disable-xml
 endif
 
 $(eval $(autotools-package))

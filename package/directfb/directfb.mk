@@ -9,7 +9,6 @@ DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSI
 DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
 DIRECTFB_LICENSE = LGPLv2.1+
 DIRECTFB_LICENSE_FILES = COPYING
-DIRECTFB_AUTORECONF = YES
 DIRECTFB_INSTALL_STAGING = YES
 DIRECTFB_CONF_OPT = \
 	--localstatedir=/var \
@@ -24,6 +23,7 @@ DIRECTFB_CONF_OPT = \
 	--disable-video4linux \
 	--disable-video4linux2 \
 	--without-tools
+DIRECTFB_CONFIG_SCRIPTS = directfb-config
 
 DIRECTFB_DEPENDENCIES = freetype zlib
 
@@ -52,7 +52,7 @@ else
 DIRECTFB_CONF_OPT += --disable-unique
 endif
 
-DIRECTFB_GFX := \
+DIRECTFB_GFX = \
 	$(if $(BR2_PACKAGE_DIRECTFB_ATI128),ati128) \
 	$(if $(BR2_PACKAGE_DIRECTFB_CLE266),cle266) \
 	$(if $(BR2_PACKAGE_DIRECTFB_CYBER5K),cyber5k) \
@@ -63,14 +63,13 @@ DIRECTFB_GFX := \
 	$(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x)
 
 ifeq ($(strip $(DIRECTFB_GFX)),)
-DIRECTFB_GFX:=none
+DIRECTFB_CONF_OPT += --with-gfxdrivers=none
 else
-DIRECTFB_GFX:=$(subst $(space),$(comma),$(strip $(DIRECTFB_GFX)))
+DIRECTFB_CONF_OPT += \
+	--with-gfxdrivers=$(subst $(space),$(comma),$(strip $(DIRECTFB_GFX)))
 endif
 
-DIRECTFB_CONF_OPT += --with-gfxdrivers=$(DIRECTFB_GFX)
-
-DIRECTFB_INPUT := \
+DIRECTFB_INPUT = \
 	$(if $(BR2_PACKAGE_DIRECTFB_LINUXINPUT),linuxinput) \
 	$(if $(BR2_PACKAGE_DIRECTFB_KEYBOARD),keyboard) \
 	$(if $(BR2_PACKAGE_DIRECTFB_PS2MOUSE),ps2mouse) \
@@ -82,12 +81,11 @@ DIRECTFB_DEPENDENCIES += tslib
 endif
 
 ifeq ($(strip $(DIRECTFB_INPUT)),)
-DIRECTFB_INPUT:=none
+DIRECTFB_CONF_OPT += --with-inputdrivers=none
 else
-DIRECTFB_INPUT:=$(subst $(space),$(comma),$(strip $(DIRECTFB_INPUT)))
+DIRECTFB_CONF_OPT += \
+	--with-inputdrivers=$(subst $(space),$(comma),$(strip $(DIRECTFB_INPUT)))
 endif
-
-DIRECTFB_CONF_OPT += --with-inputdrivers=$(DIRECTFB_INPUT)
 
 ifeq ($(BR2_PACKAGE_DIRECTFB_GIF),y)
 DIRECTFB_CONF_OPT += --enable-gif
@@ -134,16 +132,8 @@ HOST_DIRECTFB_BUILD_CMDS = \
 HOST_DIRECTFB_INSTALL_CMDS = \
 	$(INSTALL) -m 0755 $(@D)/tools/directfb-csource $(HOST_DIR)/usr/bin
 
-define DIRECTFB_STAGING_CONFIG_FIXUP
-	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
-		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
-		$(STAGING_DIR)/usr/bin/directfb-config
-endef
-
-DIRECTFB_POST_INSTALL_STAGING_HOOKS += DIRECTFB_STAGING_CONFIG_FIXUP
-
 $(eval $(autotools-package))
 $(eval $(host-autotools-package))
 
 # directfb-csource for the host
-DIRECTFB_HOST_BINARY:=$(HOST_DIR)/usr/bin/directfb-csource
+DIRECTFB_HOST_BINARY = $(HOST_DIR)/usr/bin/directfb-csource

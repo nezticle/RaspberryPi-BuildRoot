@@ -21,7 +21,7 @@ LVM2_BINS = \
 
 # Make sure that binaries and libraries are installed with write
 # permissions for the owner.
-LVM2_CONF_OPT += --enable-write_install
+LVM2_CONF_OPT += --enable-write_install --enable-pkgconfig
 
 # LVM2 uses autoconf, but not automake, and the build system does not
 # take into account the CC passed at configure time.
@@ -39,6 +39,12 @@ ifeq ($(BR2_PACKAGE_LVM2_DMSETUP_ONLY),y)
 LVM2_MAKE_OPT = device-mapper
 LVM2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install_device-mapper
 LVM2_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install_device-mapper
+endif
+
+ifeq ($(BR2_PACKAGE_LVM2_APP_LIBRARY),y)
+LVM2_CONF_OPT += --enable-applib
+else
+LVM2_CONF_OPT += --disable-applib
 endif
 
 define LVM2_UNINSTALL_STAGING_CMDS

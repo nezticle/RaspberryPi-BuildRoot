@@ -16,6 +16,12 @@ IMAGEMAGICK_LICENSE_FILES = LICENSE
 
 IMAGEMAGICK_INSTALL_STAGING = YES
 IMAGEMAGICK_AUTORECONF = YES
+IMAGEMAGICK_CONFIG_SCRIPTS = \
+	$(addsuffix -config,Magick MagickCore MagickWand Wand)
+
+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+IMAGEMAGICK_CONFIG_SCRIPTS += Magick++-config
+endif
 
 ifeq ($(BR2_LARGEFILE),y)
 IMAGEMAGICK_CONF_ENV = ac_cv_sys_file_offset_bits=64
@@ -111,16 +117,6 @@ IMAGEMAGICK_CONF_OPT += --with-bzlib
 IMAGEMAGICK_DEPENDENCIES += bzip2
 else
 IMAGEMAGICK_CONF_OPT += --without-bzip2
-endif
-
-define IMAGEMAGICK_REMOVE_CONFIG_SCRIPTS
-	$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,	\
-		   $(addsuffix -config,			\
-		     Magick MagickCore MagickWand Wand Magick++))
-endef
-
-ifneq ($(BR2_HAVE_DEVFILES),y)
-IMAGEMAGICK_POST_INSTALL_TARGET_HOOKS += IMAGEMAGICK_REMOVE_CONFIG_SCRIPTS
 endif
 
 $(eval $(autotools-package))

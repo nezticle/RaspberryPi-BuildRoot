@@ -1,9 +1,5 @@
 menuconfig BR2_PACKAGE_XORG7
 	bool "X.org X Window System"
-	select BR2_PACKAGE_ZLIB
-	select BR2_PACKAGE_LIBPNG
-	select BR2_PACKAGE_EXPAT
-	select BR2_PACKAGE_FONTCONFIG
 	depends on BR2_USE_WCHAR
 	help
 	  Support for X11R7 libraries, servers, drivers, and/or
@@ -12,33 +8,14 @@ menuconfig BR2_PACKAGE_XORG7
 	  http://xorg.freedesktop.org
 
 if BR2_PACKAGE_XORG7
-
-choice
-	prompt "X Window System server type"
-	default BR2_PACKAGE_XSERVER_tinyx
-	help
-	  Select the X Window System server to use
-
-config BR2_PACKAGE_XSERVER_xorg
-	bool "Modular X.org"
-	depends on BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP
-
-comment 'X.org requires largefile and C++ support'
-	depends on !(BR2_LARGEFILE && BR2_INSTALL_LIBSTDCPP)
-
-config BR2_PACKAGE_XSERVER_tinyx
-	bool "TinyX"
-
-endchoice
-
-menu "X11R7 Servers"
-	source package/x11r7/xserver_xorg-server/Config.in
-endmenu
+	menu "X11R7 Servers"
+		source package/x11r7/xserver_xorg-server/Config.in
+	endmenu
 	menu "X11R7 Libraries"
 		source package/x11r7/libxcb/Config.in
 		source package/x11r7/mesa3d/Config.in
-		source package/x11r7/pthread-stubs/Config.in
 		source package/x11r7/xcb-util/Config.in
+		source package/x11r7/xcb-util-keysyms/Config.in
 		source package/x11r7/xlib_libFS/Config.in
 		source package/x11r7/xlib_libICE/Config.in
 		source package/x11r7/xlib_libSM/Config.in
@@ -78,6 +55,7 @@ endmenu
 		source package/x11r7/xlib_libxkbui/Config.in
 		source package/x11r7/xlib_xtrans/Config.in
 		source package/x11r7/xlib_libpciaccess/Config.in
+		source package/x11r7/xlib_libpthread-stubs/Config.in
 	endmenu
 	menu "X11R7 Applications"
 		source package/x11r7/xapp_appres/Config.in
@@ -131,7 +109,7 @@ endmenu
 		source package/x11r7/xapp_xhost/Config.in
 		source package/x11r7/xapp_xinit/Config.in
 		source package/x11r7/xapp_xinput/Config.in
-		source package/x11r7/xapp_xinput_calibrator/Config.in
+		source package/x11r7/xapp_xinput-calibrator/Config.in
 		source package/x11r7/xapp_xkbcomp/Config.in
 		source package/x11r7/xapp_xkbevd/Config.in
 		source package/x11r7/xapp_xkbprint/Config.in
@@ -167,10 +145,8 @@ endmenu
 		source package/x11r7/xapp_xwininfo/Config.in
 		source package/x11r7/xapp_xwud/Config.in
 	endmenu
-	if BR2_PACKAGE_XSERVER_xorg
+	if BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
 	menu "X11R7 Drivers"
-		source package/x11r7/xdriver_xf86-input-acecad/Config.in
-		source package/x11r7/xdriver_xf86-input-aiptek/Config.in
 		source package/x11r7/xdriver_xf86-input-evdev/Config.in
 		source package/x11r7/xdriver_xf86-input-joystick/Config.in
 		source package/x11r7/xdriver_xf86-input-keyboard/Config.in
@@ -179,11 +155,9 @@ endmenu
 		source package/x11r7/xdriver_xf86-input-tslib/Config.in
 		source package/x11r7/xdriver_xf86-input-vmmouse/Config.in
 		source package/x11r7/xdriver_xf86-input-void/Config.in
-		source package/x11r7/xdriver_xf86-video-apm/Config.in
 		source package/x11r7/xdriver_xf86-video-ark/Config.in
 		source package/x11r7/xdriver_xf86-video-ast/Config.in
 		source package/x11r7/xdriver_xf86-video-ati/Config.in
-		source package/x11r7/xdriver_xf86-video-chips/Config.in
 		source package/x11r7/xdriver_xf86-video-cirrus/Config.in
 		source package/x11r7/xdriver_xf86-video-dummy/Config.in
 		source package/x11r7/xdriver_xf86-video-fbdev/Config.in
@@ -191,7 +165,6 @@ endmenu
 		source package/x11r7/xdriver_xf86-video-glide/Config.in
 		source package/x11r7/xdriver_xf86-video-glint/Config.in
 		source package/x11r7/xdriver_xf86-video-i128/Config.in
-		source package/x11r7/xdriver_xf86-video-i740/Config.in
 		source package/x11r7/xdriver_xf86-video-intel/Config.in
 		source package/x11r7/xdriver_xf86-video-mach64/Config.in
 		source package/x11r7/xdriver_xf86-video-mga/Config.in
@@ -200,30 +173,17 @@ endmenu
 		source package/x11r7/xdriver_xf86-video-nv/Config.in
 		source package/x11r7/xdriver_xf86-video-openchrome/Config.in
 		source package/x11r7/xdriver_xf86-video-r128/Config.in
-		source package/x11r7/xdriver_xf86-video-rendition/Config.in
-		source package/x11r7/xdriver_xf86-video-s3/Config.in
-		source package/x11r7/xdriver_xf86-video-s3virge/Config.in
 		source package/x11r7/xdriver_xf86-video-savage/Config.in
 		source package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
 		source package/x11r7/xdriver_xf86-video-sis/Config.in
-		source package/x11r7/xdriver_xf86-video-sisusb/Config.in
-		source package/x11r7/xdriver_xf86-video-suncg14/Config.in
-		source package/x11r7/xdriver_xf86-video-suncg3/Config.in
-		source package/x11r7/xdriver_xf86-video-suncg6/Config.in
-		source package/x11r7/xdriver_xf86-video-sunffb/Config.in
-		source package/x11r7/xdriver_xf86-video-sunleo/Config.in
-		source package/x11r7/xdriver_xf86-video-suntcx/Config.in
 		source package/x11r7/xdriver_xf86-video-tdfx/Config.in
 		source package/x11r7/xdriver_xf86-video-tga/Config.in
 		source package/x11r7/xdriver_xf86-video-trident/Config.in
-		source package/x11r7/xdriver_xf86-video-tseng/Config.in
 		source package/x11r7/xdriver_xf86-video-v4l/Config.in
 		source package/x11r7/xdriver_xf86-video-vesa/Config.in
 		source package/x11r7/xdriver_xf86-video-vmware/Config.in
 		source package/x11r7/xdriver_xf86-video-voodoo/Config.in
 		source package/x11r7/xdriver_xf86-video-wsfb/Config.in
-		source package/x11r7/xdriver_xf86-video-xgi/Config.in
-		source package/x11r7/xdriver_xf86-video-xgixp/Config.in
 	endmenu
 	endif
 	menu "X11R7 Fonts"

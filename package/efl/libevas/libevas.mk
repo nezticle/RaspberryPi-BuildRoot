@@ -4,7 +4,7 @@
 #
 #############################################################
 
-LIBEVAS_VERSION = 1.1.0
+LIBEVAS_VERSION = 1.7.4
 LIBEVAS_SOURCE = evas-$(LIBEVAS_VERSION).tar.bz2
 LIBEVAS_SITE = http://download.enlightenment.org/releases/
 LIBEVAS_LICENSE = BSD-2c
@@ -63,7 +63,7 @@ endif
 
 ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
 LIBEVAS_CONF_OPT += --enable-software-xlib
-LIBEVAS_DEPENDENCIES += xproto_xproto
+LIBEVAS_DEPENDENCIES += xlib_libX11 xlib_libXext
 endif
 
 ifeq ($(BR2_PACKAGE_LIBEVAS_X11_GLX),y)
@@ -142,8 +142,7 @@ else
 LIBEVAS_CONF_OPT += --disable-cpu-altivec
 endif
 
-ifeq ($(BR2_cortex_a8)$(BR2_cortex_a9),y)
-# NEON is optional for A9
+ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
 LIBEVAS_CONF_OPT += --enable-cpu-neon
 else
 LIBEVAS_CONF_OPT += --disable-cpu-neon
@@ -177,12 +176,6 @@ else
 LIBEVAS_CONF_OPT += --disable-image-loader-pmaps
 endif
 
-ifeq ($(BR2_PACKAGE_LIBEVAS_SVG),y)
-LIBEVAS_CONF_OPT += --enable-image-loader-svg
-else
-LIBEVAS_CONF_OPT += --disable-image-loader-svg
-endif
-
 ifeq ($(BR2_PACKAGE_LIBEVAS_TIFF),y)
 LIBEVAS_CONF_OPT += --enable-image-loader-tiff
 LIBEVAS_DEPENDENCIES += tiff
@@ -210,10 +203,13 @@ else
 LIBEVAS_CONF_OPT += --disable-font-loader-eet
 endif
 
-# documentation
-ifneq ($(BR2_HAVE_DOCUMENTATION),y)
-LIBEVAS_CONF_OPT += --disable-doc
-endif
+# libevas installs the source code of examples on the target, which
+# are generally not useful.
+define LIBEVAS_REMOVE_EXAMPLES
+	rm -rf $(TARGET_DIR)/usr/share/evas/examples/
+endef
+
+LIBEVAS_POST_INSTALL_TARGET_HOOKS += LIBEVAS_REMOVE_EXAMPLES
 
 $(eval $(autotools-package))
 $(eval $(host-autotools-package))

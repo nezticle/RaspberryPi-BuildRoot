@@ -1,4 +1,5 @@
-// -*- mode:doc -*- ;
+// -*- mode:doc; -*-
+// vim: set syntax=asciidoc:
 
 [[rootfs-custom]]
 Customizing the generated target filesystem
@@ -12,8 +13,37 @@ there are a few ways to customize the resulting target filesystem.
   simply make your changes here and run make afterwards - this will
   rebuild the target filesystem image. This method allows you to do
   anything to the target filesystem, but if you decide to completely
-  rebuild your toolchain and tools, these changes will be lost.
-  _Changes do not survive the +make clean+ command_.
+  rebuild your toolchain and tools, these changes will be lost. This
+  solution is therefore only useful for quick tests only: _changes do
+  not survive the +make clean+ command_. Once you have validated your
+  changes, you should make sure that they will persist after a +make
+  clean+ by using one of the following methods.
+
+* Create a filesystem overlay: a tree of files that are copied directly
+  over the target filesystem after it has been built.  Set
+  +BR2_ROOTFS_OVERLAY+ to the top of the tree.  +.git+, +.svn+, +.hg+
+  directories, +.empty+ files and files ending with +~+ are excluded.
+  _Among these first 3 methods, this one should be preferred_.
+
+* In the Buildroot configuration, you can specify the paths to one or
+  more *post-build scripts*. These scripts are called in the given order,
+  'after' Buildroot builds all the selected software, but 'before' the
+  rootfs images are assembled. The +BR2_ROOTFS_POST_BUILD_SCRIPT+ allows
+  you to specify the location of your post-build scripts. This option can be
+  found in the +System configuration+ menu. The destination root
+  filesystem folder is given as the first argument to these scripts,
+  and these scripts can then be used to remove or modify any file in your
+  target filesystem. You should, however, use this feature with care.
+  Whenever you find that a certain package generates wrong or unneeded
+  files, you should fix that package rather than work around it with some
+  post-build cleanup scripts.
+  You may also use these variables in your post-build script:
+    - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
+    - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
+      xref:generic-package-reference[]
+    - +BINARIES_DIR+: the place where all binary files (aka images) are
+      stored
+    - +BASE_DIR+: the base output directory
 
 * Create your own 'target skeleton'. You can start with the default
   skeleton available under +system/skeleton+ and then customize it to
@@ -22,24 +52,32 @@ there are a few ways to customize the resulting target filesystem.
   location of your custom skeleton. These options can be found in the
   +System configuration+ menu. At build time, the contents of the
   skeleton are copied to output/target before any package
-  installation.
+  installation. Note that this method is *not recommended*, as it
+  duplicates the entire skeleton, which prevents from taking advantage
+  of the fixes or improvements brought to the default Buildroot
+  skeleton. The recommended method is to use the _post-build scripts_
+  mechanism described in the previous item.
 
-* In the Buildroot configuration, you can specify the path to a
-  *post-build script*, that gets called 'after' Buildroot builds all the
-  selected software, but 'before' the rootfs packages are
-  assembled. The +BR2_ROOTFS_POST_BUILD_SCRIPT+ will allow you to
-  specify the location of your post-build script. This option can be
-  found in the +System configuration+ menu. The destination root
-  filesystem folder is given as the first argument to this script,
-  and this script can then be used to copy programs, static data or
-  any other needed file to your target filesystem. You should,
-  however, use this feature with care. Whenever you find that a
-  certain package generates wrong or unneeded files, you should fix
-  that package rather than work around it with a post-build cleanup
-  script. _Among these first 3 methods, this one should be preferred_.
+Note also that you can use the *post-image scripts*
+if you want to perform some specific actions 'after' all
+filesystem images have been created (for example to automatically
+extract your root filesystem tarball in a location exported by your
+NFS server, or to create a special firmware image that bundles your
+root filesystem and kernel image, or any other custom action), you can
+specify a space-separated list of scripts in the
++BR2_ROOTFS_POST_IMAGE_SCRIPT+ configuration option. This option can be
+found in the +System configuration+ menu as well.
 
-* A special package, 'customize', stored in +package/customize+ can be
-  used. You can put all the files that you want to see in the final
-  target root filesystem in +package/customize/source+, and then
-  enable this special package in the configuration system. _This
-  method is marked as deprecated_.
+Each of those scripts will be called with the path to the +images+
+output directory as first and unique argument, and will be executed
+with the main Buildroot source directory as the current
+directory. Those scripts will be executed as the user that executes
+Buildroot, which should normally not be the root user. Therefore, any
+action requiring root permissions in one of these _post-image scripts_
+will require special handling (usage of fakeroot or sudo), which is
+left to the script developer.
+
+Just like for the _post-build scripts_ mentioned above, you also have
+access to the following environment variables from your _post-image
+scripts_: +BUILDROOT_CONFIG+, +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+,
++BINARIES_DIR+ and +BASE_DIR+.

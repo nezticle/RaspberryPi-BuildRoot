@@ -4,13 +4,20 @@
 #
 #############################################################
 
-LIBCURL_VERSION = 7.27.0
+LIBCURL_VERSION = 7.28.1
 LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
 LIBCURL_SITE = http://curl.haxx.se/download
 LIBCURL_LICENSE = ICS
 LIBCURL_LICENSE_FILES = COPYING
 LIBCURL_INSTALL_STAGING = YES
-LIBCURL_CONF_OPT = --disable-verbose --disable-manual --enable-hidden-symbols
+
+# We disable NTLM support because it uses fork(), which doesn't work
+# on non-MMU platforms. Moreover, this authentication method is
+# probably almost never used. See
+# http://curl.haxx.se/docs/manpage.html#--ntlm.
+LIBCURL_CONF_OPT = --disable-verbose --disable-manual \
+	--enable-hidden-symbols --disable-ntlm-wb
+LIBCURL_CONFIG_SCRIPTS = curl-config
 
 ifeq ($(BR2_PACKAGE_OPENSSL),y)
 LIBCURL_DEPENDENCIES += openssl
@@ -25,18 +32,17 @@ else
 LIBCURL_CONF_OPT += --without-ssl
 endif
 
+define LIBCURL_FIX_DOT_PC
+	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
+endef
+LIBCURL_POST_PATCH_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_DOT_PC)
+
+ifeq ($(BR2_PACKAGE_CURL),)
 define LIBCURL_TARGET_CLEANUP
-	rm -rf $(TARGET_DIR)/usr/bin/curl-config \
-	       $(if $(BR2_PACKAGE_CURL),,$(TARGET_DIR)/usr/bin/curl)
+	rm -rf $(TARGET_DIR)/usr/bin/curl
 endef
-
 LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
-
-define LIBCURL_STAGING_FIXUP_CURL_CONFIG
-	$(SED) "s,prefix=/usr,prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/curl-config
-endef
-
-LIBCURL_POST_INSTALL_STAGING_HOOKS += LIBCURL_STAGING_FIXUP_CURL_CONFIG
+endif
 
 $(eval $(autotools-package))
 

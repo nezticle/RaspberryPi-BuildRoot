@@ -20,8 +20,8 @@ if BR2_LINUX_KERNEL
 choice
 	prompt "Kernel version"
 
-config BR2_LINUX_KERNEL_3_6
-	bool "3.6.8"
+config BR2_LINUX_KERNEL_3_7
+	bool "3.7.8"
 
 config BR2_LINUX_KERNEL_SAME_AS_HEADERS
 	bool "Same as toolchain kernel headers"
@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
 
 config BR2_LINUX_KERNEL_VERSION
 	string
-	default "3.6.8" if BR2_LINUX_KERNEL_3_6
+	default "3.7.8" if BR2_LINUX_KERNEL_3_7
 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
@@ -264,11 +264,12 @@ config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
 endchoice
 
 config BR2_LINUX_KERNEL_INTREE_DTS_NAME
-	string "Device Tree Source file name"
+	string "Device Tree Source file names"
 	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
 	help
 	 Name of the device tree source file, without
-	 the trailing .dts
+	 the trailing .dts. You can provide a list of
+	 dts files to build, separated by spaces.
 
 config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
 	string "Device Tree Source file path"

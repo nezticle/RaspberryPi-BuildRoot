@@ -3,8 +3,9 @@
 # linux-firmware
 #
 #############################################################
-LINUX_FIRMWARE_VERSION = a707c25a6e992b8ee6127a6ebab63dd063043047
-LINUX_FIRMWARE_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+
+LINUX_FIRMWARE_VERSION = 65a5163b8bb77bd7759efa3ca780867fcaed89b0
+LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
 LINUX_FIRMWARE_SITE_METHOD = git
 
 # rt2501/rt61
@@ -52,6 +53,10 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V9) += \
 LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688) += \
 	libertas/sd8688.bin libertas/sd8688_helper.bin LICENCE.Marvell
 
+# sd8787
+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787) += \
+	mrvl/sd8787_uapsta.bin LICENCE.Marvell
+
 # wl127x
 LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X) += \
 	ti-connectivity/wl1271-fw-2.bin				\
@@ -87,6 +92,22 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X) += \
 	ti-connectivity/wl128x-fw-5-sr.bin			\
 	ti-connectivity/TIInit_7.2.31.bts 			\
 	LICENCE.ti-connectivity
+
+# iwlwifi 5000. Multiple files are available (iwlwifi-5000-1.ucode,
+# iwlwifi-5000-2.ucode, iwlwifi-5000-5.ucode), corresponding to
+# different versions of the firmware API. For now, we only install the
+# most recent one.
+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000) += \
+	iwlwifi-5000-5.ucode LICENCE.iwlwifi_firmware
+
+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_XC5000) += \
+	dvb-fe-xc5000-1.6.114.fw
+
+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_DIB0700) += \
+	dvb-usb-dib0700-1.20.fw
+
+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_H5_DRXK) += \
+	dvb-usb-terratec-h5-drxk.fw
 
 
 ifneq ($(LINUX_FIRMWARE_FILES_y),)

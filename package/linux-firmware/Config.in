@@ -8,7 +8,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE
 
 if BR2_PACKAGE_LINUX_FIRMWARE
 
-menu "Atheros"
+menu "WiFi firmwares"
 
 config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010
 	bool "Atheros 7010"
@@ -20,9 +20,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
 	help
 	  Firmware files for the Atheros 9271 module
 
-endmenu
-
-menu "Marvell Libertas"
+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_5000
+	bool "Intel iwlwifi 5000"
+	help
+	  Firmware files for the Intel Wifi 5000 devices supported by
+	  the iwlwifi kernel driver.
 
 config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8
        bool "Libertas SD 8686 v8"
@@ -39,9 +41,10 @@ config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688
        help
          Firmware files for the Marvell SD8688 module
 
-endmenu
-
-menu "Ralink"
+config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787
+	bool "Marvell Wifi-Ex SD 8787"
+	help
+	  Firmware files for the Marvell Wifi-Ex 8787 module on SDIO.
 
 config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
 	bool "Ralink rt2501/rt61"
@@ -58,10 +61,6 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX
 	help
 	  Ralink rt27xx/rt28xx/rt30xx
 
-endmenu
-
-menu "Realtek"
-
 config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8192
 	bool "Realtek 8192"
 	help
@@ -72,19 +71,34 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8712
 	help
 	  Realtek 8712
 
-endmenu
-
-menu "Texas Instruments"
-
 config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X
-	bool "wl127X"
+	bool "TI wl127X"
 	help
 	  Firmware files for WLAN and Bluetooth modules wl1271 and wl1273
 
 config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X
-	bool "wl128X"
+	bool "TI wl128X"
 	help
 	  Firmware files for WLAN and Bluetooth modules wl128x
+
+endmenu
+
+menu "DVB firmwares"
+
+config BR2_PACKAGE_LINUX_FIRMWARE_DIB0700
+	bool "DiBcom dib0700"
+	help
+	  Firmware file for dib0700-based USB DVB tuner driver
+
+config BR2_PACKAGE_LINUX_FIRMWARE_H5_DRXK
+	bool "Terratec H5 DRX-K"
+	help
+	  Firmware file for Terratec H5 DRX-K based DVB tuner driver
+
+config BR2_PACKAGE_LINUX_FIRMWARE_XC5000
+	bool "Xceive xc5000"
+	help
+	  Firmware file for xc5000-based DVB tuner driver
 
 endmenu
 
