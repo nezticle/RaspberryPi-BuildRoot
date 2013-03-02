@@ -2,5 +2,7 @@ config BR2_PACKAGE_QTWAYLAND
 	bool "qtwayland"
 	select BR2_PACKAGE_QTDECLARATIVE
 	select BR2_PACKAGE_WAYLAND
+	select BR2_PACKAGE_XKBCOMMON
+	select BR2_PACKAGE_XPROTO
 	help
 		Qt 5 Wayland module
