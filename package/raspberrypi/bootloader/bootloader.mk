@@ -1,4 +1,4 @@
-BOOTLOADER_VERSION = d3ada6f
+BOOTLOADER_VERSION = 80d26df
 BOOTLOADER_SITE = http://bsquask.com/downloads/firmware
 BOOTLOADER_SOURCE = raspberrypi-bootloader-$(BOOTLOADER_VERSION).tar.gz
 BOOTLOADER_INSTALL_TARGET = YES
