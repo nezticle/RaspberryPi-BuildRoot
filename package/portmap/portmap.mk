@@ -33,8 +33,6 @@ define PORTMAP_INSTALL_TARGET_CMDS
 		$(TARGET_DIR)/usr/share/man/man8/pmap_dump.8
 	$(INSTALL) -D $(@D)/pmap_set.8 \
 		$(TARGET_DIR)/usr/share/man/man8/pmap_set.8
-	$(INSTALL) -m 0755 package/portmap/S13portmap \
-		$(TARGET_DIR)/etc/init.d
 endef
 
 define PORTMAP_UNINSTALL_TARGET_CMDS
@@ -42,5 +40,22 @@ define PORTMAP_UNINSTALL_TARGET_CMDS
 	rm -f $(addprefix $(TARGET_DIR)/usr/share/man/man8/, \
 		$(addsuffix .8,$(PORTMAP_SBINS)))
 endef
+
+define PORTMAP_INSTALL_INITSCRIPT
+	$(INSTALL) -m 0755 package/portmap/S13portmap \
+		$(TARGET_DIR)/etc/init.d
+endef
+
+define PORTMAP_INSTALL_UPSTART_INITSCRIPT
+	mkdir -p $(TARGET_DIR)/etc/init
+	$(INSTALL) -m 0644 package/portmap/portmap.conf \
+		$(TARGET_DIR)/etc/init/portmap.conf
+endef
+
+ifeq ($(BR2_PACKAGE_UPSTART), y)
+	PORTMAP_POST_INSTALL_TARGET_HOOKS += PORTMAP_INSTALL_UPSTART_INITSCRIPT
+else
+	PORTMAP_POST_INSTALL_TARGET_HOOKS += PORTMAP_INSTALL_INITSCRIPT
+endif
 
 $(eval $(generic-package))

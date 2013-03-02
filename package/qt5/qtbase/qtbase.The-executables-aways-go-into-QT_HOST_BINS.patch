@@ -1,0 +1,29 @@
+From https://codereview.qt-project.org/p/qt/qtbase
+ * branch            refs/changes/66/43966/1 -> FETCH_HEAD
+From 03475ae31a43906ce940c06c8a4388be812d72ae Mon Sep 17 00:00:00 2001
+From: Stephen Kelly <stephen.kelly@kdab.com>
+Date: Fri, 4 Jan 2013 13:44:22 +0100
+Subject: [PATCH] The executables always go into QT_HOST_BINS.
+
+Task-number: QTBUG-28922
+
+Change-Id: I7afaee292a0026d67866e4f1f711296adee8f8de
+---
+ mkspecs/features/create_cmake.prf |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mkspecs/features/create_cmake.prf b/mkspecs/features/create_cmake.prf
+index 63001f3..dd60b31 100644
+--- a/mkspecs/features/create_cmake.prf
++++ b/mkspecs/features/create_cmake.prf
+@@ -52,7 +52,7 @@ contains(CMAKE_LIB_DIR, "$${CMAKE_QT_INSTALL_PREFIX_ESCAPED}.*") {
+     CMAKE_LIB_DIR_IS_ABSOLUTE = True
+ }
+ 
+-CMAKE_BIN_DIR = $$[QT_INSTALL_BINS]/
++CMAKE_BIN_DIR = $$[QT_HOST_BINS]/
+ contains(CMAKE_BIN_DIR, "$${CMAKE_QT_INSTALL_PREFIX_ESCAPED}.*") {
+     CMAKE_BIN_DIR = $$replace(CMAKE_BIN_DIR, "$$CMAKE_QT_INSTALL_PREFIX_ESCAPED", )
+ } else {
+-- 
+1.7.9.5

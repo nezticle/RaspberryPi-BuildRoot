@@ -47,4 +47,10 @@ BLUEZ_UTILS_CONF_OPT +=	\
 	--disable-usb
 endif
 
+# Wiimote support
+ifeq ($(BR2_PACKAGE_BLUEZ_UTILS_WIIMOTE),y)
+BLUEZ_UTILS_CONF_OPT += \
+	--enable-wiimote
+endif
+
 $(eval $(autotools-package))

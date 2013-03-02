@@ -9,12 +9,26 @@ ln -T -s /bin/bash $TARGETDIR/bin/sh
 # Package the /boot partition
 tar -czf $TARGETDIR/../images/boot.tar.gz --exclude=Image -C $TARGETDIR/boot/ .
 
-# add a corrected, and lightweight inittab
-cp board/raspberrypi/inittab $TARGETDIR/etc/inittab
+# remove inittab
+rm $TARGETDIR/etc/inittab
+
+#remove rc.conf
+rm $TARGETDIR/etc/init/rc.conf
+
+#add task to mount everything
+cp board/raspberrypi/mount.conf $TARGETDIR/etc/init/
+
+#add task to set hostname
+cp board/raspberrypi/hostname.conf $TARGETDIR/etc/init/
+
+#add task to start getty on tty1
+cp board/raspberrypi/tty1.conf $TARGETDIR/etc/init/
 
 # add eth0 dhcp entry into /etc/network/interfaces
 cp board/raspberrypi/interfaces $TARGETDIR/etc/network/
 
 # make sure that ntpdate is run before sshd is started
-cp board/raspberrypi/S41ntpdate $TARGETDIR/etc/init.d/
-chmod a+x $TARGETDIR/etc/init.d/S41ntpdate
+cp board/raspberrypi/ntpdate.conf $TARGETDIR/etc/init/
+
+# start bluetooth daemon
+cp board/raspberrypi/bluetooth.conf $TARGETDIR/etc/init/

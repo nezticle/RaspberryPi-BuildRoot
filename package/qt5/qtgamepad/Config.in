@@ -1,0 +1,6 @@
+config BR2_PACKAGE_QTGAMEPAD
+	bool "qtgamepad"
+	select BR2_PACKAGE_QTBASE
+	help
+		A Qt5 module that adds support for reading
+		from Gamepad devices on Linux

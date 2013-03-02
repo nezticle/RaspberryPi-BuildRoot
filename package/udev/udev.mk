@@ -43,6 +43,19 @@ define UDEV_INSTALL_INITSCRIPT
 	$(INSTALL) -m 0755 package/udev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
 endef
 
-UDEV_POST_INSTALL_TARGET_HOOKS += UDEV_INSTALL_INITSCRIPT
+define UDEV_INSTALL_UPSTART_INITSCRIPT
+	mkdir -p $(TARGET_DIR)/etc/init
+	$(INSTALL) -m 0644 package/udev/udev.conf $(TARGET_DIR)/etc/init/udev.conf
+	$(INSTALL) -m 0644 package/udev/udevmonitor.conf $(TARGET_DIR)/etc/init/udevmonitor.conf
+	$(INSTALL) -m 0644 package/udev/udevtrigger.conf $(TARGET_DIR)/etc/init/udevtrigger.conf
+	$(INSTALL) -m 0644 package/udev/udev-finish.conf $(TARGET_DIR)/etc/init/udev-finish.conf
+endef
+
+ifeq ($(BR2_PACKAGE_UPSTART), y)
+	UDEV_POST_INSTALL_TARGET_HOOKS += UDEV_INSTALL_UPSTART_INITSCRIPT
+else
+	UDEV_POST_INSTALL_TARGET_HOOKS += UDEV_INSTALL_INITSCRIPT
+endif
+
 
 $(eval $(autotools-package))

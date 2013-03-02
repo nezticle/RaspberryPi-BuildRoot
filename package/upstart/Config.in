@@ -1,0 +1,14 @@
+config BR2_PACKAGE_UPSTART
+	bool "upstart"
+	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+	depends on BR2_INET_IPV6
+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+	select BR2_PACKAGE_DBUS
+	select BR2_PACKAGE_LIBNIH
+	select BR2_PACKAGE_JSON_C
+	help
+		Upstart is an event-based replacement for the /sbin/init
+		daemon which handles starting of tasks and services
+		during boot, stopping them during shutdown and supervising 
+		them while the system is running.
+

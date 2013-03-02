@@ -36,6 +36,11 @@ config BR2_PACKAGE_BLUEZ_UTILS_USB
 	help
 	  USB support
 
+config BR2_PACKAGE_BLUEZ_UTILS_WIIMOTE
+	bool "Wiimote support"
+	help
+		Wiimote support
+
 endif
 
 comment "bluez-utils require a toolchain with WCHAR and thread support"
