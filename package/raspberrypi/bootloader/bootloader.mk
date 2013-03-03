@@ -14,7 +14,6 @@ define BOOTLOADER_INSTALL_TARGET_CMDS
 	echo "framebuffer_depth=24" >> $(TARGET_DIR)/boot/config.txt
 	echo "arm_freq=1000" >> $(TARGET_DIR)/boot/config.txt
 	echo "core_freq=500" >> $(TARGET_DIR)/boot/config.txt
-	echo "sdram_freq=500" >> $(TARGET_DIR)/boot/config.txt
 	echo "over_voltage=6" >> $(TARGET_DIR)/boot/config.txt
 	echo "gpu_mem_256=112" >> $(TARGET_DIR)/boot/config.txt
 	echo "gpu_mem_512=368" >> $(TARGET_DIR)/boot/config.txt
