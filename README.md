@@ -69,4 +69,4 @@ Lets set a few more environment variables to make things easier:
 `cmake -DCMAKE_TOOLCHAIN_FILE=$BSQUASK_HOST_DIR/usr/share/buildroot/toolchainfile.cmake`   
 `make`   
 
-### The Bsquask SDK is based on BuildRoot 2012.11 ###
+### The Bsquask SDK is based on BuildRoot 2013.02 ###
