@@ -1,7 +1,7 @@
 QTWAYLAND_VERSION = 4d124fea48a0d094443ed0e031c8e28ec04611a3
 QTWAYLAND_SITE = git://gitorious.org/qt/qtwayland.git
 QTWAYLAND_SITE_METHOD = git
-QTWAYLAND_DEPENDENCIES = qtbase qtxmlpatterns qtjsbackend qtdeclarative wayland xkbcommon xproto
+QTWAYLAND_DEPENDENCIES = qtbase qtxmlpatterns qtjsbackend qtdeclarative wayland xkbcommon xkeyboard-config xproto_kbproto
 QTWAYLAND_INSTALL_STAGING = YES
 
 define QTWAYLAND_CONFIGURE_CMDS

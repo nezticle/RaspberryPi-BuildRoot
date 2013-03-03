@@ -1,4 +1,0 @@
-config BR2_PACKAGE_XPROTO
-	bool "xproto"
-	help
-		Development files for X11 protocol
