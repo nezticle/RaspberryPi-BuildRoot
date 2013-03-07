@@ -21,13 +21,13 @@ endef
 define QTWAYLAND_INSTALL_TARGET_CMDS
 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Compositor*.so.* $(TARGET_DIR)/usr/lib
 	cp -dpf $(STAGING_DIR)/usr/plugins/platforms/libqwayland-brcm-egl.so $(TARGET_DIR)/usr/plugins/platforms/
-	cp -dpf $(STAGING_DIR)/usr/plugins/waylandcompositors/libbrcm-egl.so $(TARGET_DIR)/usr/plugins/waylandcompositors/
+	cp -dpfr $(STAGING_DIR)/usr/plugins/waylandcompositors $(TARGET_DIR)/usr/plugins/
 endef
 
 define QTWAYLAND_UNINSTALL_TARGET_CMDS
 	-rm $(TARGET_DIR)/usr/lib/libQt5Compositor*.so.*
 	-rm $(TARGET_DIR)/usr/plugins/platforms/libqwayland-brcm-egl.so
-	-rm $(TARGET_DIR)/usr/plugins/waylandcompositors/libbrcm-egl.so
+	-rm -r $(TARGET_DIR)/usr/plugins/waylandcompositors
 endef
 
 $(eval $(generic-package))
