@@ -1,7 +1,6 @@
 BOOTLOADER_VERSION = 80d26df
 BOOTLOADER_SITE = http://bsquask.com/downloads/firmware
 BOOTLOADER_SOURCE = raspberrypi-bootloader-$(BOOTLOADER_VERSION).tar.gz
-BOOTLOADER_INSTALL_TARGET = YES
 
 define BOOTLOADER_INSTALL_TARGET_CMDS
 	mkdir -p $(TARGET_DIR)/boot
@@ -9,17 +8,41 @@ define BOOTLOADER_INSTALL_TARGET_CMDS
 	cp $(@D)/bootcode.bin $(TARGET_DIR)/boot/bootcode.bin
 	cp $(@D)/fixup.dat $(TARGET_DIR)/boot/fixup.dat
 	# Generate boot config files
-	echo "dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty2 root=/dev/mmcblk0p2 rootfstype=ext4 coherent_pool=6M smsc95xx.turbo_mode=N rootwait quiet" > $(TARGET_DIR)/boot/cmdline.txt
-	echo "disable_overscan=1" > $(TARGET_DIR)/boot/config.txt
-	echo "framebuffer_depth=24" >> $(TARGET_DIR)/boot/config.txt
-	echo "arm_freq=1000" >> $(TARGET_DIR)/boot/config.txt
-	echo "core_freq=500" >> $(TARGET_DIR)/boot/config.txt
-	echo "over_voltage=6" >> $(TARGET_DIR)/boot/config.txt
-	echo "gpu_mem_256=112" >> $(TARGET_DIR)/boot/config.txt
-	echo "gpu_mem_512=368" >> $(TARGET_DIR)/boot/config.txt
-	echo "cma_lwm=16" >> $(TARGET_DIR)/boot/config.txt
-	echo "cma_hwm=32" >> $(TARGET_DIR)/boot/config.txt
-	echo "cma_offline_start=16" >> $(TARGET_DIR)/boot/config.txt
+        echo "#Generated config.txt by RaspberryPi-Buildroot at "`date +%c` >  $(TARGET_DIR)/boot/config.txt
+
+	echo "arm_freq=$(BR2_RASPBERRYPI_CPU_SPEED)" >> $(TARGET_DIR)/boot/config.txt
+#	echo "core_freq=$(BR2_RPI_CONFIG_CPU_SPEED)" >> $(TARGET_DIR)/boot/config.txt
+	echo "gpu_freq=$(BR2_RASPBERRYPI_GPU_SPEED)" >> $(TARGET_DIR)/boot/config.txt
+	echo "gpu_mem="$(BR2_RASPBERRYPI_GPU_RAM_SIZE) >> $(TARGET_DIR)/boot/config.txt
+	echo "init_uart_baud=$(BR2_RASPBERRYPI__UART_SPEED)" >> $(TARGET_DIR)/boot/config.txt
+
+        -if [ "$(BR2_RASPBERRYPI_DISABLE_OVERSCAN)" = "y" ]; then \
+	  echo "disable_overscan=$(BR2_RASPBERRYPI_DISABLE_OVERSCAN)" >> $(TARGET_DIR)/boot/config.txt; \
+        fi
+
+        -if [ "$(BR2_RASPBERRYPI_DISABLE_L2CACHE)" = "y" ]; then \
+	  echo "disable_l2cache=$(BR2_RASPBERRYPI_DISABLE_L2CACHE)" >> $(TARGET_DIR)/boot/config.txt; \
+        fi
+
+        -if [ "$(BR2_RASPBERRYPI_LICENSE_MPG2)" != "" ]; then \
+          echo "decode_MPG2=$(BR2_RASPBERRYPI_LICENSE_MPG2)" >> $(TARGET_DIR)/boot/config.txt; \
+        fi
+
+        -if [ "$(BR2_RASPBERRYPI_LICENSE_VC1)" != "" ]; then \
+          echo "decode_WVC1=$(BR2_RASPBERRYPI_LICENSE_VC1)" >> $(TARGET_DIR)/boot/config.txt; \
+        fi
+
+        -if [ "$(BR2_RASPBERRYPI_DISABLE_SAFEMODE)" = "y" ]; then \
+          echo "avoid_safe_mode=1" >> $(TARGET_DIR)/boot/config.txt; \
+        fi
+
+        echo "framebuffer_depth=24" >> $(TARGET_DIR)/boot/config.txt #ERIC
+        echo "over_voltage=6" >> $(TARGET_DIR)/boot/config.txt #ERIC
+        echo "cma_lwm=16" >> $(TARGET_DIR)/boot/config.txt #ERIC
+        echo "cma_hwm=32" >> $(TARGET_DIR)/boot/config.txt #ERIC
+        echo "cma_offline_start=16" >> $(TARGET_DIR)/boot/config.txt #ERIC
+
+	echo "$(BR2_RASPBERRYPI_CMDLINE)" > $(TARGET_DIR)/boot/cmdline.txt
 endef
 
 $(eval $(generic-package))
