@@ -85,7 +85,7 @@ config BR2_RASPBERRYPI_DISABLE_OVERSCAN
 comment "Kernel command line options"
 config BR2_RASPBERRYPI_CMDLINE
   string "Linux kernel command line"
-  default "smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 console=tty1,console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 root=/dev/mmcblk0p2 rootfstype=ext4 coherent_pool=6M smsc95xx.turbo_mode=N rootwait quiet"
+  default "smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 console=tty0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 root=/dev/mmcblk0p2 rootfstype=ext4 coherent_pool=6M rootwait quiet"
   help
     Kernel parameters for properly booting the kernel. 
     Add 'smsc95xx.turbo_mode=N' to disable multiple frames per Rx transaction.
