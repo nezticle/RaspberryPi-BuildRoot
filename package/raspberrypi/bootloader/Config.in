@@ -1,15 +1,94 @@
+comment "-- RaspberryPi bootloader --"
 config BR2_PACKAGE_BOOTLOADER
-	bool "Raspberry Pi bootloader files"
+	bool "Install Raspberry Pi bootloader files"
 	help
 	  These are the binary bootloader files from Broadcom.
 	  https://github.com/raspberrypi/firmware
 
 if BR2_PACKAGE_BOOTLOADER
 
+# http://elinux.org/RPiconfig#Memory
 config BR2_RASPBERRYPI_GPU_RAM_SIZE
     int "Amount of RAM dedicated to the GPU"
     default "128"
     help
       Remaining RAM will be used as system RAM.
+
+# http://elinux.org/RPiconfig#Licensed_Codecs
+config BR2_RASPBERRYPI_CONFIG_LICENSE
+  bool "Configure codec licenses"
+  help 
+  See http://elinux.org/RPiconfig#Licensed_Codecs
+
+if BR2_RASPBERRYPI_CONFIG_LICENSE
+comment "Additional license keys for codecs"
+
+config BR2_RASPBERRYPI_LICENSE_MPG2
+  string "MPG2 license key"
+  default "0xdeadbeef"
+  help
+    See http://www.raspberrypi.com/ for purchasing keys
+
+config BR2_RASPBERRYPI_LICENSE_VC1
+  string "VC1 license key"
+  default "0xbeefdead"
+  help
+    See http://www.raspberrypi.com/ for purchasing keys
+
+endif
+
+# http://elinux.org/RPiconfig#Boot
+comment "-- advanced config.txt options --"
+config BR2_RASPBERRYPI_DISABLE_L2CACHE
+  bool "disable L2 cache"
+  default n
+  help
+    Disable ARM access to GPU's L2 cache. Needs corresponding L2 disabled kernel.
+    CPU speed should increase at cost of GPU speed
+    See http://elinux.org/RPiconfig#Memory
+
+config BR2_RASPBERRYPI_DISABLE_SAFEMODE
+  bool "disable safe mode"
+  default y
+  help 
+    This is the config.txt option avoid_safe_mode. Useful when hardware is connected to PIN 5 & 6
+    See http://elinux.org/RPI_safe_mode
+
+config BR2_RASPBERRYPI__UART_SPEED
+  int "Initial UART baudrate"
+  default 115200
+  help
+    This sets the value for init_uart_baud.
+    See http://elinux.org/RPiconfig#Boot
+
+config BR2_RASPBERRYPI_CPU_SPEED
+  int "ARM CPU Frequency (MHz)"
+  default 700
+  help
+    Set the frequency of the ARM frequency
+    See http://elinux.org/RPiconfig#Overclocking
+
+config BR2_RASPBERRYPI_GPU_SPEED
+  int "GPU frequency (Mhz)"
+  default 250
+  help 
+    Sets core_freq, h264_freq, isp_freq, v3d_freq together
+    See http://elinux.org/RPiconfig#Overclocking
+
+config BR2_RASPBERRYPI_DISABLE_OVERSCAN
+  bool "disable overscan"
+  default y
+  help
+    Disable overscan
+    See http://elinux.org/RPiconfig#Video_mode_options
+
+comment "Kernel command line options"
+config BR2_RASPBERRYPI_CMDLINE
+  string "Linux kernel command line"
+  default "smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 console=tty0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 root=/dev/mmcblk0p2 rootfstype=ext4 coherent_pool=6M rootwait quiet"
+  help
+    Kernel parameters for properly booting the kernel. 
+    Add 'smsc95xx.turbo_mode=N' to disable multiple frames per Rx transaction.
+    Add 'dwc_otg.lpm-enable=0' to disable link power management on usb.
 
 endif
