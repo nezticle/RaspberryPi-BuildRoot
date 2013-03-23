@@ -17,7 +17,8 @@ Create the directory where you want your SDK to be built:
 Enter the BuildRoot directory and generate a Makefile for your SDK:  
 `cd BuildRoot`  
 `make raspberrypi_defconfig O=$BSQUASK_DIR`  
-You may be missing some build dependancies (flex, bison, etc...) but you will be warned about what packages you need to install if this is the case.
+You may be missing some build dependancies (flex, bison, etc...) but you will be warned about what packages you need to install if this is the case. If you are using ubuntu the following command should install all needed dependancies:   
+`sudo apt-get install flex bison texinfo mercurial git-core`   
 
 Change to your SDK directory and and start the build (this can take a few hours the first time).  
 `cd $BSQUASK_DIR`  
