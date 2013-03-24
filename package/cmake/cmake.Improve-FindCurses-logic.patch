@@ -1,0 +1,26 @@
+From 945e77b05d47caf4fe66adbef818eb91abe14ce7 Mon Sep 17 00:00:00 2001
+From: Andy Nichols <andy.nichols@digia.com>
+Date: Sun, 24 Mar 2013 17:39:33 +0100
+Subject: [PATCH] Improve FindCurses logic
+
+---
+ Modules/FindCurses.cmake | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Modules/FindCurses.cmake b/Modules/FindCurses.cmake
+index 6acf421..06a003e 100644
+--- a/Modules/FindCurses.cmake
++++ b/Modules/FindCurses.cmake
+@@ -94,7 +94,8 @@ else()
+   find_file(CURSES_HAVE_CURSES_H          curses.h
+     HINTS "${_cursesParentDir}/include")
+ 
+-  find_path(CURSES_NCURSES_INCLUDE_PATH ncurses.h ncurses/ncurses.h
++  find_path(CURSES_NCURSES_INCLUDE_PATH ncurses.h)
++  find_path(CURSES_NCURSES_INCLUDE_PATH ncurses/ncurses.h
+     ncurses/curses.h)
+   find_path(CURSES_NCURSES_INCLUDE_PATH curses.h
+     HINTS "${_cursesParentDir}/include")
+-- 
+1.8.1.2
+
