@@ -17,11 +17,11 @@ define BOOTLOADER_INSTALL_TARGET_CMDS
 	echo "init_uart_baud=$(BR2_RASPBERRYPI__UART_SPEED)" >> $(TARGET_DIR)/boot/config.txt
 
         -if [ "$(BR2_RASPBERRYPI_DISABLE_OVERSCAN)" = "y" ]; then \
-	  echo "disable_overscan=$(BR2_RASPBERRYPI_DISABLE_OVERSCAN)" >> $(TARGET_DIR)/boot/config.txt; \
+	  echo "disable_overscan=1" >> $(TARGET_DIR)/boot/config.txt; \
         fi
 
         -if [ "$(BR2_RASPBERRYPI_DISABLE_L2CACHE)" = "y" ]; then \
-	  echo "disable_l2cache=$(BR2_RASPBERRYPI_DISABLE_L2CACHE)" >> $(TARGET_DIR)/boot/config.txt; \
+	  echo "disable_l2cache=1" >> $(TARGET_DIR)/boot/config.txt; \
         fi
 
         -if [ "$(BR2_RASPBERRYPI_LICENSE_MPG2)" != "" ]; then \
