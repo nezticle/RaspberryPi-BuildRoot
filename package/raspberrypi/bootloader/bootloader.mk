@@ -1,14 +1,16 @@
-BOOTLOADER_VERSION = 80d26df
-BOOTLOADER_SITE = http://bsquask.com/downloads/firmware
-BOOTLOADER_SOURCE = raspberrypi-bootloader-$(BOOTLOADER_VERSION).tar.gz
+BOOTLOADER_VERSION = a18dd8bef402ed69739869a54a07a59a68704ac0
+BOOTLOADER_SITE = http://github.com/raspberrypi/firmware/tarball/master
+BOOTLOADER_LICENSE = BSD-3c
+BOOTLOADER_LICENSE_FILE = boot/LICENCE.broadcom
+
 
 define BOOTLOADER_INSTALL_TARGET_CMDS
 	mkdir -p $(TARGET_DIR)/boot
-	cp $(@D)/start.elf $(TARGET_DIR)/boot/start.elf
-	cp $(@D)/bootcode.bin $(TARGET_DIR)/boot/bootcode.bin
-	cp $(@D)/fixup.dat $(TARGET_DIR)/boot/fixup.dat
+	cp $(@D)/boot/start.elf $(TARGET_DIR)/boot/start.elf
+	cp $(@D)/boot/bootcode.bin $(TARGET_DIR)/boot/bootcode.bin
+	cp $(@D)/boot/fixup.dat $(TARGET_DIR)/boot/fixup.dat
 	# Generate boot config files
-        echo "#Generated config.txt by RaspberryPi-Buildroot at "`date +%c` >  $(TARGET_DIR)/boot/config.txt
+    echo "#Generated config.txt by RaspberryPi-Buildroot at "`date +%c` >  $(TARGET_DIR)/boot/config.txt
 
 	echo "arm_freq=$(BR2_RASPBERRYPI_CPU_SPEED)" >> $(TARGET_DIR)/boot/config.txt
 #	echo "core_freq=$(BR2_RPI_CONFIG_CPU_SPEED)" >> $(TARGET_DIR)/boot/config.txt
