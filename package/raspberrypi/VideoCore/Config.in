@@ -4,3 +4,8 @@ config BR2_PACKAGE_VIDEOCORE
 	  These are the binary VideoCore drivers from Broadcom.
 	  https://github.com/raspberrypi/firmware
 
+if BR2_PACKAGE_VIDEOCORE
+config BR2_PACKAGE_VIDEOCORE_VERSION
+	string "Github revision of VideoCore tar ball"
+	default 0e57896bbe98a0885506c3c09821d2c3c4465eef
+endif
