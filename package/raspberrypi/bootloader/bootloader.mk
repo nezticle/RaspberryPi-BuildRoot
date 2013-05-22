@@ -11,6 +11,8 @@ define BOOTLOADER_INSTALL_TARGET_CMDS
 	cp $(@D)/boot/start.elf $(TARGET_DIR)/boot/start.elf
 	cp $(@D)/boot/bootcode.bin $(TARGET_DIR)/boot/bootcode.bin
 	cp $(@D)/boot/fixup.dat $(TARGET_DIR)/boot/fixup.dat
+	cp $(@D)/boot/fixup_x.dat $(TARGET_DIR)/boot/fixup_x.dat
+	cp $(@D)/boot/start_x.elf $(TARGET_DIR)/boot/start_x.elf
 	# Generate boot config files
     echo "#Generated config.txt by RaspberryPi-Buildroot at "`date +%c` >  $(TARGET_DIR)/boot/config.txt
 
@@ -45,6 +47,11 @@ define BOOTLOADER_INSTALL_TARGET_CMDS
         echo "cma_lwm=16" >> $(TARGET_DIR)/boot/config.txt #ERIC
         echo "cma_hwm=32" >> $(TARGET_DIR)/boot/config.txt #ERIC
         echo "cma_offline_start=16" >> $(TARGET_DIR)/boot/config.txt #ERIC
+
+        # add the _x files for csi camera support
+        echo "#uncomment these lines to add CSI camera support:" >> $(TARGET_DIR)/boot/config.txt
+        echo "#start_file=start_x.elf" >> $(TARGET_DIR)/boot/config.txt
+        echo "#fixup_file=fixup_x.dat" >> $(TARGET_DIR)/boot/config.txt
 
 	echo "$(BR2_RASPBERRYPI_CMDLINE)" > $(TARGET_DIR)/boot/cmdline.txt
 endef
