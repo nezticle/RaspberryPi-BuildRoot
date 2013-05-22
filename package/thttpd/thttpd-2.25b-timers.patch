@@ -1,0 +1,147 @@
+# Patch to fix a timer problem, by Daniel Griscom <griscom@suitable.com> on
+# 26-Oct-2007 for 25-Seven Systems, Inc.
+#
+# If the system clock changes suddenly, many timer events occur and the
+# daemon is swamped as all of them get processed.  This will happen if the
+# system's hardware clock is incorrect and thttpd gets started before an
+# NTP daemon fixes the time.  When the clock is changed suddenly, like what
+# ntpdate(8) does at boot-time, the bug is triggered.  If it changes by
+# months or years, the deamon will crash.  This fix removes those events
+# when it detects a significant change in the current time.
+#
+diff -Naur thttpd-2.25b/timers.c thttpd-2.25b/timers.c
+--- thttpd-2.25b/timers.c	2007-11-11 14:03:46.000000000 -0500
++++ thttpd-2.25b/timers.c	2007-11-11 14:04:30.000000000 -0500
+@@ -39,6 +39,9 @@
+ static Timer* free_timers;
+ static int alloc_count, active_count, free_count;
+ 
++#define MAX_SEC_OFFSET (5)		/* Max time jump forward before correct */
++static struct timeval last_now;	/* Last seen "now" value */
++
+ ClientData JunkClientData;
+ 
+ 
+@@ -135,6 +138,61 @@
+     l_add( t );
+     }
+ 
++static void
++l_check_now( struct timeval* nowP )
++	{
++	Timer storage;
++	Timer* storage_next;
++	Timer* t;
++	Timer* t_next;
++	int h;
++	int diff_usec;
++	int diff_sec;
++	
++	diff_sec = nowP->tv_sec - last_now.tv_sec;
++	/* If "now" has changed too far into future, or at all into past */
++	if ( diff_sec > MAX_SEC_OFFSET || diff_sec < 0 )
++ 	{
++		syslog( LOG_WARNING, "detected time shift of %d seconds", diff_sec );
++ 		/* Move all timers to singly linked list off of storage */
++ 		storage_next = &storage;
++ 		for ( h = 0; h < HASH_SIZE; ++h)
++ 		for ( t = timers[h]; t != (Timer*) 0; t = t_next )
++ 			{
++ 			t_next = t->next;
++ 			l_remove(t);
++ 			storage_next->next = t;
++ 			storage_next = t;
++ 			}
++ 		/* Adjust all timers' times */
++ 		diff_usec = nowP->tv_usec - last_now.tv_usec;
++ 		for ( t = storage.next; t != (Timer*) 0; t = t->next )
++ 			{
++ 			t->time.tv_sec += diff_sec;
++ 			t->time.tv_usec += diff_usec;
++ 			if ( t->time.tv_usec >= 1000000L )
++ 				{
++ 				t->time.tv_usec -= 1000000L;
++ 				t->time.tv_sec++;
++ 				}
++ 			else if ( t->time.tv_usec < 0 )
++ 				{
++ 				t->time.tv_usec += 1000000L;
++ 				t->time.tv_sec--;
++ 				}
++ 			}
++ 		/* Add all timers back into hashed lists */
++ 		for ( t = storage.next; t != (Timer*) 0; t = t_next )
++ 			{
++ 			t_next = t->next;
++ 			t->hash = hash( t );
++ 			l_add(t);
++ 			}
++ 	}
++	/* Remember new "now" */
++	last_now.tv_sec = nowP->tv_sec;
++	last_now.tv_usec = nowP->tv_usec;
++	}
+ 
+ void
+ tmr_init( void )
+@@ -145,6 +203,14 @@
+ 	timers[h] = (Timer*) 0;
+     free_timers = (Timer*) 0;
+     alloc_count = active_count = free_count = 0;
++	(void) gettimeofday( &last_now, (struct timezone*) 0 );
++	/* Schedule vacuous timer to keep time check software happy */
++	if ( tmr_create( (struct timeval*) 0, NULL, JunkClientData, 
++			MAX_SEC_OFFSET * 1000L / 2, 1 ) == (Timer*) 0 )
++	{
++	syslog( LOG_CRIT, "tmr_create(NULL) failed" );
++	exit( 1 );
++	}
+     }
+ 
+ 
+@@ -177,6 +243,9 @@
+ 	t->time = *nowP;
+     else
+ 	(void) gettimeofday( &t->time, (struct timezone*) 0 );
++    
++	l_check_now( &t->time );
++    
+     t->time.tv_sec += msecs / 1000L;
+     t->time.tv_usec += ( msecs % 1000L ) * 1000L;
+     if ( t->time.tv_usec >= 1000000L )
+@@ -216,6 +285,8 @@
+     long msecs, m;
+     register Timer* t;
+ 
++    l_check_now( nowP );
++
+     gotone = 0;
+     msecs = 0;          /* make lint happy */
+     /* Since the lists are sorted, we only need to look at the
+@@ -252,6 +323,8 @@
+     Timer* t;
+     Timer* next;
+ 
++    l_check_now( nowP );
++
+     for ( h = 0; h < HASH_SIZE; ++h )
+ 	for ( t = timers[h]; t != (Timer*) 0; t = next )
+ 	    {
+@@ -263,6 +336,7 @@
+ 		 ( t->time.tv_sec == nowP->tv_sec &&
+ 		   t->time.tv_usec > nowP->tv_usec ) )
+ 		break;
++		if ( t->timer_proc != (TimerProc*) 0 )	/* If timer_proc exists */
+ 	    (t->timer_proc)( t->client_data, nowP );
+ 	    if ( t->periodic )
+ 		{
+@@ -285,6 +359,9 @@
+ void
+ tmr_reset( struct timeval* nowP, Timer* t )
+     {
++    
++    l_check_now( nowP );
++    
+     t->time = *nowP;
+     t->time.tv_sec += t->msecs / 1000L;
+     t->time.tv_usec += ( t->msecs % 1000L ) * 1000L;
