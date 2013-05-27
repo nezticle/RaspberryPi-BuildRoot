@@ -1,4 +1,4 @@
-WAYLAND_VERSION = 1.0.5
+WAYLAND_VERSION = 1.1.0
 WAYLAND_SITE = http://wayland.freedesktop.org/releases/
 WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
 HOST_WAYLAND_DEPENDENCIES = host-expat host-libffi
