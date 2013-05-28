@@ -1,0 +1,314 @@
+From 6f24192bcbed536453ff319867cad83443153e7b Mon Sep 17 00:00:00 2001
+From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
+Date: Wed, 8 May 2013 15:30:56 +0200
+Subject: [PATCH] install host libraries into -hostprefix
+
+... and introduce -hostlibdir configure option for symmetry.
+
+the libraries built for the host have no business in the target prefix.
+
+in principle this code would even support dynamically linked host
+libraries, but that's currently unused.
+
+Task-number: QTBUG-30591
+Change-Id: I8e600fa4911a020fb0e87fbf7ef2f35647c7c4d5
+Reviewed-by: Joerg Bornemann <joerg.bornemann@digia.com>
+Reviewed-by: Ivan Romanov <drizt@land.ru>
+---
+ configure                           | 18 +++++++++++++++++-
+ mkspecs/features/qt_config.prf      |  2 ++
+ mkspecs/features/qt_installs.prf    | 10 ++++++++--
+ mkspecs/features/qt_module.prf      |  9 ++++++---
+ mkspecs/features/qt_module_pris.prf | 26 +++++++++++++++++++-------
+ qmake/property.cpp                  |  1 +
+ src/corelib/global/qlibraryinfo.cpp |  1 +
+ src/corelib/global/qlibraryinfo.h   |  1 +
+ tools/configure/configureapp.cpp    | 11 +++++++++++
+ 9 files changed, 66 insertions(+), 13 deletions(-)
+
+diff --git a/configure b/configure
+index aa840cb..1c34b62 100755
+--- a/configure
++++ b/configure
+@@ -1001,6 +1001,7 @@ CFG_SYSROOT=
+ CFG_GCC_SYSROOT="yes"
+ QT_HOST_PREFIX=
+ QT_HOST_BINS=
++QT_HOST_LIBS=
+ QT_HOST_DATA=
+ 
+ #flags for SQL drivers
+@@ -1109,7 +1110,7 @@ while [ "$#" -gt 0 ]; do
+         VAL=no
+         ;;
+     #Qt style options that pass an argument
+-    -prefix|-docdir|-headerdir|-plugindir|-importdir|-qmldir|-archdatadir|-datadir|-libdir|-bindir|-libexecdir|-translationdir|-sysconfdir|-examplesdir|-testsdir|-depths|-make|-nomake|-skip|-platform|-xplatform|-device|-device-option|-sdk|-arch|-host-arch|-mysql_config|-sysroot|-hostdatadir|-hostbindir|-qpa|-qconfig|-android-sdk|-android-ndk|-android-ndk-platform|-android-ndk-host|-android-arch|-android-toolchain-version)
++    -prefix|-docdir|-headerdir|-plugindir|-importdir|-qmldir|-archdatadir|-datadir|-libdir|-bindir|-libexecdir|-translationdir|-sysconfdir|-examplesdir|-testsdir|-depths|-make|-nomake|-skip|-platform|-xplatform|-device|-device-option|-sdk|-arch|-host-arch|-mysql_config|-sysroot|-hostdatadir|-hostbindir|-hostlibdir|-qpa|-qconfig|-android-sdk|-android-ndk|-android-ndk-platform|-android-ndk-host|-android-arch|-android-toolchain-version)
+         VAR=`echo $1 | sed "s,^-\(.*\),\1,"`
+         shift
+         VAL="$1"
+@@ -1294,6 +1295,9 @@ while [ "$#" -gt 0 ]; do
+     hostbindir)
+         QT_HOST_BINS="$VAL"
+         ;;
++    hostlibdir)
++        QT_HOST_LIBS="$VAL"
++        ;;
+     pkg-config)
+         if [ "$VAL" = "yes" ] || [ "$VAL" = "no" ]; then
+             CFG_PKGCONFIG="$VAL"
+@@ -3150,6 +3154,15 @@ if [ -z "$QT_HOST_BINS" ]; then #default
+ fi
+ QT_HOST_BINS=`"$relpath/config.tests/unix/makeabs" "$QT_HOST_BINS"`
+ 
++if [ -z "$QT_HOST_LIBS" ]; then #default
++    if $haveHpx; then
++        QT_HOST_LIBS="$QT_HOST_PREFIX/lib" #fallback
++    else
++        QT_HOST_LIBS="$QT_INSTALL_LIBS"
++    fi
++fi
++QT_HOST_LIBS=`"$relpath/config.tests/unix/makeabs" "$QT_HOST_LIBS"`
++
+ if [ -z "$QT_HOST_DATA" ]; then #default
+     if $haveHpx; then
+         QT_HOST_DATA="$QT_HOST_PREFIX"
+@@ -3323,6 +3336,8 @@ Installation options:
+ 
+     -hostbindir <dir> .. Host executables will be installed to <dir>
+                          (default HOSTPREFIX/bin)
++    -hostlibdir <dir> .. Host libraries will be installed to <dir>
++                         (default HOSTPREFIX/lib)
+     -hostdatadir <dir> . Data used by qmake will be installed to <dir>
+                          (default HOSTPREFIX)
+ 
+@@ -3837,6 +3852,7 @@ static const char qt_configure_prefix_path_strs[][256 + 12] = {
+     "qt_ssrtpath=$CFG_SYSROOT",
+     "qt_hpfxpath=$QT_HOST_PREFIX",
+     "qt_hbinpath=$QT_HOST_BINS",
++    "qt_hlibpath=$QT_HOST_LIBS",
+     "qt_hdatpath=$QT_HOST_DATA",
+     "qt_targspec=$shortxspec",
+     "qt_hostspec=$shortspec",
+diff --git a/mkspecs/features/qt_config.prf b/mkspecs/features/qt_config.prf
+index 061399d..77d2c0f 100644
+--- a/mkspecs/features/qt_config.prf
++++ b/mkspecs/features/qt_config.prf
+@@ -20,6 +20,7 @@ QMAKE_QT_CONFIG = $$[QT_HOST_DATA/get]/mkspecs/qconfig.pri
+          # qt_<module>.pri forwarding file
+          QT_MODULE_INCLUDE_BASE = $$[QT_INSTALL_HEADERS]
+          QT_MODULE_LIB_BASE = $$[QT_INSTALL_LIBS]
++         QT_MODULE_HOST_LIB_BASE = $$[QT_HOST_LIBS]
+          QT_MODULE_PLUGIN_BASE = $$[QT_INSTALL_PLUGINS]
+          QT_MODULE_LIBEXEC_BASE = $$[QT_INSTALL_LIBEXECS]
+          QT_MODULE_BIN_BASE = $$[QT_INSTALL_BINS]
+@@ -30,6 +31,7 @@ QMAKE_QT_CONFIG = $$[QT_HOST_DATA/get]/mkspecs/qconfig.pri
+    }
+    unset(QT_MODULE_INCLUDE_BASE)
+    unset(QT_MODULE_LIB_BASE)
++   unset(QT_MODULE_HOST_LIB_BASE)
+    unset(QT_MODULE_PLUGIN_BASE)
+    unset(QT_MODULE_LIBEXEC_BASE)
+    unset(QT_MODULE_BIN_BASE)
+diff --git a/mkspecs/features/qt_installs.prf b/mkspecs/features/qt_installs.prf
+index cc720ac..e82b499 100644
+--- a/mkspecs/features/qt_installs.prf
++++ b/mkspecs/features/qt_installs.prf
+@@ -12,10 +12,16 @@
+ #library
+ !qt_no_install_library {
+     win32 {
+-       dlltarget.path = $$[QT_INSTALL_BINS]
++       host_build: \
++           dlltarget.path = $$[QT_HOST_BINS]
++       else: \
++           dlltarget.path = $$[QT_INSTALL_BINS]
+        INSTALLS += dlltarget
+     }
+-    target.path = $$[QT_INSTALL_LIBS]
++    host_build: \
++        target.path = $$[QT_HOST_LIBS]
++    else: \
++        target.path = $$[QT_INSTALL_LIBS]
+     INSTALLS += target
+ }
+ 
+diff --git a/mkspecs/features/qt_module.prf b/mkspecs/features/qt_module.prf
+index 3531d28..429e00b 100644
+--- a/mkspecs/features/qt_module.prf
++++ b/mkspecs/features/qt_module.prf
+@@ -128,7 +128,10 @@ load(qt_installs)
+ 
+ unix|win32-g++* {
+    CONFIG += create_pc
+-   QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS/raw]
++   host_build: \
++       QMAKE_PKGCONFIG_LIBDIR = $$[QT_HOST_LIBS]
++   else: \
++       QMAKE_PKGCONFIG_LIBDIR = $$[QT_INSTALL_LIBS/raw]
+    QMAKE_PKGCONFIG_INCDIR = $$[QT_INSTALL_HEADERS/raw]
+    QMAKE_PKGCONFIG_CFLAGS = -I${includedir}/$$MODULE_INCNAME
+    QMAKE_PKGCONFIG_DESTDIR = pkgconfig
+@@ -139,14 +142,14 @@ unix|win32-g++* {
+    include_replace.match = $$rplbase/include
+    include_replace.replace = $$[QT_INSTALL_HEADERS/raw]
+    lib_replace.match = $$rplbase/lib
+-   lib_replace.replace = $$[QT_INSTALL_LIBS/raw]
++   lib_replace.replace = $$QMAKE_PKGCONFIG_LIBDIR
+    QMAKE_PKGCONFIG_INSTALL_REPLACE += include_replace lib_replace
+    QMAKE_PRL_INSTALL_REPLACE += include_replace lib_replace
+ }
+ 
+ unix {
+    CONFIG += create_libtool explicitlib
+-   QMAKE_LIBTOOL_LIBDIR = $$[QT_INSTALL_LIBS/raw]
++   QMAKE_LIBTOOL_LIBDIR = $$QMAKE_PKGCONFIG_LIBDIR
+    QMAKE_LIBTOOL_INSTALL_REPLACE += include_replace lib_replace
+ }
+ 
+diff --git a/mkspecs/features/qt_module_pris.prf b/mkspecs/features/qt_module_pris.prf
+index bedcfd4..9e40a67 100644
+--- a/mkspecs/features/qt_module_pris.prf
++++ b/mkspecs/features/qt_module_pris.prf
+@@ -19,10 +19,18 @@ else: \
+ !build_pass {
+ 
+     # Create a module .pri file
+-    unix:!static: \
+-        module_rpath = "QT.$${MODULE}.rpath = $$[QT_INSTALL_LIBS/raw]"
++    host_build: \
++        module_libs = "\$\$QT_MODULE_HOST_LIB_BASE"
+     else: \
++        module_libs = "\$\$QT_MODULE_LIB_BASE"
++    unix:!static {
++        host_build: \
++            module_rpath = "QT.$${MODULE}.rpath = $$[QT_HOST_LIBS]"
++        else: \
++            module_rpath = "QT.$${MODULE}.rpath = $$[QT_INSTALL_LIBS/raw]"
++    } else {
+         module_rpath =
++    }
+     !isEmpty(QT_FOR_PRIVATE) {
+         contains(QT_FOR_PRIVATE, .*-private$):error("QT_FOR_PRIVATE may not contain *-private.")
+         module_privdep = "QT.$${MODULE}.private_depends = $$QT_FOR_PRIVATE"
+@@ -55,15 +63,17 @@ else: \
+         "QT.$${MODULE}.PATCH_VERSION = $$section(VERSION, ., 2, 2)" \
+         "" \
+         "QT.$${MODULE}.name = $$TARGET" \
+-        "QT.$${MODULE}.bins = \$\$QT_MODULE_BIN_BASE" \
++        "QT.$${MODULE}.libs = $$module_libs" \
++        $$module_rpath \
++        "QT.$${MODULE}.private_includes = $$MODULE_PRIVATE_INCLUDES"
++    !host_build: MODULE_PRI_CONT += \
+         "QT.$${MODULE}.includes = $$MODULE_INCLUDES" \
+-        "QT.$${MODULE}.private_includes = $$MODULE_PRIVATE_INCLUDES" \
+-        "QT.$${MODULE}.libs = \$\$QT_MODULE_LIB_BASE" \
++        "QT.$${MODULE}.bins = \$\$QT_MODULE_BIN_BASE" \
+         "QT.$${MODULE}.libexecs = \$\$QT_MODULE_LIBEXEC_BASE" \
+-        $$module_rpath \
+         "QT.$${MODULE}.plugins = \$\$QT_MODULE_PLUGIN_BASE" \
+         "QT.$${MODULE}.imports = \$\$QT_MODULE_IMPORT_BASE" \
+-        "QT.$${MODULE}.qml = \$\$QT_MODULE_QML_BASE" \
++        "QT.$${MODULE}.qml = \$\$QT_MODULE_QML_BASE"
++    MODULE_PRI_CONT += \
+         "QT.$${MODULE}.depends =$$join(MODULE_DEPENDS, " ", " ")" \
+         $$module_privdep \
+         $$module_rundep \
+@@ -84,6 +94,7 @@ else: \
+             "QT_MODULE_IMPORT_BASE = $$MODULE_BASE_OUTDIR/imports" \
+             "QT_MODULE_QML_BASE = $$MODULE_BASE_OUTDIR/qml" \
+             "QT_MODULE_LIB_BASE = $$MODULE_BASE_OUTDIR/lib" \
++            "QT_MODULE_HOST_LIB_BASE = $$MODULE_BASE_OUTDIR/lib" \
+             "QT_MODULE_LIBEXEC_BASE = $$MODULE_BASE_OUTDIR/libexec" \
+             "QT_MODULE_PLUGIN_BASE = $$MODULE_BASE_OUTDIR/plugins" \
+             "include($$MODULE_PRI)"
+@@ -99,6 +110,7 @@ else: \
+         QT_MODULE_IMPORT_BASE = $$[QT_INSTALL_IMPORTS]
+         QT_MODULE_QML_BASE = $$[QT_INSTALL_QML]
+         QT_MODULE_LIB_BASE = $$[QT_INSTALL_LIBS]
++        QT_MODULE_HOST_LIB_BASE = $$[QT_HOST_LIBS]
+         QT_MODULE_LIBEXEC_BASE = $$[QT_INSTALL_LIBEXECS]
+         QT_MODULE_PLUGIN_BASE = $$[QT_INSTALL_PLUGINS]
+ 
+diff --git a/qmake/property.cpp b/qmake/property.cpp
+index c4fbcd6..4685440 100644
+--- a/qmake/property.cpp
++++ b/qmake/property.cpp
+@@ -74,6 +74,7 @@ static const struct {
+     { "QT_HOST_PREFIX", QLibraryInfo::HostPrefixPath, true },
+     { "QT_HOST_DATA", QLibraryInfo::HostDataPath, true },
+     { "QT_HOST_BINS", QLibraryInfo::HostBinariesPath, true },
++    { "QT_HOST_LIBS", QLibraryInfo::HostLibrariesPath, true },
+     { "QMAKE_SPEC", QLibraryInfo::HostSpecPath, true },
+     { "QMAKE_XSPEC", QLibraryInfo::TargetSpecPath, true },
+ };
+diff --git a/src/corelib/global/qlibraryinfo.cpp b/src/corelib/global/qlibraryinfo.cpp
+index 5fb9640..1eaebe5 100644
+--- a/src/corelib/global/qlibraryinfo.cpp
++++ b/src/corelib/global/qlibraryinfo.cpp
+@@ -291,6 +291,7 @@ static const struct {
+     { "Sysroot", "" },
+     { "HostPrefix", "" },
+     { "HostBinaries", "bin" },
++    { "HostLibraries", "lib" },
+     { "HostData", "." },
+     { "TargetSpec", "" },
+     { "HostSpec", "" },
+diff --git a/src/corelib/global/qlibraryinfo.h b/src/corelib/global/qlibraryinfo.h
+index 1a00a14..b275e01 100644
+--- a/src/corelib/global/qlibraryinfo.h
++++ b/src/corelib/global/qlibraryinfo.h
+@@ -82,6 +82,7 @@ public:
+         SysrootPath,
+         HostPrefixPath,
+         HostBinariesPath,
++        HostLibrariesPath,
+         HostDataPath,
+         TargetSpecPath,
+         HostSpecPath,
+diff --git a/tools/configure/configureapp.cpp b/tools/configure/configureapp.cpp
+index a18aac3..3602179 100644
+--- a/tools/configure/configureapp.cpp
++++ b/tools/configure/configureapp.cpp
+@@ -1166,6 +1166,13 @@ void Configure::parseCmdLine()
+             dictionary[ "QT_HOST_BINS" ] = configCmdLine.at(i);
+         }
+ 
++        else if (configCmdLine.at(i) == "-hostlibdir") {
++            ++i;
++            if (i == argCount)
++                break;
++            dictionary[ "QT_HOST_LIBS" ] = configCmdLine.at(i);
++        }
++
+         else if (configCmdLine.at(i) == "-hostdatadir") {
+             ++i;
+             if (i == argCount)
+@@ -1693,6 +1700,7 @@ bool Configure::displayHelp()
+         desc(       "-testsdir <dir>",                  "Tests will be installed to <dir>\n(default PREFIX/tests)\n");
+ 
+         desc(       "-hostbindir <dir>",                "Host executables will be installed to <dir>\n(default HOSTPREFIX/bin)");
++        desc(       "-hostlibdir <dir>",                "Host libraries will be installed to <dir>\n(default HOSTPREFIX/lib)");
+         desc(       "-hostdatadir <dir>",               "Data used by qmake will be installed to <dir>\n(default HOSTPREFIX)");
+ 
+ #if !defined(EVAL)
+@@ -3734,6 +3742,8 @@ void Configure::generateQConfigCpp()
+         haveHpx = true;
+     if (dictionary["QT_HOST_BINS"].isEmpty())
+         dictionary["QT_HOST_BINS"] = haveHpx ? dictionary["QT_HOST_PREFIX"] + "/bin" : dictionary["QT_INSTALL_BINS"];
++    if (dictionary["QT_HOST_LIBS"].isEmpty())
++        dictionary["QT_HOST_LIBS"] = haveHpx ? dictionary["QT_HOST_PREFIX"] + "/lib" : dictionary["QT_INSTALL_LIBS"];
+     if (dictionary["QT_HOST_DATA"].isEmpty())
+         dictionary["QT_HOST_DATA"] = haveHpx ? dictionary["QT_HOST_PREFIX"] : dictionary["QT_INSTALL_ARCHDATA"];
+ 
+@@ -3774,6 +3784,7 @@ void Configure::generateQConfigCpp()
+                   << "    \"qt_ssrtpath=" << formatPath(dictionary["CFG_SYSROOT"]) << "\"," << endl
+                   << "    \"qt_hpfxpath=" << formatPath(dictionary["QT_HOST_PREFIX"]) << "\"," << endl
+                   << "    \"qt_hbinpath=" << formatPath(dictionary["QT_HOST_BINS"]) << "\"," << endl
++                  << "    \"qt_hlibpath=" << formatPath(dictionary["QT_HOST_LIBS"]) << "\"," << endl
+                   << "    \"qt_hdatpath=" << formatPath(dictionary["QT_HOST_DATA"]) << "\"," << endl
+                   << "    \"qt_targspec=" << targSpec << "\"," << endl
+                   << "    \"qt_hostspec=" << hostSpec << "\"," << endl
+-- 
+1.8.1.2
+

@@ -1,5 +1,7 @@
-QTXMLPATTERNS_VERSION = 5.0.1
-QTXMLPATTERNS_SITE = http://releases.qt-project.org/qt5/$(QTXMLPATTERNS_VERSION)/submodules_tar
+#QTXMLPATTERNS_VERSION = 5.0.2
+#QTXMLPATTERNS_SITE = http://origin.releases.qt-project.org/qt5/$(QTXMLPATTERNS_VERSION)/submodules_tar
+QTXMLPATTERNS_VERSION = 5.1.0-beta1
+QTXMLPATTERNS_SITE = http://download.qt-project.org/development_releases/qt/5.1/$(QTBASE_VERSION)/submodules
 QTXMLPATTERNS_SOURCE = qtxmlpatterns-opensource-src-$(QTXMLPATTERNS_VERSION).tar.xz
 QTXMLPATTERNS_DEPENDENCIES = qtbase
 QTXMLPATTERNS_INSTALL_STAGING = YES
