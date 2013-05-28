@@ -17,7 +17,10 @@ define VIDEOCORE_CLEANUP_TARGET_INSTALL
 	# remove vcfile daemon because it's not compatible (and not used)
 	rm $(TARGET_DIR)/etc/init.d/vcfiled
 	# add /opt/vc/lib to default library path
-	echo /opt/vc/lib >> $(TARGET_DIR)/etc/ld.so.conf
+	if ! grep -q /opt/vc/lib $(TARGET_DIR)/etc/ld.so.conf; then \
+		echo /opt/vc/lib >> $(TARGET_DIR)/etc/ld.so.conf ; \
+		echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/opt/vc/lib" >> $(TARGET_DIR)/etc/profile ; \ 
+	fi
 endef
 
 $(eval $(cmake-package))
