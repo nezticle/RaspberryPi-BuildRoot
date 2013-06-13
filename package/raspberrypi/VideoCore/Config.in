@@ -8,5 +8,7 @@ if BR2_PACKAGE_VIDEOCORE
 config BR2_PACKAGE_VIDEOCORE_VERSION
 	string "Github revision of VideoCore tar ball"
 	default 0e57896bbe98a0885506c3c09821d2c3c4465eef
-	help "Enter the SHA of your preferred revision of the RPI userland files (https://github.com/raspberrypi/userland/)"
+	help
+	  Enter the SHA of your preferred revision of the RPI userland files (https://github.com/raspberrypi/userland)
+
 endif
