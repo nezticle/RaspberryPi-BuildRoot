@@ -10,6 +10,8 @@ if BR2_PACKAGE_BOOTLOADER
 config BR2_BOOTLOADER_VERSION
 	string "Github revision of bootloader tar ball"
 	default "7fcb9d3eb2ead5e9da90f72a7eec94f6055c2dc2"
+	help 
+	  Enter the SHA of your preferred revision of the RPI Firmware (https://github.com/raspberrypi/firmware/)
 
 # http://elinux.org/RPiconfig#Memory
 config BR2_RASPBERRYPI_GPU_RAM_SIZE
