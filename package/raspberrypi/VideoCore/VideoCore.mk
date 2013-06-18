@@ -19,7 +19,7 @@ define VIDEOCORE_CLEANUP_TARGET_INSTALL
 	# add /opt/vc/lib to default library path
 	if ! grep -q /opt/vc/lib $(TARGET_DIR)/etc/ld.so.conf; then \
 		echo /opt/vc/lib >> $(TARGET_DIR)/etc/ld.so.conf ; \
-		echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/opt/vc/lib" >> $(TARGET_DIR)/etc/profile ; \ 
+		echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/opt/vc/lib" >> $(TARGET_DIR)/etc/profile ; \
 	fi
 endef
 
