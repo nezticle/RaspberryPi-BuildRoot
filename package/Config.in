@@ -823,6 +823,7 @@ source "package/raspberrypi/omxplayer/Config.in"
 source "package/xwiimote/Config.in"
 source "package/libnih/Config.in"
 source "package/upstart/Config.in"
+source "package/wiringpi/Config.in"
 menu "Qt 5"
 source "package/qt5/qtbase/Config.in"
 source "package/qt5/qtxmlpatterns/Config.in"
@@ -838,6 +839,8 @@ source "package/qt5/qtscript/Config.in"
 source "package/qt5/qtsvg/Config.in"
 source "package/qt5/qt3d/Config.in"
 source "package/qt5/qtgamepad/Config.in"
+source "package/qt5/qtserialport/Config.in"
+source "package/qt5/qtftp/Config.in"
 endmenu
 endmenu
 

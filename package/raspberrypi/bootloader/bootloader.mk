@@ -24,7 +24,17 @@ define BOOTLOADER_INSTALL_TARGET_CMDS
 
         -if [ "$(BR2_RASPBERRYPI_DISABLE_OVERSCAN)" = "y" ]; then \
 	  echo "disable_overscan=1" >> $(TARGET_DIR)/boot/config.txt; \
+	fi
+	-if [ "$(BR2_RASPBERRYPI_DISABLE_OVERSCAN)" != "y" ]; then \
+	  echo "overscan_left=$(BR2_RASPBERRYPI_OVERSCAN_LEFT)" >> $(TARGET_DIR)/boot/config.txt; \
+	  echo "overscan_right=$(BR2_RASPBERRYPI_OVERSCAN_RIGHT)" >> $(TARGET_DIR)/boot/config.txt; \
+	  echo "overscan_top=$(BR2_RASPBERRYPI_OVERSCAN_TOP)" >> $(TARGET_DIR)/boot/config.txt; \
+	  echo "overscan_bottom=$(BR2_RASPBERRYPI_OVERSCAN_BOTTOM)" >> $(TARGET_DIR)/boot/config.txt; \
         fi
+
+	echo "hdmi_drive=$(BR2_RASPBERRYPI_HDMI_DRIVE)" >> $(TARGET_DIR)/boot/config.txt
+	echo "hdmi_group="$(BR2_RASPBERRYPI_HDMI_GROUP) >> $(TARGET_DIR)/boot/config.txt
+	echo "hdmi_mode="$(BR2_RASPBERRYPI_HDMI_MODE) >> $(TARGET_DIR)/boot/config.txt
 
         -if [ "$(BR2_RASPBERRYPI_DISABLE_L2CACHE)" = "y" ]; then \
 	  echo "disable_l2cache=1" >> $(TARGET_DIR)/boot/config.txt; \
@@ -54,6 +64,17 @@ define BOOTLOADER_INSTALL_TARGET_CMDS
         echo "#fixup_file=fixup_x.dat" >> $(TARGET_DIR)/boot/config.txt
 
 	echo "$(BR2_RASPBERRYPI_CMDLINE)" > $(TARGET_DIR)/boot/cmdline.txt
+
+	# Generate minimal /etc/wpa_supplicant.conf file if necessary
+	-if [ "$(BR2_PACKAGE_WPA_SUPPLICANT)" = "y" ]; then \
+	  rm $(TARGET_DIR)/etc/wpa_supplicant.conf; \
+	  echo "ctrl_interface=/var/run/wpa_supplicant" >> $(TARGET_DIR)/etc/wpa_supplicant.conf; \
+	  echo "ap_scan=1" >> $(TARGET_DIR)/etc/wpa_supplicant.conf; \
+	  echo "network={" >> $(TARGET_DIR)/etc/wpa_supplicant.conf; \
+	  echo 'ssid='$(BR2_PACKAGE_WPA_SUPPLICANT_SSID) >> $(TARGET_DIR)/etc/wpa_supplicant.conf; \
+	  echo 'psk='$(BR2_PACKAGE_WPA_SUPPLICANT_KEY) >> $(TARGET_DIR)/etc/wpa_supplicant.conf; \
+	  echo "}" >> $(TARGET_DIR)/etc/wpa_supplicant.conf; \
+        fi
 endef
 
 $(eval $(generic-package))

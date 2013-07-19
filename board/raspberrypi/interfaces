@@ -4,3 +4,8 @@ iface lo inet loopback
 # Configure eth0
 auto eth0
 iface eth0 inet dhcp
+# Configure wlan0
+allow-hotplug wlan0
+auto wlan0
+iface wlan0 inet dhcp
+pre-up wpa_supplicant -c /etc/wpa_supplicant.conf -i wlan0 -B

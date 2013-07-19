@@ -1,0 +1,5 @@
+config BR2_PACKAGE_QTFTP
+	bool "qtftp"
+	select BR2_PACKAGE_QTBASE
+	help
+		A Qt5 module that adds support for ftp but which is deprecated.
