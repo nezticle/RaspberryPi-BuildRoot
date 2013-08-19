@@ -1,7 +1,5 @@
-#QTDECLARATIVE_VERSION = 5.0.2
-#QTDECLARATIVE_SITE = http://origin.releases.qt-project.org/qt5/$(QTDECLARATIVE_VERSION)/submodules_tar
-QTDECLARATIVE_VERSION = 5.1.0-beta1
-QTDECLARATIVE_SITE = http://download.qt-project.org/development_releases/qt/5.1/$(QTBASE_VERSION)/submodules
+QTDECLARATIVE_VERSION = 5.1.0
+QTDECLARATIVE_SITE = http://download.qt-project.org/official_releases/qt/5.1/$(QTDECLARATIVE_VERSION)/submodules/
 QTDECLARATIVE_SOURCE = qtdeclarative-opensource-src-$(QTDECLARATIVE_VERSION).tar.xz
 QTDECLARATIVE_DEPENDENCIES = qtbase qtxmlpatterns qtjsbackend
 QTDECLARATIVE_INSTALL_STAGING = YES

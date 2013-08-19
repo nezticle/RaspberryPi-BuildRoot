@@ -6,6 +6,8 @@ QTGAMEPAD_INSTALL_STAGING = YES
 
 define QTGAMEPAD_CONFIGURE_CMDS
 	-[ -f $(@D)/Makefile ] && $(MAKE) -C $(@D) distclean
+	#A dirty hack to appease qmake (so it will run syncqt)
+	touch $(@D)/.git
 	#run qmake
 	(cd $(@D) && $(HOST_DIR)/usr/bin/qmake )
 endef

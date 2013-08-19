@@ -1,7 +1,5 @@
-#QTBASE_VERSION = 5.0.2
-#QTBASE_SITE = http://origin.releases.qt-project.org/qt5/$(QTBASE_VERSION)/submodules_tar
-QTBASE_VERSION = 5.1.0-beta1
-QTBASE_SITE = http://download.qt-project.org/development_releases/qt/5.1/$(QTBASE_VERSION)/submodules
+QTBASE_VERSION = 5.1.0
+QTBASE_SITE = http://download.qt-project.org/official_releases/qt/5.1/$(QTBASE_VERSION)/submodules/
 QTBASE_SOURCE = qtbase-opensource-src-$(QTBASE_VERSION).tar.xz
 QTBASE_DEPENDENCIES = host-pkgconf udev libglib2 zlib jpeg libpng tiff freetype dbus VideoCore openssl sqlite alsa-lib 
 QTBASE_INSTALL_STAGING = YES

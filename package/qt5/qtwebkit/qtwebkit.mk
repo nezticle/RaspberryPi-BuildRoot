@@ -1,7 +1,5 @@
-#QTWEBKIT_VERSION = 5.0.2
-#QTWEBKIT_SITE = http://origin.releases.qt-project.org/qt5/$(QTWEBKIT_VERSION)/submodules_tar
-QTWEBKIT_VERSION = 5.1.0-beta1
-QTWEBKIT_SITE = http://download.qt-project.org/development_releases/qt/5.1/$(QTBASE_VERSION)/submodules
+QTWEBKIT_VERSION = 5.1.0
+QTWEBKIT_SITE = http://download.qt-project.org/official_releases/qt/5.1/$(QTWEBKIT_VERSION)/submodules/
 QTWEBKIT_SOURCE = qtwebkit-opensource-src-$(QTWEBKIT_VERSION).tar.xz
 QTWEBKIT_DEPENDENCIES = qtbase qtxmlpatterns qtdeclarative qtmultimedia qtjsbackend host-ruby
 QTWEBKIT_INSTALL_STAGING = YES

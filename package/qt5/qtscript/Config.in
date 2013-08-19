@@ -1,5 +1,5 @@
 config BR2_PACKAGE_QTSCRIPT
-	bool "qtxmlscript"
+	bool "qtscript"
 	select BR2_PACKAGE_QTBASE
 	help
 		Qt 5 script module
