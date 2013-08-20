@@ -1,4 +1,4 @@
-QTGAMEPAD_VERSION = 007693d81d05507b2a6c857038086b21eb80a5bd
+QTGAMEPAD_VERSION = 5a270664917ce19cf57492ee990113bade793564
 QTGAMEPAD_SITE = https://github.com/nezticle/qtgamepad.git
 QTGAMEPAD_SITE_METHOD = git
 QTGAMEPAD_DEPENDENCIES = qtbase
@@ -6,6 +6,8 @@ QTGAMEPAD_INSTALL_STAGING = YES
 
 define QTGAMEPAD_CONFIGURE_CMDS
 	-[ -f $(@D)/Makefile ] && $(MAKE) -C $(@D) distclean
+	#A dirty hack to appease qmake (so it will run syncqt)
+	touch $(@D)/.git
 	#run qmake
 	(cd $(@D) && $(HOST_DIR)/usr/bin/qmake )
 endef

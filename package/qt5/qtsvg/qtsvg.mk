@@ -1,5 +1,5 @@
-QTSVG_VERSION = 5.0.1
-QTSVG_SITE = http://releases.qt-project.org/qt5/$(QTSVG_VERSION)/submodules_tar
+QTSVG_VERSION = 5.1.0
+QTSVG_SITE = http://download.qt-project.org/official_releases/qt/5.1/$(QTSVG_VERSION)/submodules/
 QTSVG_SOURCE = qtsvg-opensource-src-$(QTSVG_VERSION).tar.xz
 QTSVG_DEPENDENCIES = qtbase
 QTSVG_INSTALL_STAGING = YES
