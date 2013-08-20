@@ -1,0 +1,5 @@
+config BR2_PACKAGE_QTSERIALPORT
+	bool "qtserialport"
+	select BR2_PACKAGE_QTBASE
+	help
+		A Qt5 module that adds support for managing serial port

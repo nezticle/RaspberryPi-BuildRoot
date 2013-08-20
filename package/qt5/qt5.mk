@@ -12,3 +12,5 @@ include package/qt5/qtscript/qtscript.mk
 include package/qt5/qtsvg/qtsvg.mk
 include package/qt5/qt3d/qt3d.mk
 include package/qt5/qtgamepad/qtgamepad.mk
+include package/qt5/qtserialport/qtserialport.mk
+include package/qt5/qtftp/qtftp.mk

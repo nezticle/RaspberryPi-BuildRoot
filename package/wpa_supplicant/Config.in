@@ -54,4 +54,19 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WPS
 	help
 	  Enable support for Wi-Fi Protected Setup (WPS)
 
+comment "/etc/wpa_supplicant.conf file"
+
+config BR2_PACKAGE_WPA_SUPPLICANT_SSID
+  string "Network SSID"
+  default "home"
+  help
+    This is the SSID name of your network.
+    Check http://linux.die.net/man/5/wpa_supplicant.conf if your need more parameters.
+
+config BR2_PACKAGE_WPA_SUPPLICANT_KEY
+  string "Password"
+  default "my SSID WPA key"
+  help
+    This is the key. Must be between quotes if litteral or without quotes if entered as hexadecimal.
+    Check http://linux.die.net/man/5/wpa_supplicant.conf if your need more parameters.
 endif

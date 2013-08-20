@@ -83,9 +83,59 @@ config BR2_RASPBERRYPI_GPU_SPEED
 
 config BR2_RASPBERRYPI_DISABLE_OVERSCAN
   bool "disable overscan"
-  default y
+  default n
   help
     Disable overscan
+    See http://elinux.org/RPiconfig#Video_mode_options
+
+if !BR2_RASPBERRYPI_DISABLE_OVERSCAN
+comment "Make display smaller to stop text spilling off the screen"
+
+config BR2_RASPBERRYPI_OVERSCAN_LEFT
+  int "Overscan left"
+  default 50
+  help
+    See http://elinux.org/RPiconfig#Video_mode_options
+
+config BR2_RASPBERRYPI_OVERSCAN_RIGHT
+  int "Overscan right"
+  default 50
+  help
+    See http://elinux.org/RPiconfig#Video_mode_options
+
+config BR2_RASPBERRYPI_OVERSCAN_TOP
+  int "Overscan top"
+  default 50
+  help
+    See http://elinux.org/RPiconfig#Video_mode_options
+
+config BR2_RASPBERRYPI_OVERSCAN_BOTTOM
+  int "Overscan bottom"
+  default 50
+  help
+    See http://elinux.org/RPiconfig#Video_mode_options
+
+endif
+
+config BR2_RASPBERRYPI_HDMI_DRIVE
+  int "hdmi drive"
+  default 2
+  help
+    hdmi_drive chooses between HDMI and DVI modes (1 = DVI no sound, 2 = HDMI sound if supported)
+    See http://elinux.org/RPiconfig#Video_mode_options
+
+config BR2_RASPBERRYPI_HDMI_GROUP
+  int "hdmi group"
+  default 1
+  help
+    hdmi_group defines the HDMI type (1 = CEA, 2 = DMT)
+    See http://elinux.org/RPiconfig#Video_mode_options
+
+config BR2_RASPBERRYPI_HDMI_MODE
+  int "hdmi mode"
+  default 31
+  help
+    hdmi_mode defines screen resolution in CEA or DMT format (default 1080p 50 Hz)
     See http://elinux.org/RPiconfig#Video_mode_options
 
 comment "Kernel command line options"
