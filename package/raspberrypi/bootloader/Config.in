@@ -9,7 +9,7 @@ if BR2_PACKAGE_BOOTLOADER
 
 config BR2_BOOTLOADER_VERSION
 	string "Github revision of bootloader tar ball"
-	default "57b604530d3c86edd5093d2a58c9d026fdfa7a7a"
+	default "c9c9465093f7dada45566bae65fef7fe26ce9361"
 	help 
 	  Enter the SHA of your preferred revision of the RPI Firmware (https://github.com/raspberrypi/firmware/)
 

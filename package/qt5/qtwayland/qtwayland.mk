@@ -1,4 +1,4 @@
-QTWAYLAND_VERSION = 11b0a7db584d21eb7eb94849de79ad033249ae3c
+QTWAYLAND_VERSION = 3b0b90b3dbadc5119931378089ac9207eb2c4673
 QTWAYLAND_SITE = git://gitorious.org/qt/qtwayland.git
 QTWAYLAND_SITE_METHOD = git
 QTWAYLAND_DEPENDENCIES = qtbase qtxmlpatterns qtjsbackend qtdeclarative wayland xkbcommon xkeyboard-config xproto_kbproto xproto_xproto
@@ -9,7 +9,7 @@ define QTWAYLAND_CONFIGURE_CMDS
 	#A dirty hack to appease qmake (so it will run syncqt)
 	touch $(@D)/.git
 	#run qmake
-	(cd $(@D) && $(HOST_DIR)/usr/bin/qmake -r CONFIG+=wayland-compositor )
+	(cd $(@D) && $(TARGET_MAKE_ENV) qmake -r CONFIG+=wayland-compositor )
 endef
 
 define QTWAYLAND_BUILD_CMDS
