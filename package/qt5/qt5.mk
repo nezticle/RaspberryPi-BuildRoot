@@ -10,6 +10,8 @@ include package/qt5/qtwebkit/qtwebkit.mk
 include package/qt5/qtimageformats/qtimageformats.mk
 include package/qt5/qtquick1/qtquick1.mk
 include package/qt5/qtscript/qtscript.mk
+include package/qt5/qtsensors/qtsensors.mk
+include package/qt5/qtserialport/qtserialport.mk
 include package/qt5/qtsvg/qtsvg.mk
 include package/qt5/qt3d/qt3d.mk
 include package/qt5/qtgamepad/qtgamepad.mk

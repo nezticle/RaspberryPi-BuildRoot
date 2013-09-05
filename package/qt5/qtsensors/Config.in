@@ -1,0 +1,5 @@
+config BR2_PACKAGE_QTSENSORS
+	bool "qtsensors"
+	select BR2_PACKAGE_QTBASE
+	help
+		Qt 5 sensors module
