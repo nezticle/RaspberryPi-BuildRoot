@@ -33,7 +33,7 @@ First you need to obtain an SD card that has the correct partitions setup.  It n
 
 If you need help with this, the Raspberry Pi wiki has a [guide](http://elinux.org/RPi_Advanced_Setup#Advanced_SD_card_setup) that's pretty close (make sure to use ext4 instead of ext3).
 
-When you have this setup, mount the the two partitions (assuming /media/BOOT for the fat32 partiion, and /media/rootfs for the ext4).  The run the following commands to install the rootfs:  
+When you have this setup, mount the two partitions (assuming /media/BOOT for the fat32 partiion, and /media/rootfs for the ext4).  The run the following commands to install the rootfs:  
 `cd $BSQUASK_DIR/images`  
 `tar -zxvf boot.tar.gz -C /media/BOOT`  
 `sudo tar -zxvf rootfs.tar.gz -C /media/rootfs`  
